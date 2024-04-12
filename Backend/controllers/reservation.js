@@ -2,6 +2,9 @@ const Reservation = require('../models/Reservation');
 const Restaurant  = require('../models/Restaurant');
 const Menu  = require('../models/Menu');
 
+//@desc Get all reservation
+//@route GET /api/v1/reservations
+//@access Public
 exports.getReservations=async (req,res,next)=>{
     let query;
     if(req.user.role !== 'admin'){
@@ -28,7 +31,9 @@ exports.getReservations=async (req,res,next)=>{
         });
     }
 };
-
+//@desc Get single reservation
+//@route GET /api/v1/reservations/:id
+//@acess Public
 exports.getReservation=async (req,res,next)=>{
     try{
         const reservation = await Reservation.findById(req.params.id).populate({
@@ -59,7 +64,9 @@ exports.getReservation=async (req,res,next)=>{
         });
     }
 };
-
+//@desc  Add reservation
+//@route POST /api/v1/restaurants/:restaurantId/reservation
+//@acess Private
 exports.addReservation=async (req,res,next)=>{
     try{
         req.body.restaurant = req.params.restaurantId;
@@ -115,7 +122,9 @@ exports.addReservation=async (req,res,next)=>{
         });
     }
 };
-
+//@desc  Update reservation
+//@route PUT /api/v1/reservations/:id
+//@acess Private
 exports.updateReservation=async (req,res,next)=>{
     try{
         
@@ -175,7 +184,9 @@ exports.updateReservation=async (req,res,next)=>{
         });
     }
 };
-
+//@desc  Delete resercation
+//@route DELETE /api/v1/reservations/:id
+//@acess Private
 exports.deleteReservation=async (req,res,next)=>{
     try{
         let reservation = await Reservation.findById(req.params.id);
