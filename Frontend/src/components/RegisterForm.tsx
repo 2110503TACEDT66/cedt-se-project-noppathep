@@ -4,10 +4,10 @@ import userRegister from "@/libs/userRegister";
 import { useRouter } from 'next/navigation'
 
 export default function RegisterForm(reRoute:any) {
-    const [name, setName] = useState<any>(null)
-    const [email, setEmail] = useState<any>(null)
-    const [telephone, setTelephone] = useState<any>(null)
-    const [password, setPassword] = useState<any>(null)
+    const [name, setName] = useState<string>("")
+    const [email, setEmail] = useState<string>("")
+    const [telephone, setTelephone] = useState<string>("")
+    const [password, setPassword] = useState<string>("")
 
     const handleSubmit = (event:any) => {
         event.preventDefault();

@@ -62,14 +62,19 @@ export default function BookingList({profile}:{profile:any}) {
 
 
     return (
-        <>
-            <div className='flex flex-row mt-4'>
+        <div className=''>
+            <div className='flex flex-col xl:flex-row mt-4 gap-5 items-center justify-around'>
+                
                 {profile && (
-                    <div className="w-[45%] h-full bg-slate-200 rounded mx-5 p-2 text-black" key={profile.data.id}>
-                        <table className='w-full table-auto border-separate border-spacing-2 bg-gray-100 rounded'>
-                            <tbody>
+                    <div className="w-full xl:w-[40%] md:max-w-[700px] h-full xl:self-start xl:ml-5 p-2 border-2 border-gray-200 text-black shadow-md" 
+                         key={profile.data.id}
+                    >
+
+                        <table className='w-full'>
+                            <tbody className='[&>tr>th]:text-end [&>tr>th]:px-4 [&>tr]:h-11'>
+                                <th colSpan={2} className='text-2xl font-semibold text-center p-2'>User Profile</th>
                                 <tr>
-                                    <td>Name:</td>
+                                    <th>Name</th>
                                     <td>
                                         {profile.data.name}
                                         <button className='w-fit h-fit px-2'>
@@ -78,7 +83,7 @@ export default function BookingList({profile}:{profile:any}) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Email:</td>
+                                    <th>Email</th>
                                     <td>
                                         {profile.data.email}
                                         <button className='w-fit h-fit px-2'>
@@ -87,7 +92,7 @@ export default function BookingList({profile}:{profile:any}) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Tel.</td>
+                                    <th>Tel.</th>
                                     <td>
                                         {profile.data.telephone}
                                         <button className='w-fit h-fit px-2'>
@@ -96,7 +101,7 @@ export default function BookingList({profile}:{profile:any}) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Credit/Debit Card:</td>
+                                    <th>Credit/Debit Card</th>
                                     <td>
                                         2154*******557
                                         <button className='w-fit h-fit px-2'>
@@ -105,11 +110,11 @@ export default function BookingList({profile}:{profile:any}) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Points:</td>
+                                    <th>Points</th>
                                     <td>9999</td>
                                 </tr>
                                 <tr>
-                                    <td>Member since:</td>
+                                    <th>Member since</th>
                                     <td>{formatDate(profile.data.createdAt)}</td>
                                 </tr>
                             </tbody>
@@ -117,21 +122,21 @@ export default function BookingList({profile}:{profile:any}) {
                     </div>
                 )}
 
-                <div className='flex flex-col gap-2'>
+                <div className='flex flex-col gap-y-4 w-full px-2 xl:my-5 sm:px-0 sm:w-auto sm:mx-4'>
                     {allReservation.length > 0 ? (
                         allReservation.map((item: any) => (
-                            <div className='bg-slate-200 w-[700px] h-[200px] rounded-lg'>
-                                <div className='h-full flex flex-row items-center px-5'>
+                            <div className='bg-slate-200 w-full sm:w-[700px] h-[200px] rounded-md'>
+                                <div className='h-full w-full flex flex-row items-center px-5'>
                                     <Image
-                                    src= {"/img/thaispice.jpg"}
-                                    alt={"Image"}
-                                    objectFit='cover'
-                                    width={150}
-                                    height={100}
+                                        src= {"/img/thaispice.jpg"}
+                                        alt={"Image"}
+                                        width={150}
+                                        height={100}
+                                        className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 object-contain sm:rounded-none sm:size-auto sm:scale-90"
                                     />
-                                    <div className='w-full flex flex-col gap-3 pl-3'>
-                                        <button className='ml-auto w-fit h-fit px-2 py-0'>
-                                            <Edit fontSize='small' sx={{ color: "black" }} />
+                                    <div className='w-full flex flex-col gap-3 pl-3 pb-3'>
+                                        <button className='ml-auto w-fit h-fit py-0'>
+                                            <Edit fontSize='medium' sx={{ color: "black" }} />
                                         </button>
                                         <div className='text-left text-sm font-medium text-gray-600'>
                                             Restaurant: {item.restaurant.name}
@@ -144,11 +149,11 @@ export default function BookingList({profile}:{profile:any}) {
                                         </div>
 
                                         <div className='ml-auto flex flex-row gap-2'>
-                                            <button className="rounded-md bg-orange-600 hover:bg-yellow-300 px-3 py-1 text-white shadow-sm" 
+                                            <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-3 py-2 text-white shadow-sm" 
                                             onClick={()=>{router.push(`/Orderfood/${item._id}`)}}>
                                                 Order
                                             </button>
-                                            <button className="block rounded-md bg-red-600 hover:bg-orange-600 px-3 py-1 text-white shadow-sm" onClick={async () => {
+                                            <button className="block rounded-md bg-red-600 hover:bg-red-700 px-3 py-2 text-white shadow-sm" onClick={async () => {
                                             await deleteReservation(item._id, session?.user.token || "");
                                             window.location.reload();
                                             }}>
@@ -222,6 +227,6 @@ export default function BookingList({profile}:{profile:any}) {
                     )}
                 </div>
             </div>
-        </>
+        </div>
     );
 }
