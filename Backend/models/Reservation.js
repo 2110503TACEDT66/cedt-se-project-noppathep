@@ -22,8 +22,25 @@ const ReservationSchema = new mongoose.Schema({
     createdAt:{
         type:Date,
         default:Date.now
-    }
+    },
+    reserveTable : [{
+        type: mongoose.Schema.ObjectId,
+        ref: 'Table'
+    }]
 });
+
+ReservationSchema.methods.addTable = function(tableId) {
+    this.reserveTable.push(tableId);
+    return this.save();
+};
+
+ReservationSchema.methods.removeTable = function(tableId) {
+    const index = this.reserveTable.indexOf(tableId);
+    if (index !== -1) {
+        this.reserveTable.splice(index, 1);
+    }
+    return this.save();
+};
 
 ReservationSchema.methods.addItem = function(menuItemId) {
     this.foodOrder.push(menuItemId);
