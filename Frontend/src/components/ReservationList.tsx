@@ -1,13 +1,18 @@
 'use client'
 import { useSession } from 'next-auth/react';
 import Image from "next/image";
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import  getReservations  from '@/libs/getReservations';
 import deleteReservation from '@/libs/deleteReservation';
 import LinearProgress from '@mui/material/LinearProgress';
 import updateReservation from '@/libs/updateReservation';
 import Select from '@mui/material/Select';
-import { Button } from '@mui/material';
+import { Button, Input } from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
+
+import Swal from 'sweetalert2'
+
 import MenuItem from '@mui/material/MenuItem';
 import getRestaurants from '@/libs/getRestaurants';
 import DateReserve from './DateReserve';
@@ -15,7 +20,8 @@ import  Dayjs  from 'dayjs';
 import { useRouter } from 'next/navigation';
 import getMenu from '@/libs/getMenu';
 import { setEmitFlags } from 'typescript';
-import { Edit } from '@mui/icons-material';
+import { Close, Edit } from '@mui/icons-material';
+import Link from 'next/link';
 
 export default function BookingList({profile}:{profile:any}) {
 
@@ -40,6 +46,42 @@ export default function BookingList({profile}:{profile:any}) {
     const [bookingDate, setBookingDate] = useState(Dayjs);
     const [location, setLocation] = useState('');
 
+    //profile editing
+    const [isEdit , setEdit] = useState<boolean>(false);
+    const newName = useRef<String>(profile.data.name);
+    const newEmail = useRef<String>(profile.data.email);
+    const newTel = useRef<String>(profile.data.telephone);
+    const newCard = useRef<String>('');
+
+
+
+
+    const editProfile = ()=>{
+        
+        Swal.fire({
+          title: "Do you want to save the changes?",
+          showCancelButton: true,
+          
+          confirmButtonText: "Save"
+        }).then((result) => {
+          if (result.isConfirmed) {
+
+            /* 
+                WAIT FOR EDITPROFILE FUNCTION
+            */
+
+            Swal.fire("Your profile has been changed", "", "success");
+            setEdit(false)
+          } 
+          else return;
+        });
+
+        
+
+    }
+
+
+    //just for date formatting
     function formatDate(time: Date | number): string {
         const months: string[] = [
             'January', 'February', 'March', 'April', 'May', 'June', 'July',
@@ -66,47 +108,76 @@ export default function BookingList({profile}:{profile:any}) {
             <div className='flex flex-col xl:flex-row mt-4 gap-5 items-center justify-around'>
                 
                 {profile && (
-                    <div className="w-full xl:w-[40%] md:max-w-[700px] h-full xl:self-start xl:ml-5 p-2 border-2 border-gray-200 text-black shadow-md" 
+                    <div className="w-full  md:max-w-[700px] h-full xl:self-start xl:ml-5 p-2 border-2 border-gray-100 text-black shadow-lg" 
                          key={profile.data.id}
                     >
 
                         <table className='w-full'>
-                            <tbody className='[&>tr>th]:text-end [&>tr>th]:px-4 [&>tr]:h-11'>
-                                <th colSpan={2} className='text-2xl font-semibold text-center p-2'>User Profile</th>
+                            <tbody className='[&>tr>th]:text-start [&>tr>th]:px-4 [&>tr>th]:w-44 sm:[&>tr>th]:w-52 sm:[&>tr>td]:w-96 [&>tr]:h-11'>
+                                <th colSpan={2} className='relative text-2xl font-semibold text-start sm:text-center p-2'>
+                                    User Profile
+                                        {
+                                            isEdit
+                                                ?
+                                                <span className='absolute right-2 space-x-2'>
+                                                    <button onClick={ ()=>editProfile() } className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
+                                                        save
+                                                    </button>
+                                                    <button onClick={ ()=>setEdit(false) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
+                                                        cancel editing
+                                                    </button>
+                                                </span>
+                                                :
+                                                <span className='absolute right-2 space-x-2'>
+                                                    <button onClick={ ()=>setEdit(true) } className='text-sm text-gray-700 font-normal bg-gray-200 hover:bg-gray-300 rounded-md px-2 p-1'>
+                                                        Edit profile    
+                                                    </button>    
+                                                </span>
+                                        }
+                         
+                                </th>
+
                                 <tr>
                                     <th>Name</th>
                                     <td>
-                                        {profile.data.name}
-                                        <button className='w-fit h-fit px-2'>
-                                            <Edit fontSize='small' />
-                                        </button>
+                                        {
+                                        isEdit
+                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={profile.data.name}/>
+                                            : <>{profile.data.name}</>
+                                        }
                                     </td>
                                 </tr>
+                                
                                 <tr>
                                     <th>Email</th>
                                     <td>
-                                        {profile.data.email}
-                                        <button className='w-fit h-fit px-2'>
-                                            <Edit fontSize='small' />
-                                        </button>
+                                        {
+                                        isEdit
+                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={profile.data.email}/>
+                                            : <>{profile.data.email}</>
+                                        }
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <th>Tel.</th>
                                     <td>
-                                        {profile.data.telephone}
-                                        <button className='w-fit h-fit px-2'>
-                                            <Edit fontSize='small' />
-                                        </button>
+                                        {
+                                        isEdit
+                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={profile.data.telephone}/>
+                                            : <>{profile.data.telephone}</>
+                                        }
                                     </td>
                                 </tr>
+
                                 <tr>
                                     <th>Credit/Debit Card</th>
                                     <td>
-                                        2154*******557
-                                        <button className='w-fit h-fit px-2'>
-                                            <Edit fontSize='small' />
-                                        </button>
+                                        {
+                                        isEdit
+                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={`2154*******557`} />
+                                            : <>"2154*******557"</>
+                                        }
                                     </td>
                                 </tr>
                                 <tr>
@@ -122,25 +193,31 @@ export default function BookingList({profile}:{profile:any}) {
                     </div>
                 )}
 
-                <div className='flex flex-col gap-y-4 w-full px-2 xl:my-5 sm:px-0 sm:w-auto sm:mx-4'>
+                <div className='flex flex-col gap-y-4 w-full px-2 xl:my-5 sm:px-0 items-center sm:mx-4'>
                     {allReservation.length > 0 ? (
                         allReservation.map((item: any) => (
-                            <div className='bg-slate-200 w-full sm:w-[700px] h-[200px] rounded-md'>
+                            <div className='bg-slate-200 w-full md:w-[700px] h-[200px] rounded-md'>
                                 <div className='h-full w-full flex flex-row items-center px-5'>
+                                    
                                     <Image
                                         src= {"/img/thaispice.jpg"}
                                         alt={"Image"}
                                         width={150}
                                         height={100}
-                                        className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 object-contain sm:rounded-none sm:size-auto sm:scale-90"
+                                        className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 sm:rounded-none sm:w-[150px] sm:h-auto"
                                     />
+                                
                                     <div className='w-full flex flex-col gap-3 pl-3 pb-3'>
                                         <button className='ml-auto w-fit h-fit py-0'>
                                             <Edit fontSize='medium' sx={{ color: "black" }} />
                                         </button>
-                                        <div className='text-left text-sm font-medium text-gray-600'>
-                                            Restaurant: {item.restaurant.name}
-                                        </div>
+
+                                        <Link href={`Restaurant/${item.restaurant.id}`}>
+                                            <div className='text-left text-lg font-semibold  text-teal-700 underline hover:text-teal-900'>
+                                                Restaurant: {item.restaurant.name}
+                                            </div>
+                                        </Link>
+
                                         <div className='text-left text-sm font-medium text-gray-600'>
                                             Reservation Date: {formatDate(item.apptDate)}
                                         </div>
