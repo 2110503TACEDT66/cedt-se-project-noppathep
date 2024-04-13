@@ -47,7 +47,7 @@ export default function BookingList({profile}:{profile:any}) {
     const [location, setLocation] = useState('');
 
     //==================<profile editing>====================
-    const [isEdit , setEdit] = useState<boolean>(false);
+    const [isEditProfile , setEditProfile] = useState<boolean>(false);
     const newName = useRef<String>(profile.data.name);
     const newEmail = useRef<String>(profile.data.email);
     const newTel = useRef<String>(profile.data.telephone);
@@ -68,7 +68,7 @@ export default function BookingList({profile}:{profile:any}) {
             */
 
             Swal.fire("Your profile has been changed", "", "success");
-            setEdit(false)
+            setEditProfile(false)
           } 
           else return;
         });
@@ -98,6 +98,9 @@ export default function BookingList({profile}:{profile:any}) {
         
     }
     //=======================================================
+
+
+
 
     //just for date formatting
     function formatDate(time: Date | number): string {
@@ -136,19 +139,19 @@ export default function BookingList({profile}:{profile:any}) {
                                 <th colSpan={2} className='relative text-2xl font-semibold text-start sm:text-center p-2'>
                                     User Profile
                                         {
-                                            isEdit
+                                            isEditProfile
                                                 ?
                                                 <span className='absolute right-2 space-x-2'>
                                                     <button onClick={ ()=>editProfile() } className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
                                                         save
                                                     </button>
-                                                    <button onClick={ ()=>setEdit(false) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
+                                                    <button onClick={ ()=>setEditProfile(false) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
                                                         cancel editing
                                                     </button>
                                                 </span>
                                                 :
                                                 <span className='absolute right-2 space-x-2'>
-                                                    <button onClick={ ()=>setEdit(true) } className='text-sm text-gray-700 font-normal bg-gray-200 hover:bg-gray-300 rounded-md px-2 p-1'>
+                                                    <button onClick={ ()=>setEditProfile(true) } className='text-sm text-gray-700 font-normal bg-gray-200 hover:bg-gray-300 rounded-md px-2 p-1'>
                                                         Edit profile    
                                                     </button>    
                                                 </span>
@@ -160,7 +163,7 @@ export default function BookingList({profile}:{profile:any}) {
                                     <th>Name</th>
                                     <td>
                                         {
-                                        isEdit
+                                        isEditProfile
                                             ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={profile.data.name}/>
                                             : <>{profile.data.name}</>
                                         }
@@ -171,7 +174,7 @@ export default function BookingList({profile}:{profile:any}) {
                                     <th>Email</th>
                                     <td>
                                         {
-                                        isEdit
+                                        isEditProfile
                                             ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={profile.data.email}/>
                                             : <>{profile.data.email}</>
                                         }
@@ -182,7 +185,7 @@ export default function BookingList({profile}:{profile:any}) {
                                     <th>Tel.</th>
                                     <td>
                                         {
-                                        isEdit
+                                        isEditProfile
                                             ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={profile.data.telephone}/>
                                             : <>{profile.data.telephone}</>
                                         }
@@ -193,7 +196,7 @@ export default function BookingList({profile}:{profile:any}) {
                                     <th>Credit/Debit Card</th>
                                     <td>
                                         {
-                                        isEdit
+                                        isEditProfile
                                             ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={`2154*******557`} />
                                             : <>"2154*******557"</>
                                         }
