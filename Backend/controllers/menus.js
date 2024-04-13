@@ -2,6 +2,9 @@ const Reservation = require('../models/Reservation');
 const Restaurant  = require('../models/Restaurant');
 const Menu  = require('../models/Menu');
 
+//@desc get one Menu 
+//@route GET /api/v1/menus/:id
+//@access Public
 exports.getMenu = async (req,res,next)=>{
     try{
         const menu = await Menu.find({restaurant:req.params.id}).populate({
@@ -19,6 +22,9 @@ exports.getMenu = async (req,res,next)=>{
     }
 };
 
+//@desc Add Menu body (name,price,restaurant : restaurantID)
+//@route POST /api/v1/menus
+//@access Private
 exports.addMenu=async (req,res,next)=>{
     try{
         const restaurant = await Restaurant.findById(req.body.restaurant);
@@ -39,6 +45,9 @@ exports.addMenu=async (req,res,next)=>{
     }
 };
 
+//@desc Update single menu
+//@route GET /api/v1/menus/:id
+//@access Private
 exports.updateMenu = async (req,res,next)=>{
     try{
         const menu = await Menu.findByIdAndUpdate(req.params.id,req.body,{
@@ -54,6 +63,9 @@ exports.updateMenu = async (req,res,next)=>{
     }
 };
 
+//@desc Delete single menus
+//@route DELETE /api/v1/menus/:id
+//@access Private
 exports.deleteMenu=async (req,res,next)=>{
     try{
         let menu = await Menu.findById(req.params.id);
