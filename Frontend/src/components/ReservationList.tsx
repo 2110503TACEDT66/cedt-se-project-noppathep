@@ -46,15 +46,12 @@ export default function BookingList({profile}:{profile:any}) {
     const [bookingDate, setBookingDate] = useState(Dayjs);
     const [location, setLocation] = useState('');
 
-    //profile editing
+    //==================<profile editing>====================
     const [isEdit , setEdit] = useState<boolean>(false);
     const newName = useRef<String>(profile.data.name);
     const newEmail = useRef<String>(profile.data.email);
     const newTel = useRef<String>(profile.data.telephone);
     const newCard = useRef<String>('');
-
-
-
 
     const editProfile = ()=>{
         
@@ -76,10 +73,31 @@ export default function BookingList({profile}:{profile:any}) {
           else return;
         });
 
-        
-
+    
     }
+    //=======================================================
 
+    //==================<profile editing>====================
+    const removeReservation = async (rid:string)=>{
+
+        Swal.fire({
+            title: "Do you want to delete this reservation?",
+            showConfirmButton:true,
+            showCancelButton: true,
+            confirmButtonText: "Sure, delete it",
+            cancelButtonColor: "#d33"
+          }).then(async (result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                await deleteReservation(rid , session?.user.token || "");
+                Swal.fire("Reservation Deleted!", "", "success");
+                window.location.reload();
+            } else return;
+          });
+
+        
+    }
+    //=======================================================
 
     //just for date formatting
     function formatDate(time: Date | number): string {
@@ -100,12 +118,13 @@ export default function BookingList({profile}:{profile:any}) {
         return `${day} ${month} ${year} ${hour}:${minute}`;
     }    
 
+    //waiting for fetched data
     if(!allReservation){return <p>Loading ... <LinearProgress/></p>}
 
 
     return (
         <div className=''>
-            <div className='flex flex-col xl:flex-row mt-4 gap-5 items-center justify-around'>
+            <div className='flex flex-col xl:py-5 xl:flex-row mt-4 gap-5 items-center justify-around'>
                 
                 {profile && (
                     <div className="w-full  md:max-w-[700px] h-full xl:self-start xl:ml-5 p-2 border-2 border-gray-100 text-black shadow-lg" 
@@ -193,116 +212,133 @@ export default function BookingList({profile}:{profile:any}) {
                     </div>
                 )}
 
-                <div className='flex flex-col gap-y-4 w-full px-2 xl:my-5 sm:px-0 items-center sm:mx-4'>
-                    {allReservation.length > 0 ? (
-                        allReservation.map((item: any) => (
-                            <div className='bg-slate-200 w-full md:w-[700px] h-[200px] rounded-md'>
-                                <div className='h-full w-full flex flex-row items-center px-5'>
-                                    
-                                    <Image
-                                        src= {"/img/thaispice.jpg"}
-                                        alt={"Image"}
-                                        width={150}
-                                        height={100}
-                                        className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 sm:rounded-none sm:w-[150px] sm:h-auto"
-                                    />
+                {
+                    allReservation.length > 0
+                        ?
+                            <div className='flex flex-col gap-y-4 w-full md:w-[720px] bg-slate-200 p-2 items-center sm:mx-4 rounded-sm'>
+                            {
+                                allReservation.map((item: any) => 
+                                (
+                                    <div className='bg-slate-50 shadow-md w-full md:w-[700px] h-[200px] rounded-md'>
+                                        <div className='h-full w-full flex flex-row items-center px-5'>
+                                            
+                                            <Image
+                                                src= {"/img/thaispice.jpg"}
+                                                alt={"Image"}
+                                                width={150}
+                                                height={100}
+                                                className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 sm:rounded-none sm:w-[150px] sm:h-auto"
+                                            />
+                                        
+                                            <div className='w-full flex flex-col gap-3 pl-3 pb-3'>
+
+                                                <button className='ml-auto w-fit h-fit py-0'>
+                                                    <Edit fontSize='medium' sx={{ color: "black" }} />
+                                                </button>
                                 
-                                    <div className='w-full flex flex-col gap-3 pl-3 pb-3'>
-                                        <button className='ml-auto w-fit h-fit py-0'>
-                                            <Edit fontSize='medium' sx={{ color: "black" }} />
-                                        </button>
+                                                <Link href={`Restaurant/${item.restaurant.id}`}>
+                                                    <div className='text-left text-lg font-semibold  text-teal-700 underline hover:text-teal-900'>
+                                                        Restaurant: {item.restaurant.name}
+                                                    </div>
+                                                </Link>
+                                
+                                                <div className='text-left text-sm font-medium text-gray-600'>
+                                                    Reservation Date: {formatDate(item.apptDate)}
+                                                </div>
 
-                                        <Link href={`Restaurant/${item.restaurant.id}`}>
-                                            <div className='text-left text-lg font-semibold  text-teal-700 underline hover:text-teal-900'>
-                                                Restaurant: {item.restaurant.name}
+                                                <div className='text-left text-sm font-medium text-gray-600'>
+                                                    Food Order count: {item.foodOrder.length}
+                                                </div>
+                                
+                                                <div className='ml-auto flex flex-row gap-2'>
+                                                    <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-3 py-2 text-white shadow-sm" 
+                                                            onClick={()=>{router.push(`/Orderfood/${item._id}`)}}
+                                                    >
+                                                        Order
+                                                    </button>
+                                                    <button className="block rounded-md bg-red-600 hover:bg-red-700 px-3 py-2 text-white shadow-sm" 
+                                                            onClick={()=>removeReservation(item._id)}
+                                                    >
+                                                        Cancel Reservation
+                                                    </button>
+                                                </div>
+
                                             </div>
-                                        </Link>
-
-                                        <div className='text-left text-sm font-medium text-gray-600'>
-                                            Reservation Date: {formatDate(item.apptDate)}
-                                        </div>
-                                        <div className='text-left text-sm font-medium text-gray-600'>
-                                            Food Order count: {item.foodOrder.length}
-                                        </div>
-
-                                        <div className='ml-auto flex flex-row gap-2'>
-                                            <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-3 py-2 text-white shadow-sm" 
-                                            onClick={()=>{router.push(`/Orderfood/${item._id}`)}}>
-                                                Order
-                                            </button>
-                                            <button className="block rounded-md bg-red-600 hover:bg-red-700 px-3 py-2 text-white shadow-sm" onClick={async () => {
-                                            await deleteReservation(item._id, session?.user.token || "");
-                                            window.location.reload();
-                                            }}>
-                                            Cancel Reservation
-                                            </button>
                                         </div>
                                     </div>
-                                </div>
+                                    // <table className="w-[50%] divide-y divide-gray-200 rounded-lg overflow-hidden text-black">
+                                    //     <tbody className="divide-y divide-gray-200">
+                                    //         <tr className="text-left text-sm font-medium text-gray-600">
+                                    //             <td className="px-6 py-3">Restaurant:</td>
+                                    //             <td className="px-6 py-3">{item.restaurant.name}</td>
+                                    //         </tr>
+                                    //         <tr className="text-left text-sm font-medium text-gray-600">
+                                    //             <td className="px-6 py-3">Reservation Date:</td>
+                                    //             <td className="px-6 py-3">{formatDate(item.apptDate)}</td>
+                                    //         </tr>
+                                    //         <tr className="text-left text-sm font-medium text-gray-600">
+                                    //             <td className="px-6 py-3">Food Order count:</td>
+                                    //             <td className="px-6 py-3">{item.foodOrder.length}</td>
+                                    //             <td className="px-6 py-3">
+                                    //                 <button className="rounded-md bg-orange-600 hover:bg-yellow-300 px-3 py-1 text-white shadow-sm" 
+                                    //                 onClick={()=>{router.push(`/Orderfood/${item._id}`)}}>
+                                    //                     Click here to edit order
+                                    //                 </button>
+                                    //             </td>
+                                    //         </tr>
+                                    //         <tr className="text-left text-sm font-medium text-gray-600">
+                                    //             <td className="px-6 py-3">Change reservation to:</td>
+                                    //             <td className="px-6 py-3"><DateReserve onDateChange={(value:any) => { setBookingDate(value) }} /></td>
+                                    //         </tr>
+                                    //         <tr className="text-left text-sm font-medium text-gray-600">
+                                    //             <td className="px-6 py-3">Change Restaurant to:</td>
+                                    //             <td className="px-6 py-3">
+                                    //                 <Select variant="standard" name="location" className="h-[em] w-[200px]" value={location} onChange={(e)=>{setLocation(e.target.value);}}>
+                                    //                     {RestaurantResponse?.data.map((RestaurantItem:any)=>(
+                                    //                     <MenuItem value={RestaurantItem._id}>{RestaurantItem.name}</MenuItem>
+                                    //                     ))}
+                                    //                 </Select>
+                                    //             </td>
+                                    //         </tr>
+                                    //         <tr className="text-left text-sm font-medium text-gray-600">
+                                    //             <td className="px-6 py-3">Make reservation at:</td>
+                                    //             <td className="px-6 py-3">{formatDate(item.createdAt)}</td>
+                                    //         </tr>
+                                    //         <tr>
+                                    //             <td className="px-6 py-3">
+                                    //                 <button className="block rounded-md bg-red-600 hover:bg-orange-600 px-3 py-1 text-white shadow-sm" onClick={async () => {
+                                    //                 await deleteReservation(item._id, session?.user.token || "");
+                                    //                 window.location.reload();
+                                    //                 }}>
+                                    //                 Cancel Reservation
+                                    //                 </button>
+                                    //             </td>
+                                    //             <td className="px-6 py-3">
+                                    //                 <button className="block rounded-md bg-green-600 hover:bg-green-800 px-3 py-1 text-white shadow-sm" onClick={async () => {
+                                    //                 await updateReservation(item._id, session?.user.token || "", bookingDate, location);
+                                    //                 window.location.reload();
+                                    //                 }}>
+                                    //                     Update Reservation
+                                    //                 </button>
+                                    //             </td>
+                                    //         </tr>
+                                    //     </tbody>
+                                    // </table>
+                                ))
+                            }
                             </div>
-                            // <table className="w-[50%] divide-y divide-gray-200 rounded-lg overflow-hidden text-black">
-                            //     <tbody className="divide-y divide-gray-200">
-                            //         <tr className="text-left text-sm font-medium text-gray-600">
-                            //             <td className="px-6 py-3">Restaurant:</td>
-                            //             <td className="px-6 py-3">{item.restaurant.name}</td>
-                            //         </tr>
-                            //         <tr className="text-left text-sm font-medium text-gray-600">
-                            //             <td className="px-6 py-3">Reservation Date:</td>
-                            //             <td className="px-6 py-3">{formatDate(item.apptDate)}</td>
-                            //         </tr>
-                            //         <tr className="text-left text-sm font-medium text-gray-600">
-                            //             <td className="px-6 py-3">Food Order count:</td>
-                            //             <td className="px-6 py-3">{item.foodOrder.length}</td>
-                            //             <td className="px-6 py-3">
-                            //                 <button className="rounded-md bg-orange-600 hover:bg-yellow-300 px-3 py-1 text-white shadow-sm" 
-                            //                 onClick={()=>{router.push(`/Orderfood/${item._id}`)}}>
-                            //                     Click here to edit order
-                            //                 </button>
-                            //             </td>
-                            //         </tr>
-                            //         <tr className="text-left text-sm font-medium text-gray-600">
-                            //             <td className="px-6 py-3">Change reservation to:</td>
-                            //             <td className="px-6 py-3"><DateReserve onDateChange={(value:any) => { setBookingDate(value) }} /></td>
-                            //         </tr>
-                            //         <tr className="text-left text-sm font-medium text-gray-600">
-                            //             <td className="px-6 py-3">Change Restaurant to:</td>
-                            //             <td className="px-6 py-3">
-                            //                 <Select variant="standard" name="location" className="h-[em] w-[200px]" value={location} onChange={(e)=>{setLocation(e.target.value);}}>
-                            //                     {RestaurantResponse?.data.map((RestaurantItem:any)=>(
-                            //                     <MenuItem value={RestaurantItem._id}>{RestaurantItem.name}</MenuItem>
-                            //                     ))}
-                            //                 </Select>
-                            //             </td>
-                            //         </tr>
-                            //         <tr className="text-left text-sm font-medium text-gray-600">
-                            //             <td className="px-6 py-3">Make reservation at:</td>
-                            //             <td className="px-6 py-3">{formatDate(item.createdAt)}</td>
-                            //         </tr>
-                            //         <tr>
-                            //             <td className="px-6 py-3">
-                            //                 <button className="block rounded-md bg-red-600 hover:bg-orange-600 px-3 py-1 text-white shadow-sm" onClick={async () => {
-                            //                 await deleteReservation(item._id, session?.user.token || "");
-                            //                 window.location.reload();
-                            //                 }}>
-                            //                 Cancel Reservation
-                            //                 </button>
-                            //             </td>
-                            //             <td className="px-6 py-3">
-                            //                 <button className="block rounded-md bg-green-600 hover:bg-green-800 px-3 py-1 text-white shadow-sm" onClick={async () => {
-                            //                 await updateReservation(item._id, session?.user.token || "", bookingDate, location);
-                            //                 window.location.reload();
-                            //                 }}>
-                            //                     Update Reservation
-                            //                 </button>
-                            //             </td>
-                            //         </tr>
-                            //     </tbody>
-                            // </table>
-                        ))
-                    ) : (
-                        <div className="w-[50%] bg-slate-200 rounded-px mx-5 py-2 my-2 text-xl text-black">No Reservation</div>
-                    )}
-                </div>
+                            
+                        :   <div className="w-[95%] md:max-w-[700px] h-72 flex flex-col flex-nowrap items-center justify-center gap-y-3 bg-slate-200 mx-5 ">
+                                <div className='text-lg text-slate-600'>You have no reservation</div>
+                                <Link href={'/reservation'} className='w-fit text-xl font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
+                                    Make some reservation !
+                                </Link>
+                            </div>
+                }
+
+
+
+              
             </div>
         </div>
     );
