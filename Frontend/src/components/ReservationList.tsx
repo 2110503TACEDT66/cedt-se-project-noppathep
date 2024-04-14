@@ -102,7 +102,6 @@ export default function BookingList({profile}:{profile:any}) {
     }
     //=======================================================
 
-    // const [isEditReservation, setEditReservation] = useState<boolean>(false);
     const [editStates, setEditStates] = useState<{ [key: string]: boolean }>({});
     
     // Function to toggle the editing state for a specific reservation
@@ -130,7 +129,6 @@ export default function BookingList({profile}:{profile:any}) {
               )
   
               Swal.fire("Your reservation has been changed", "", "success");
-            //   setEditReservation(false)
               window.location.reload();
             } 
             else return;
@@ -145,7 +143,7 @@ export default function BookingList({profile}:{profile:any}) {
             'August', 'September', 'October', 'November', 'December'
         ];
         let dateObj: Date = new Date(time);
-        dateObj.setHours(dateObj.getHours() - 7);
+        // dateObj.setHours(dateObj.getHours() - 7);
     
 
         const day: string = ('0' + dateObj.getDate()).slice(-2);
@@ -273,7 +271,7 @@ export default function BookingList({profile}:{profile:any}) {
 
                                                 {
                                                     !editStates[item._id] &&
-                                                    <button className='ml-auto w-fit h-fit py-0' onClick={(e) => toggleEditState(item._id)}>
+                                                    <button className='ml-auto w-fit h-fit py-0' onClick={(e) => {toggleEditState(item._id); setLocation(item.restaurant._id)}}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
                                                 }

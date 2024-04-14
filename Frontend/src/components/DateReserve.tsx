@@ -8,12 +8,13 @@ import { useState } from 'react'
 
 export default function Form({onDateChange, defaultDate}:{onDateChange:Function, defaultDate:Dayjs|null}){
 
-    const [bookingDate,setBookDate] = useState<Dayjs|null>(defaultDate)
+    const [bookingDate,setBookDate] = useState<Dayjs|null>(defaultDate);
+    const today = dayjs();
 
     return(
         <div className="bg-state-100 rounded-lg space-x-5 space-y-2 flex felx-row">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker className="bg-white" value={bookingDate} onChange={(value)=>{setBookDate(value);onDateChange(value);}}/>
+                <DateTimePicker className="bg-white" value={bookingDate} onChange={(value)=>{setBookDate(value);onDateChange(value);}} minDate={today}/>
             </LocalizationProvider>
         </div>
     )

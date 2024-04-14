@@ -1,9 +1,9 @@
 import { Dayjs } from "dayjs"
 
 export default async function updateReservation(id: string, token: string, apptDate: Dayjs ,restaurant:string) {
-    if(apptDate) {
-        apptDate = apptDate.add(7, 'hour');
-    }
+    // if(apptDate) {
+    //     apptDate = apptDate.add(7, 'hour');
+    // }
     const response = await fetch(`http://localhost:5000/api/v1/reservations/${id}`, {
         method: "PUT",
         headers: {
