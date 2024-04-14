@@ -1,7 +1,7 @@
 import NextAuth from "next-auth/next";
 import { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import userLogIn from "@/libs/userLogIn";
+import userLogIn from "@/libs/user/userLogIn";
 export const authOptions:AuthOptions = {
         providers: [
             CredentialsProvider({
@@ -17,15 +17,11 @@ export const authOptions:AuthOptions = {
               },
               async authorize(credentials, req) {
                 if(!credentials) return null
-                const user = await userLogIn(credentials.email,credentials.password)
-                if (user) {
-                  // Any object returned will be saved in `user` property of the JWT
-                  return user
-                } else {
-                  // If you return null then an error will be displayed advising the user to check their details.
-                  return null
-                  // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
-                }
+               
+                const userData = await userLogIn(credentials.email , credentials.password);
+                
+                if (!userData){ return null}
+                return userData
               }
             })
           ],

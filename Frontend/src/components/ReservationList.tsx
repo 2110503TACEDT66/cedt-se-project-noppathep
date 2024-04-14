@@ -2,23 +2,23 @@
 import { useSession } from 'next-auth/react';
 import Image from "next/image";
 import { useEffect, useRef, useState } from 'react';
-import  getReservations  from '@/libs/getReservations';
-import deleteReservation from '@/libs/deleteReservation';
+import  getReservations  from '@/libs/reservation/getReservations';
+import deleteReservation from '@/libs/reservation/deleteReservation';
 import LinearProgress from '@mui/material/LinearProgress';
-import updateReservation from '@/libs/updateReservation';
+import updateReservation from '@/libs/user/updateReservation';
 import Select from '@mui/material/Select';
 import { Button, Input } from '@mui/material';
 
 import Swal from 'sweetalert2'
 
 import MenuItem from '@mui/material/MenuItem';
-import getRestaurants from '@/libs/getRestaurants';
+import getRestaurants from '@/libs/restaurant/getRestaurants';
 import DateReserve from './DateReserve';
 import  Dayjs  from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { Close, Edit } from '@mui/icons-material';
 import Link from 'next/link';
-import updateUserProfile from '@/libs/updateUserProfile';
+import updateUserProfile from '@/libs/user/updateUserProfile';
 import dayjs from 'dayjs';
 
 export default function BookingList({profile}:{profile:any}) {
@@ -32,7 +32,7 @@ export default function BookingList({profile}:{profile:any}) {
 
     useEffect(() => {
         const fetchData = async () => {
-        console.log("finding");
+        // console.log("finding");
         const Restaurants = await getRestaurants();
         setRestaurantResponse(Restaurants);
         const reservations = await getReservations(session?.user.token || "");

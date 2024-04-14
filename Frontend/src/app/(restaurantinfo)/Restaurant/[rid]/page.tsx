@@ -1,6 +1,6 @@
 
-import getRestaurant from '@/libs/getRestaurant';
-import getMenu from '@/libs/getMenu';
+import getRestaurant from '@/libs/restaurant/getRestaurant';
+import getMenu from '@/libs/restaurant/getMenu';
 import Image from 'next/image';
 import InteractiveCard from '@/components/InteractiveCard';
 

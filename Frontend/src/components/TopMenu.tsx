@@ -23,7 +23,21 @@ export default async function TopMenu(){
             {
                 session?
                 <div className='flex items-center h-full px-2 text-cyan-600 text-sm'>
-                <TopMenuItem title='My Reservation' pageRef='/myreservation'/>
+                    {
+                        session.user.role == "user" && (
+                            <TopMenuItem title='My Reservation' pageRef='/myreservation'/>
+                        )
+                    }
+                    {
+                        session.user.role === "owner" && (
+                            <TopMenuItem title='My Restaurant' pageRef='/myrestaurant'/>
+                        )
+                    }
+                    {
+                        session.user.role === "admin" && (
+                            <TopMenuItem title='Manage' pageRef='/manage'/>
+                        )
+                    }
                 </div>
                 :
                 <Link href="/api/auth/register">

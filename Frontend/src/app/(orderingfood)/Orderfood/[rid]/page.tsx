@@ -1,13 +1,13 @@
 'use client'
-import getRestaurant from '@/libs/getRestaurant';
-import getMenu from '@/libs/getMenu';
+import getRestaurant from '@/libs/restaurant/getRestaurant';
+import getMenu from '@/libs/restaurant/getMenu';
 import Image from 'next/image';
-import getReservation from '@/libs/getReservation';
+import getReservation from '@/libs/reservation/getReservation';
 import { LinearProgress } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import orderFood from '@/libs/orderFood';
-import deleteOrder from '@/libs/deleteOrder';
+import orderFood from '@/libs/reservation/orderFood';
+import deleteOrder from '@/libs/reservation/deleteOrder';
 
 
 export default function Foodorder({params}:{params:{rid:string}}){
