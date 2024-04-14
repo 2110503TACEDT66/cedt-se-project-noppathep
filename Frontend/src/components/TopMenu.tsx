@@ -4,10 +4,17 @@ import TopMenuItem from './TopMenuItem'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { Link } from '@mui/material'
+import getUserProfile from '@/libs/user/getUserProfile'
 
 export default async function TopMenu(){
 
-    const session = await getServerSession(authOptions)
+    const session = await getServerSession(authOptions);
+    let profile = null;
+
+    if (session != null)
+        profile = await getUserProfile(session?.user.token);
+
+
     return(
         <div className={styles.menucontainer}>
             {
@@ -24,17 +31,17 @@ export default async function TopMenu(){
                 session?
                 <div className='flex items-center h-full px-2 text-cyan-600 text-sm'>
                     {
-                        session.user.role == "user" && (
+                        profile.data.role == "user" && (
                             <TopMenuItem title='My Reservation' pageRef='/myreservation'/>
                         )
                     }
                     {
-                        session.user.role === "owner" && (
+                        profile.data.role === "owner" && (
                             <TopMenuItem title='My Restaurant' pageRef='/myrestaurant'/>
                         )
                     }
                     {
-                        session.user.role === "admin" && (
+                        profile.data.role === "admin" && (
                             <TopMenuItem title='Manage' pageRef='/manage'/>
                         )
                     }

@@ -11,9 +11,9 @@ export default async function mybooking() {
     const session = await getServerSession(authOptions);
     let profile = null;
 
-    if (session && !(session.user.role === "owner")) {
+    if (session) {
         profile = await getUserProfile(session.user.token);
-        console.log(session.user.role);
+        if (profile == "owner") return <p className='text-black text-xl text-center'>Unauthorized ... <LinearProgress /></p>;
     } else {
         return  <p className='text-black text-xl text-center'>Please go back and login ... <LinearProgress /></p>;
     }
