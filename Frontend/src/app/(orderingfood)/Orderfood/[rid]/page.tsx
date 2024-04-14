@@ -14,13 +14,15 @@ import Link from 'next/link';
 
 
 export default function Foodorder({params}:{params:{rid:string}}){
+
+    //setup all state
     const { data: session, status } = useSession();
     const [RestaurantDetail, setRestaurantDetail] = useState<any>(null);
     const [MenuResponse, setMenuResponse] = useState<any>(null);
     const [reservation, setreservation] = useState<any>(null);
     const [editedOrder, setEditedOrder] = useState<Map<string,number>>(new Map());
 
-
+    //fetch all data need on first render
     useEffect(() => {
         const fetchData = async () => {
         console.log("finding");
@@ -59,8 +61,9 @@ export default function Foodorder({params}:{params:{rid:string}}){
         res.then(result => {
             if(result.success) {
                 //update dish amount on page
-                if(editedOrder.get(item._id)){
-                    setEditedOrder(new Map(editedOrder.set(item._id, editedOrder.get(item._id) + 1 )) )
+                const thisItem = editedOrder.get(item._id);
+                if(thisItem){
+                    setEditedOrder(new Map(editedOrder.set(item._id, thisItem + 1 )) )
                 }else{ 
                     setEditedOrder(new Map(editedOrder.set(item._id, 1 ))) 
                 }
@@ -72,7 +75,9 @@ export default function Foodorder({params}:{params:{rid:string}}){
     const handleDelete = (item:any) => {
 
         //do nothing if id not existed in editedOrder
-        if(!editedOrder.get(item._id)) return;
+        const thisItem = editedOrder.get(item._id);
+
+        if(!thisItem) return;
 
         const res = deleteOrder(reservation.data._id,session?session.user.token:"",item._id)
         res.then(result => {
@@ -84,34 +89,38 @@ export default function Foodorder({params}:{params:{rid:string}}){
                         newMap.delete(item._id);
                         return newMap;
                     })
-                }else{ 
-                    setEditedOrder(new Map(editedOrder.set(item._id, editedOrder.get(item._id) - 1 )) )
+                }else{
+                    setEditedOrder(new Map(editedOrder.set(item._id, thisItem - 1 )) )
                 }
             } else { alert("delete failed") }
         })
     }
 
+
+    //==<total price/dishes>===
     const calculateTotalPrice = () => {
         let sum = 0;
         MenuResponse.data.forEach((item:any , index:number)=>{
             if(editedOrder.get(item._id)) {
-                sum += editedOrder.get(item._id) * item.price;
+                sum += editedOrder.get(item._id)! * item.price;
             }
         })
         return sum;
     }
-
     const calculateTotalItem = () => {
         let sum = 0;
         MenuResponse.data.forEach((item:any , index:number)=>{
             if(editedOrder.get(item._id)) {
-                sum += editedOrder.get(item._id);
+                sum += editedOrder.get(item._id)!;
             }
         })
         return sum;
     }
+    //====================================
 
+    //show loading until finish fetching
     if(!MenuResponse||!RestaurantDetail) return (<LinearProgress />)
+
 
     //get initial number of order and store in 'amount'
     let amount = new Map<string,number>();
@@ -161,10 +170,12 @@ export default function Foodorder({params}:{params:{rid:string}}){
                 }
             </div>
 
+            
             <div className='flex flex-nowrap flex-col w-full mt-5 bg-teal-600 h-20 rounded-md shadow-md border-2 justify-center items-end pr-5'>
                 <div className='text-sm sm:text-base text-white h-fit w-fit font-semibold'>Total Items : {calculateTotalItem()}</div>
                 <div className='text-base sm:text-xl h-fit w-fit font-semibold text-white '>Total Price : {calculateTotalPrice()} ฿</div>
             </div>
+
         </main>
     );
 }
