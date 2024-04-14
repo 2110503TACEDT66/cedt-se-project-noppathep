@@ -9,7 +9,7 @@ export default async function updateUserProfile(id: string, token: string, newNa
             name: newName,
             email: newEmail,
             tel: newTel,
-            // card: newCard,
+            card: newCard,
         })
     });
 

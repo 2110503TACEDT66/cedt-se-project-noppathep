@@ -143,7 +143,7 @@ export default function BookingList({profile}:{profile:any}) {
             'August', 'September', 'October', 'November', 'December'
         ];
         let dateObj: Date = new Date(time);
-        // dateObj.setHours(dateObj.getHours() - 7);
+        // dateObj.setHours(dateObj.getHours() - 7); // why?
     
 
         const day: string = ('0' + dateObj.getDate()).slice(-2);
@@ -190,7 +190,6 @@ export default function BookingList({profile}:{profile:any}) {
                                                     </button>    
                                                 </span>
                                         }
-                         
                                 </th>
 
                                 <tr>
@@ -334,64 +333,6 @@ export default function BookingList({profile}:{profile:any}) {
                                             </div>
                                         </div>
                                     </div>
-                                    // <table className="w-[50%] divide-y divide-gray-200 rounded-lg overflow-hidden text-black">
-                                    //     <tbody className="divide-y divide-gray-200">
-                                    //         <tr className="text-left text-sm font-medium text-gray-600">
-                                    //             <td className="px-6 py-3">Restaurant:</td>
-                                    //             <td className="px-6 py-3">{item.restaurant.name}</td>
-                                    //         </tr>
-                                    //         <tr className="text-left text-sm font-medium text-gray-600">
-                                    //             <td className="px-6 py-3">Reservation Date:</td>
-                                    //             <td className="px-6 py-3">{formatDate(item.apptDate)}</td>
-                                    //         </tr>
-                                    //         <tr className="text-left text-sm font-medium text-gray-600">
-                                    //             <td className="px-6 py-3">Food Order count:</td>
-                                    //             <td className="px-6 py-3">{item.foodOrder.length}</td>
-                                    //             <td className="px-6 py-3">
-                                    //                 <button className="rounded-md bg-orange-600 hover:bg-yellow-300 px-3 py-1 text-white shadow-sm" 
-                                    //                 onClick={()=>{router.push(`/Orderfood/${item._id}`)}}>
-                                    //                     Click here to edit order
-                                    //                 </button>
-                                    //             </td>
-                                    //         </tr>
-                                    //         <tr className="text-left text-sm font-medium text-gray-600">
-                                    //             <td className="px-6 py-3">Change reservation to:</td>
-                                    //             <td className="px-6 py-3"><DateReserve onDateChange={(value:any) => { setBookingDate(value) }} /></td>
-                                    //         </tr>
-                                    //         <tr className="text-left text-sm font-medium text-gray-600">
-                                    //             <td className="px-6 py-3">Change Restaurant to:</td>
-                                    //             <td className="px-6 py-3">
-                                    //                 <Select variant="standard" name="location" className="h-[em] w-[200px]" value={location} onChange={(e)=>{setLocation(e.target.value);}}>
-                                    //                     {RestaurantResponse?.data.map((RestaurantItem:any)=>(
-                                    //                     <MenuItem value={RestaurantItem._id}>{RestaurantItem.name}</MenuItem>
-                                    //                     ))}
-                                    //                 </Select>
-                                    //             </td>
-                                    //         </tr>
-                                    //         <tr className="text-left text-sm font-medium text-gray-600">
-                                    //             <td className="px-6 py-3">Make reservation at:</td>
-                                    //             <td className="px-6 py-3">{formatDate(item.createdAt)}</td>
-                                    //         </tr>
-                                    //         <tr>
-                                    //             <td className="px-6 py-3">
-                                    //                 <button className="block rounded-md bg-red-600 hover:bg-orange-600 px-3 py-1 text-white shadow-sm" onClick={async () => {
-                                    //                 await deleteReservation(item._id, session?.user.token || "");
-                                    //                 window.location.reload();
-                                    //                 }}>
-                                    //                 Cancel Reservation
-                                    //                 </button>
-                                    //             </td>
-                                    //             <td className="px-6 py-3">
-                                    //                 <button className="block rounded-md bg-green-600 hover:bg-green-800 px-3 py-1 text-white shadow-sm" onClick={async () => {
-                                    //                 await updateReservation(item._id, session?.user.token || "", bookingDate, location);
-                                    //                 window.location.reload();
-                                    //                 }}>
-                                    //                     Update Reservation
-                                    //                 </button>
-                                    //             </td>
-                                    //         </tr>
-                                    //     </tbody>
-                                    // </table>
                                 ))
                             }
                             </div>
@@ -403,10 +344,6 @@ export default function BookingList({profile}:{profile:any}) {
                                 </Link>
                             </div>
                 }
-
-
-
-              
             </div>
         </div>
     );
