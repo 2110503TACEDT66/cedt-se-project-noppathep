@@ -270,7 +270,7 @@ export default function BookingList({profile}:{profile:any}) {
 
                                                 {
                                                     !editStates[item._id] &&
-                                                    <button className='ml-auto w-fit h-fit py-0' onClick={(e) => {toggleEditState(item._id); setLocation(item.restaurant._id)}}>
+                                                    <button className='ml-auto w-fit h-fit py-0' onClick={(e) => {toggleEditState(item._id); setLocation(item.restaurant._id); setBookingDate(item.apptDate);}}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
                                                 }
