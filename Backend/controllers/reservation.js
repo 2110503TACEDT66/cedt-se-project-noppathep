@@ -362,6 +362,12 @@ exports.removeTable=async (req,res,next)=>{
                 message:`User ${req.user.id} is not authorize to delete this reserve table`
             });
         }
+        if(reservation.reserveTable.includes(req.params.tableid)) {
+            return res.status(400).json({
+                success: false,
+                message: `The table with id ${req.params.tableid} is not in this reservation`
+            });
+        }
         reservation.removeTable(req.params.tableid);
         res.status(200).json({
             success: true,

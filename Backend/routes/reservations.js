@@ -4,8 +4,6 @@ const {getReservations,getReservation,addReservation,updateReservation,deleteRes
 
 const router = express.Router({mergeParams:true});
 const ratingRouter = require('./rating');
-
-
 const {protect,authorize} =require('../middleware/auth');
 
 router.use('/:reservationId/rating/',ratingRouter);
