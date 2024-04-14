@@ -10,12 +10,21 @@ exports.getRating = async(req,res,rext) => {
             return res.status(404).json({ success: false, message: `Restaurant not found with id ${req.params.restaurantId}` });
         }
 
-        const rating = await Rating.find({ restaurant: req.params.restaurantId });
+        const ratings = await Rating.find({ restaurant: req.params.restaurantId });
+
+        let totalRating = 0;
+
+        ratings.forEach(rating => {
+            totalRating += rating.rating;
+        });
+
+        const averageRating = totalRating / ratings.length;
 
         res.status(200).json({
             success: true,
-            count: rating.length,
-            data: rating
+            count: ratings.length,
+            averageRating: averageRating.toFixed(2),
+            data: ratings
         });
     } catch (err) {
         console.error(err);
@@ -28,13 +37,17 @@ exports.addRating = async(req,res,next) => {
         const reservationId = req.params.reservationId;     
         const reservation = await Reservation.findById(reservationId);
         if (!reservation) {
-            return res.status(404).json({ success: false, message: `No restaurant with the id of ${restaurantId}` });
+            return res.status(404).json({ success: false, message: `No restaurant with the id of ${reservationId}` });
         }
 
         const restaurantId = reservation.restaurant;
         const restaurant = await Restaurant.findById(restaurantId);
         if (!restaurant) {
             return res.status(404).json({ success: false, message: `No restaurant with the id of ${restaurantId}` });
+        }
+        existRating = await Rating.find({reservation : req.params.reservationId});
+        if(existRating.length > 0) {
+            return res.status(404).json({ success: false, message: `This reservation already rate this restaurant` });
         }
         
         req.body.reservation = reservationId;
