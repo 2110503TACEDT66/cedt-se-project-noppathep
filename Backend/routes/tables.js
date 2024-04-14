@@ -8,5 +8,4 @@ const {protect,authorize} =require('../middleware/auth');
 
 router.route('/:id').post(protect,authorize('admin'),addTable).get(protect,authorize('admin'),getTable).put(protect,authorize('admin'),updateTable).delete(protect,authorize('admin'),deleteTable);
 
-
 module.exports = router;
