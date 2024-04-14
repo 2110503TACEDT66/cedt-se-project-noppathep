@@ -8,8 +8,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 import updateReservation from '@/libs/updateReservation';
 import Select from '@mui/material/Select';
 import { Button, Input } from '@mui/material';
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 
 import Swal from 'sweetalert2'
 
@@ -18,11 +16,10 @@ import getRestaurants from '@/libs/getRestaurants';
 import DateReserve from './DateReserve';
 import  Dayjs  from 'dayjs';
 import { useRouter } from 'next/navigation';
-import getMenu from '@/libs/getMenu';
-import { setEmitFlags } from 'typescript';
 import { Close, Edit } from '@mui/icons-material';
 import Link from 'next/link';
 import updateUserProfile from '@/libs/updateUserProfile';
+import dayjs from 'dayjs';
 
 export default function BookingList({profile}:{profile:any}) {
 
@@ -49,10 +46,6 @@ export default function BookingList({profile}:{profile:any}) {
 
     //==================<profile editing>====================
     const [isEditProfile , setEditProfile] = useState<boolean>(false);
-    // const newName = useRef<string>(profile.data.name);
-    // const newEmail = useRef<string>(profile.data.email);
-    // const newTel = useRef<string>(profile.data.telephone);
-    // const newCard = useRef<string>('');
     const [newName, setNewName] = useState<string>(profile.data.name);
     const [newEmail, setNewEmail] = useState<string>(profile.data.email);
     const [newTel, setNewTel] = useState<string>(profile.data.telephone);
@@ -109,7 +102,40 @@ export default function BookingList({profile}:{profile:any}) {
     }
     //=======================================================
 
+    // const [isEditReservation, setEditReservation] = useState<boolean>(false);
+    const [editStates, setEditStates] = useState<{ [key: string]: boolean }>({});
+    
+    // Function to toggle the editing state for a specific reservation
+    const toggleEditState = (reservationId: string) => {
+        setEditStates(prevState => ({
+            ...prevState,
+            [reservationId]: !prevState[reservationId]
+        }));
+    };
 
+    const editReservation = async (itemID:string) => {
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showCancelButton: true,
+            
+            confirmButtonText: "Save"
+          }).then((result) => {
+            if (result.isConfirmed && session != null) {
+  
+              updateReservation(
+                itemID,
+                session.user.token,
+                bookingDate,
+                location
+              )
+  
+              Swal.fire("Your reservation has been changed", "", "success");
+            //   setEditReservation(false)
+              window.location.reload();
+            } 
+            else return;
+          });
+    }
 
 
     //just for date formatting
@@ -129,7 +155,7 @@ export default function BookingList({profile}:{profile:any}) {
         const hour: string = ('0' + dateObj.getHours()).slice(-2);
         const minute: string = ('0' + dateObj.getMinutes()).slice(-2);
         return `${day} ${month} ${year} ${hour}:${minute}`;
-    }    
+    }
 
     //waiting for fetched data
     if(!allReservation){return <p>Loading ... <LinearProgress/></p>}
@@ -243,38 +269,69 @@ export default function BookingList({profile}:{profile:any}) {
                                                 className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 sm:rounded-none sm:w-[150px] sm:h-auto"
                                             />
                                         
-                                            <div className='w-full flex flex-col gap-3 pl-3 pb-3'>
+                                            <div className='w-full flex flex-col gap-2 pl-3 pb-3'>
 
-                                                <button className='ml-auto w-fit h-fit py-0'>
-                                                    <Edit fontSize='medium' sx={{ color: "black" }} />
-                                                </button>
+                                                {
+                                                    !editStates[item._id] &&
+                                                    <button className='ml-auto w-fit h-fit py-0' onClick={(e) => toggleEditState(item._id)}>
+                                                        <Edit fontSize='medium' sx={{ color: "black" }} />
+                                                    </button>
+                                                }
                                 
-                                                <Link href={`Restaurant/${item.restaurant.id}`}>
-                                                    <div className='text-left text-lg font-semibold  text-teal-700 underline hover:text-teal-900'>
-                                                        Restaurant: {item.restaurant.name}
-                                                    </div>
-                                                </Link>
+                                                {
+                                                    editStates[item._id] 
+                                                    ?   <Select variant="standard" name="location" className="h-[em] w-[200px]" value={location} onChange={(e)=>{setLocation(e.target.value);}} displayEmpty>
+                                                        {location ? null : (
+                                                            <MenuItem value="" disabled>
+                                                                {item.restaurant.name}
+                                                            </MenuItem>
+                                                        )}
+                                                             {RestaurantResponse?.data.map((RestaurantItem:any)=>(
+                                                            <MenuItem value={RestaurantItem._id}>{RestaurantItem.name}</MenuItem>
+                                                            ))}
+                                                        </Select>
+                                                    :   <Link href={`Restaurant/${item.restaurant.id}`}>
+                                                            <div className='text-left text-lg font-semibold  text-teal-700 underline hover:text-teal-900'>
+                                                                Restaurant: {item.restaurant.name}
+                                                            </div>
+                                                        </Link>
+                                                }
                                 
-                                                <div className='text-left text-sm font-medium text-gray-600'>
-                                                    Reservation Date: {formatDate(item.apptDate)}
-                                                </div>
+                                                {
+                                                    editStates[item._id]
+                                                    ?   <DateReserve defaultDate={dayjs(item.apptDate)} onDateChange={(value:any) => { setBookingDate(value) }} />
+                                                    :   <div className='text-left text-sm font-medium text-gray-600'>
+                                                            Reservation Date: {formatDate(item.apptDate)}
+                                                        </div>
+                                                }
 
                                                 <div className='text-left text-sm font-medium text-gray-600'>
                                                     Food Order count: {item.foodOrder.length}
                                                 </div>
                                 
-                                                <div className='ml-auto flex flex-row gap-2'>
-                                                    <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-3 py-2 text-white shadow-sm" 
-                                                            onClick={()=>{router.push(`/Orderfood/${item._id}`)}}
-                                                    >
-                                                        Order
-                                                    </button>
-                                                    <button className="block rounded-md bg-red-600 hover:bg-red-700 px-3 py-2 text-white shadow-sm" 
-                                                            onClick={()=>removeReservation(item._id)}
-                                                    >
-                                                        Cancel Reservation
-                                                    </button>
-                                                </div>
+                                            {
+                                                editStates[item._id]
+                                                ?   <div className='ml-auto flex flex-row gap-2'>
+                                                        <button onClick={ ()=>{editReservation(item._id); toggleEditState(item._id)}} className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
+                                                            Save
+                                                        </button>
+                                                        <button onClick={ ()=>toggleEditState(item._id) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
+                                                            Cancel Editing
+                                                        </button>
+                                                    </div>
+                                                :   <div className='ml-auto flex flex-row gap-2'>
+                                                        <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
+                                                                onClick={()=>{router.push(`/Orderfood/${item._id}`)}}
+                                                        >
+                                                            Order
+                                                        </button>
+                                                        <button className="block rounded-md bg-red-600 hover:bg-red-700 px-2 py-1 text-white shadow-sm" 
+                                                                onClick={()=>removeReservation(item._id)}
+                                                        >
+                                                            Cancel Reservation
+                                                        </button>
+                                                    </div>
+                                            }
 
                                             </div>
                                         </div>
