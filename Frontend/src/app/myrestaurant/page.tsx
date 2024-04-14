@@ -20,7 +20,7 @@ export default async function myRestaurant() {
     return (
         <main>
             <Suspense fallback={<p className='text-black text-xl text-center' >Loading ... <LinearProgress /></p>}>
-                <RestaurantList></RestaurantList>
+                <RestaurantList profile={profile}></RestaurantList>
             </Suspense>
         </main>
     );
