@@ -2,6 +2,9 @@ const Reservation = require('../models/Reservation');
 const Restaurant  = require('../models/Restaurant');
 const Rating = require('../models/Rating');
 
+//@desc get Rating  in restaurant
+//@route GET /api/v1/restaurants/:restaurantId/rating
+//Private
 exports.getRating = async(req,res,rext) => {
     try {
         const restaurant = await Restaurant.findById(req.params.restaurantId);
@@ -32,6 +35,9 @@ exports.getRating = async(req,res,rext) => {
     }
 }
 
+//@desc add Rating to restaurant
+//@route POST /api/v1/reservations/reservationId/rating
+//Private 
 exports.addRating = async(req,res,next) => {
     try {
         const reservationId = req.params.reservationId;     
@@ -69,6 +75,9 @@ exports.addRating = async(req,res,next) => {
     }
 }
 
+//@desc update Rating
+//@route POST /api/v1/rating/:ratingId
+//Private
 exports.updateRating = async(req,res,next) => {
     try {
         console.log(req.params)
@@ -92,6 +101,9 @@ exports.updateRating = async(req,res,next) => {
 
 }
 
+//@desc remove Rating
+//@route DELETE /api/v1/rating/ratingId
+//Private
 exports.deleteRating = async(req,res,next) => {
     try{
         const rating = await Rating.findById(req.params.ratingId);
