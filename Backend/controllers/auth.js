@@ -71,6 +71,19 @@ exports.getMe = async (req,res,next)=>{
     res.status(200).json({success:true,data:user});
 }
 
+exports.updateProfile = async (req, res, next) => {
+    try {
+        const user = await User.findByIdAndUpdate(req.user.id, req.body,{
+            new:true,
+            runValidator:true
+        });
+
+        res.status(200).json({success:true, data:user});
+    } catch (error) {
+        res.status(500).json({success:false, msg:"Something wrong!"});
+    }
+}
+
 exports.logout = async (req,res,next)=>{
     res.cookie('token','none',{
         expires:new Date(Date.now()+10*1000),

@@ -11,7 +11,6 @@ export default async function deleteReservation(id: string, token: string) {
     if (!response.ok) {
         throw new Error("Cannot delete reservation");
     }
-    alert("The reservation has been deleted");
 
     return await response.json();
 }

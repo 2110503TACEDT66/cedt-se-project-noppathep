@@ -71,29 +71,30 @@ export default function Foodorder({params}:{params:{rid:string}}){
     });
 
     return(
-        <main className="text-center p-5 text-black">
+        <main className="flex flex-col items-center text-center p-5 text-black">
             <h1 className="text-lg font-medium">{RestaurantDetail.data.name}</h1>
-            <div className="grid grid-cols-3 gap-4">
+            <div className="grid grid-cols-3 gap-2 w-fit">
                 {
                 MenuResponse.data.map((item:any, index:number)=>(
-                    <div key={index} className="bg-white p-4 rounded-lg shadow-md">
-                    <div className="aspect-w-16 aspect-h-9 mb-4 content-center flex justify-center">
-                        <Image src={item.image} alt="Product Picture" width={300} height={300} className="object-cover rounded-lg"/>
-                    </div>
-                    <div className="text-center">
-                    <h3 className="text-lg font-semibold">{item.name} : {item.price} ฿</h3>
-                    <div className='text-lg text-black'>amount : {amount.get(item._id)? amount.get(item._id): 0}</div>
-                    <div className='space-x-4'>
-                    <button className="rounded-md bg-green-600 hover:bg-cyan-300 px-3 py-1 text-white shadow-sm" 
-                    onClick={()=>handleAdd(item)}>
-                        Click here to add order
-                    </button>
-                    <button className="rounded-md bg-red-600 hover:bg-red-900 px-3 py-1 text-white shadow-sm" 
-                    onClick={()=>handleDelete(item)}>
-                        Click here to cancel order
-                    </button>
-                    </div>
-                    </div>
+                    <div key={index} className="w-[280px] h-[250px] bg-white p-4 rounded-lg shadow-md flex flex-col justify-between">
+                        <div className="aspect-w-16 aspect-h-9 content-center flex justify-center">
+                            <Image src={item.image} alt="Product Picture" width={300} height={300} 
+                            className="size-14 self-start sm:self-center rounded-full sm:mt-0 sm:rounded-none sm:w-[150px] sm:h-auto"/>
+                        </div>
+                        <div className="flex flex-col gap-1 text-center">
+                            <h3 className="text-lg font-semibold">{item.name} : {item.price} ฿</h3>
+                            <div className='text-lg text-black'>Amount : {amount.get(item._id) ? amount.get(item._id) : 0}</div>
+                            <div className='space-x-4'>
+                                <button className="rounded-md bg-green-600 hover:bg-cyan-300 px-3 py-1 text-white shadow-sm" 
+                                onClick={() => handleAdd(item)}>
+                                    Add order
+                                </button>
+                                <button className="rounded-md bg-red-600 hover:bg-red-900 px-3 py-1 text-white shadow-sm" 
+                                onClick={() => handleDelete(item)}>
+                                    Cancel order
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 ))
                 }
