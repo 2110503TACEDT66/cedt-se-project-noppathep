@@ -1,7 +1,11 @@
 const Reservation = require('../models/Reservation');
 const Restaurant  = require('../models/Restaurant');
 const Menu  = require('../models/Menu');
+const Table = require('../models/Table');
 
+//@desc Get all reservation
+//@route GET /api/v1/reservations
+//@access Public
 exports.getReservations=async (req,res,next)=>{
     let query;
     if(req.user.role !== 'admin'){
@@ -28,7 +32,9 @@ exports.getReservations=async (req,res,next)=>{
         });
     }
 };
-
+//@desc Get single reservation
+//@route GET /api/v1/reservations/:id
+//@acess Public
 exports.getReservation=async (req,res,next)=>{
     try{
         const reservation = await Reservation.findById(req.params.id).populate({
@@ -59,7 +65,9 @@ exports.getReservation=async (req,res,next)=>{
         });
     }
 };
-
+//@desc  Add reservation
+//@route POST /api/v1/restaurants/:restaurantId/reservation
+//@acess Private
 exports.addReservation=async (req,res,next)=>{
     try{
         req.body.restaurant = req.params.restaurantId;
@@ -71,35 +79,43 @@ exports.addReservation=async (req,res,next)=>{
                 message:`The user with the id ${req.user.id} has already made 3 reservation`
             });
         }
+
         const restaurant = await Restaurant.findById(req.params.restaurantId);
+
         if(!restaurant){
             return res.status(404).json({success:false,message:`No restaurant with the id of ${req.parms.restaurantId}`});
         }
-
-        //Check in open-close range
         const { apptDate } = req.body;
-        const { open, close } = restaurant.openingHours;
-        const apptdate = apptDate.slice(11,16);
-        const openTime = parseInt(open.slice(0,2))*60 + parseInt(open.slice(3,5));
-        let closeTime = parseInt(close.slice(0,2))*60 + parseInt(close.slice(3,5));
-        let apptTime = parseInt(apptdate.slice(0,2))*60 + parseInt(apptdate.slice(3,5));
-
-        if(closeTime < openTime) {
-            closeTime += 1440;
-            if(apptTime < closeTime && apptTime< openTime) {
-                apptTime += 1440;
-            }   
-        }
-        if(apptTime >= closeTime || apptTime < openTime) {
+        const { open , close } =  restaurant.openingHours;
+        const today = new Date();
+        const thailandTime = new Date(today.getTime() + (7 * 60 * 60 * 1000));
+        const reservationTime = new Date(apptDate);
+        if(reservationTime < thailandTime) {
             return res.status(400).json({
-                success: false,
-                message: 'Reservation must be within restaurant opening hours'
+                success : false,
+                message : "Reservation must be scheduled for a time after today"
+            })
+        }
+
+        const openTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(open.split(':')[0]), parseInt(open.split(':')[1]));
+        const closeTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(close.split(':')[0]), parseInt(close.split(':')[1]));
+        
+        if(closeTime < openTime) {
+            closeTime.setDay(closeTime.getDay()+1);
+        }
+
+        if(reservationTime > closeTime || reservationTime < openTime) {
+            return res.status(400).json({
+                    success: false,
+                    message: 'Reservation must be within restaurant opening hours'
             });
         }
-        if(apptTime > closeTime-60) {
+
+        const oneHourBeforeClose = new Date(closeTime.getTime() - (1 * 60 * 60 * 1000));
+        if(reservationTime > oneHourBeforeClose) {
             return res.status(400).json({
-                success: false,
-                message: 'Reservation must be befor restaurant close time 1 hour'
+                    success: false,
+                    message: 'Reservation must be befor restaurant close time 1 hour'
             });
         }
         const reservation = (await Reservation.create(req.body));
@@ -116,9 +132,11 @@ exports.addReservation=async (req,res,next)=>{
     }
 };
 
+//@desc  Update reservation
+//@route PUT /api/v1/reservations/:id
+//@acess Private
 exports.updateReservation=async (req,res,next)=>{
-    try{
-        
+    try{   
         let reservation = await Reservation.findById(req.params.id);
         if(!reservation){
             return res.status(404).json({success:false,message:`No reservation with the id of ${req.params.id}`});
@@ -130,33 +148,41 @@ exports.updateReservation=async (req,res,next)=>{
             });
         }
 
-        //Check in open-close range
         const { apptDate } = req.body;
         if(apptDate) {
             const restaurant = await Restaurant.findById(reservation.restaurant);
             const { open, close } = restaurant.openingHours;
-            const apptdate = apptDate.slice(11,16);
-            const openTime = parseInt(open.slice(0,2))*60 + parseInt(open.slice(3,5));
-            let closeTime = parseInt(close.slice(0,2))*60 + parseInt(close.slice(3,5));
-            let apptTime = parseInt(apptdate.slice(0,2))*60 + parseInt(apptdate.slice(3,5));
-            if(closeTime < openTime) {
-                closeTime += 1440;
-                if(apptTime < closeTime && apptTime< openTime) {
-                    apptTime += 1440;
-                }   
+            const today = new Date();
+            const thailandTime = new Date(today.getTime() + (7 * 60 * 60 * 1000));
+            const reservationTime = new Date(apptDate);
+            if(reservationTime < thailandTime) {
+                return res.status(400).json({
+                   success : false,
+                   message : "Reservation must be scheduled for a time after today"
+                })
             }
-            if(apptTime >= closeTime || apptTime < openTime) {
+
+            const openTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(open.split(':')[0]), parseInt(open.split(':')[1]));
+            const closeTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(close.split(':')[0]), parseInt(close.split(':')[1]));
+        
+            if(closeTime < openTime) {
+                closeTime.setDay(closeTime.getDay()+1);
+            }
+
+            if(reservationTime > closeTime || reservationTime < openTime) {
                 return res.status(400).json({
                     success: false,
                     message: 'Reservation must be within restaurant opening hours'
                 });
             }
-            if(apptTime > closeTime - 60) {
+
+            const oneHourBeforeClose = new Date(closeTime.getTime() - (1 * 60 * 60 * 1000));
+            if(reservationTime > oneHourBeforeClose) {
                 return res.status(400).json({
                     success: false,
                     message: 'Reservation must be befor restaurant close time 1 hour'
-                });
-            }
+               });
+            } 
         }
         
         reservation = await Reservation.findByIdAndUpdate(req.params.id,req.body,{
@@ -175,7 +201,9 @@ exports.updateReservation=async (req,res,next)=>{
         });
     }
 };
-
+//@desc  Delete reservation
+//@route DELETE /api/v1/reservations/:id
+//@acess Private
 exports.deleteReservation=async (req,res,next)=>{
     try{
         let reservation = await Reservation.findById(req.params.id);
@@ -201,7 +229,9 @@ exports.deleteReservation=async (req,res,next)=>{
         });
     }
 };
-
+//@desc OrderFood body = { id: menuid}
+//@route POST /api/v1/reservations/:id
+//Private
 exports.orderFood =async (req,res,next)=>{
     try{
         const reservation = await Reservation.findById(req.params.id);
@@ -243,7 +273,9 @@ exports.orderFood =async (req,res,next)=>{
         });
     }
 };
-
+//@desc Cancel Food 
+//@route POST /api/v1/reservations/:id/:food
+//Private
 exports.removeFood=async (req,res,next)=>{
     try{
         let reservation = await Reservation.findById(req.params.id);
@@ -266,6 +298,80 @@ exports.removeFood=async (req,res,next)=>{
         return res.status(500).json({
             success:false,
             message:'Cannot delete Food order'
+        });
+    }
+};
+//@desc add Table
+//@route  POST /api/v1/reservations/:id/tables
+//Private
+exports.addTable = async(req,res,next) => {
+    try{
+        const reservation = await Reservation.findById(req.params.id);
+        if(!reservation){
+            return res.status(400).json({
+                success:false,
+                message:`Cannot find reservation with id of ${req.params.id}`
+            });
+        }
+        if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin'){
+            return res.status(401).json({
+                success:false,
+                message:`User ${req.user.id} is not authorize to delete this bootcamp`
+            });
+        }
+        
+        const table = await Table.findById(req.body.id);
+        if(!table){
+            return res.status(404).json({success:false,message:`There are no such table in this restautarant`});
+        }
+        if(!table.restaurant.equals(reservation.restaurant)){
+            return res.status(404).json({success:false,message:`Your reserved restaurant does not have the current table`});
+        }
+        if(reservation.reserveTable.includes(table._id)) {
+            return res.status(400).json({
+                success: false,
+                message: `The table with id ${table._id} is already reserved`
+            });
+        }
+    
+        reservation.addTable(table);
+        res.status(200).json({
+            success: true,
+            data:reservation
+        });
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:'Cannot reserve table'
+        });
+    }
+};
+//@desc add Table 
+//@route DELETE /api/v1/reservations/:id/tables/:tableid
+//Public
+exports.removeTable=async (req,res,next)=>{
+    try{
+        let reservation = await Reservation.findById(req.params.id);
+        if(!reservation){
+            return res.status(404).json({success:false,message:`No reservation with the id of ${req.params.id}`});
+        }
+        if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin'){
+            return res.status(401).json({
+                success:false,
+                message:`User ${req.user.id} is not authorize to delete this reserve table`
+            });
+        }
+        reservation.removeTable(req.params.tableid);
+        res.status(200).json({
+            success: true,
+            data:reservation
+        });
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:'Cannot delete table reserve'
         });
     }
 };
