@@ -22,6 +22,17 @@ const UserSchema=new mongoose.Schema({
             'Please add a valid email'
         ]
     },
+    card: {
+        type: String,
+        required: false,
+        unique: true,
+        minlength: [15, 'This is not a credit card number'],
+    },
+    points: {
+        type: Number,
+        default: 0,
+        required: false,
+    },
     role: {
         type:String,
         enum: ['user','admin'],

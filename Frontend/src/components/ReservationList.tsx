@@ -22,6 +22,7 @@ import getMenu from '@/libs/getMenu';
 import { setEmitFlags } from 'typescript';
 import { Close, Edit } from '@mui/icons-material';
 import Link from 'next/link';
+import updateUserProfile from '@/libs/updateUserProfile';
 
 export default function BookingList({profile}:{profile:any}) {
 
@@ -48,10 +49,14 @@ export default function BookingList({profile}:{profile:any}) {
 
     //==================<profile editing>====================
     const [isEditProfile , setEditProfile] = useState<boolean>(false);
-    const newName = useRef<String>(profile.data.name);
-    const newEmail = useRef<String>(profile.data.email);
-    const newTel = useRef<String>(profile.data.telephone);
-    const newCard = useRef<String>('');
+    // const newName = useRef<string>(profile.data.name);
+    // const newEmail = useRef<string>(profile.data.email);
+    // const newTel = useRef<string>(profile.data.telephone);
+    // const newCard = useRef<string>('');
+    const [newName, setNewName] = useState<string>(profile.data.name);
+    const [newEmail, setNewEmail] = useState<string>(profile.data.email);
+    const [newTel, setNewTel] = useState<string>(profile.data.telephone);
+    const [newCard, setNewCard] = useState<string>('');
 
     const editProfile = ()=>{
         
@@ -61,11 +66,16 @@ export default function BookingList({profile}:{profile:any}) {
           
           confirmButtonText: "Save"
         }).then((result) => {
-          if (result.isConfirmed) {
+          if (result.isConfirmed && session != null) {
 
-            /* 
-                WAIT FOR EDITPROFILE FUNCTION
-            */
+            updateUserProfile(
+                session?.user._id,
+                session?.user.token,
+                newName,
+                newEmail,
+                newTel,
+                newCard
+            );
 
             Swal.fire("Your profile has been changed", "", "success");
             setEditProfile(false)
@@ -164,8 +174,8 @@ export default function BookingList({profile}:{profile:any}) {
                                     <td>
                                         {
                                         isEditProfile
-                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={profile.data.name}/>
-                                            : <>{profile.data.name}</>
+                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => setNewName(event.target.value)} placeholder={newName}/>
+                                            : <>{newName}</>
                                         }
                                     </td>
                                 </tr>
@@ -175,8 +185,8 @@ export default function BookingList({profile}:{profile:any}) {
                                     <td>
                                         {
                                         isEditProfile
-                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={profile.data.email}/>
-                                            : <>{profile.data.email}</>
+                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => setNewEmail(event.target.value)} placeholder={newEmail}/>
+                                            : <>{newEmail}</>
                                         }
                                     </td>
                                 </tr>
@@ -186,8 +196,8 @@ export default function BookingList({profile}:{profile:any}) {
                                     <td>
                                         {
                                         isEditProfile
-                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={profile.data.telephone}/>
-                                            : <>{profile.data.telephone}</>
+                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => setNewTel(event.target.value)} placeholder={newTel}/>
+                                            : <>{newTel}</>
                                         }
                                     </td>
                                 </tr>
@@ -197,8 +207,8 @@ export default function BookingList({profile}:{profile:any}) {
                                     <td>
                                         {
                                         isEditProfile
-                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => event.target.value} placeholder={`2154*******557`} />
-                                            : <>"2154*******557"</>
+                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => setNewCard(event.target.value)} placeholder={newCard} />
+                                            : <>{newCard}</>
                                         }
                                     </td>
                                 </tr>
