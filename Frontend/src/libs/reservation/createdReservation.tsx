@@ -21,14 +21,13 @@ export default async function createdReservation(id: string, token: string, appt
         try {
             const errorJson = JSON.parse(errorMessage);
             if (errorJson.message) {
-                alert(errorJson.message);
                 throw new Error(errorJson.message);
             } else {
                 throw new Error("Unknown error occurred");
             }
-        } catch (error) {
+        } catch (error:any) {
             console.error("Error parsing error message:", error);
-            throw new Error("Cannot create reservation");
+            throw new Error(error.message);
         }
     }
     return await response.json();
