@@ -11,7 +11,8 @@ export interface RestaurantModel {
       open: string,
       close: string
   }
-    tel: string
+    tel: string,
+    image:string
   }
 
 export interface ReservationItem {
