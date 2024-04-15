@@ -2,11 +2,7 @@
 import { useSession } from 'next-auth/react';
 import Image from "next/image";
 import { useEffect, useRef, useState } from 'react';
-import  getReservations  from '@/libs/reservation/getReservations';
-import deleteReservation from '@/libs/reservation/deleteReservation';
 import LinearProgress from '@mui/material/LinearProgress';
-import updateReservation from '@/libs/user/updateReservation';
-import Select from '@mui/material/Select';
 import { Button, Input } from '@mui/material';
 
 import Swal from 'sweetalert2'
@@ -21,6 +17,7 @@ import Link from 'next/link';
 import updateUserProfile from '@/libs/user/updateUserProfile';
 import dayjs from 'dayjs';
 import deleteRestaurant from '@/libs/restaurant/deleteRestaurant';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export default function RestaurantList({profile}:{profile:any}) {
 
@@ -29,19 +26,19 @@ export default function RestaurantList({profile}:{profile:any}) {
     const { data: session, status } = useSession();
 
     const [allRestaurant, setAllRestaurant] = useState<any>(null);
+    const [ownedRestaurant, setOwnedRestaurant] = useState<any>(null);
 
     useEffect(() => {
         const fetchData = async () => {
         console.log("finding");
         const Restaurants = await getRestaurants();
         setAllRestaurant(Restaurants);
+        setOwnedRestaurant(Restaurants.data.filter((item: any) => item.owner === profile.data._id))
         console.log(Restaurants);
       };
       fetchData();
     }, []);
-  
-    const [bookingDate, setBookingDate] = useState(Dayjs);
-    const [location, setLocation] = useState('');
+
 
     //==================<profile editing>====================
     const [isEditProfile , setEditProfile] = useState<boolean>(false);
@@ -105,34 +102,8 @@ export default function RestaurantList({profile}:{profile:any}) {
     
     // Function to toggle the editing state for a specific reservation
     const toggleEditState = (reservationId: string) => {
-        setEditStates(prevState => ({
-            ...prevState,
-            [reservationId]: !prevState[reservationId]
-        }));
+        // TODO : Switch to edit restaurant page
     };
-
-    const editReservation = async (itemID:string) => {
-        Swal.fire({
-            title: "Do you want to save the changes?",
-            showCancelButton: true,
-            
-            confirmButtonText: "Save"
-          }).then((result) => {
-            if (result.isConfirmed && session != null) {
-  
-              updateReservation(
-                itemID,
-                session.user.token,
-                bookingDate,
-                location
-              )
-  
-              Swal.fire("Your reservation has been changed", "", "success");
-              window.location.reload();
-            } 
-            else return;
-          });
-    }
 
 
     //just for date formatting
@@ -248,13 +219,11 @@ export default function RestaurantList({profile}:{profile:any}) {
                 )}
 
                 {
-                    allRestaurant.data.length > 0 && (
-                        <div className='flex flex-col gap-y-4 w-full md:w-[720px] bg-slate-200 p-2 items-center sm:mx-4 rounded-sm'>
-                            {allRestaurant.data
-                                .filter((item: any) => item.owner === profile.data._id) // Filter restaurants by owner
-                                .map((item: any) => (
+                    ownedRestaurant.length > 0 
+                    ?   <div className='flex flex-col gap-y-4 w-full md:w-[720px] bg-slate-200 p-2 items-center sm:mx-4 rounded-sm'>
+                            {ownedRestaurant.map((item: any) => (
                                     <div key={item._id} className='bg-slate-50 shadow-md w-full md:w-[700px] h-[200px] rounded-md'>
-                                        <div className='h-full w-full flex flex-row items-center px-5'>
+                                        <div className='h-full w-full flex flex-row items-center justify-center px-5'>
                                             <Image
                                                 src="/img/thaispice.jpg"
                                                 alt="Image"
@@ -281,19 +250,12 @@ export default function RestaurantList({profile}:{profile:any}) {
                                                     Reservation Count: {item.reservations.length}
                                                 </div>
 
-                                                {
-                                                editStates[item._id]
-                                                ?   <div className='ml-auto flex flex-row gap-2'>
-                                                        <button onClick={ ()=>{toggleEditState(item._id)}} className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
-                                                            Save
-                                                        </button>
-                                                        <button onClick={ ()=>toggleEditState(item._id) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
-                                                            Cancel Editing
-                                                        </button>
-                                                    </div>
-                                                :   <div className='ml-auto flex flex-row gap-2'>
+                                                <div className='ml-auto flex flex-row gap-2'>
                                                         <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
                                                                 onClick={()=>{router.push(``)}}
+                                                                // TODO : View reservations page
+                                                                // ทำให้ reservation page เป็น component ที่ใส่ reservation data ที่ filter เฉพาะของร้านนี้
+                                                                // ทำไว้เผื่อสำหรับหน้าแสดงของ admin เลย
                                                         >
                                                             View Reservations
                                                         </button>
@@ -302,15 +264,24 @@ export default function RestaurantList({profile}:{profile:any}) {
                                                         >
                                                            Delete Restaurant
                                                         </button>
-                                                    </div>
-                                            }
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 ))
                             }
+                            <div className='m-2'>
+                                <Link href={'/addRestaurant'} className='w-fit text-xl font-medium bg-purple-500 hover:bg-purple-600 px-4 py-2 rounded-md text-white'>
+                                    <AddCircleIcon /> Add restaurant
+                                </Link>
+                            </div>
                         </div>
-                    )
+                    :   <div className="w-[95%] md:max-w-[700px] h-72 flex flex-col flex-nowrap items-center justify-center gap-y-3 bg-slate-200 mx-5 ">
+                            <div className='text-lg text-slate-600'>You have no restaurant</div>
+                            <Link href={'/addRestaurant'} className='w-fit text-xl font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
+                                Make some restaurant !
+                            </Link>
+                        </div>
                 }
             </div>
         </div>

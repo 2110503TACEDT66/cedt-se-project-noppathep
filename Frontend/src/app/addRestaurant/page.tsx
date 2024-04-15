@@ -20,7 +20,8 @@ export default function addRestaurantPage() {
     const [close, setClose] = useState<Dayjs>(dayjs());
     const [tel, setTel] = useState<string>("");
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e:any) => {
+        e.preventDefault();
         const session = await getSession();
 
         if (session != null) {
@@ -47,6 +48,7 @@ export default function addRestaurantPage() {
                 console.log(newRestaurant);
                 await createRestaurant(session.user.token, newRestaurant);
                 console.log("Successfully create restaurant");
+                window.location.href = '/myrestaurant';
             } catch (error) {
                 console.log(newRestaurant);
                 console.error("Failed to create restaurant:", error);
