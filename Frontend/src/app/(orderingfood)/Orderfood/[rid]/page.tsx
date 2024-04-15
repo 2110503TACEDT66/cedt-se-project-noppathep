@@ -143,7 +143,7 @@ export default function Foodorder({params}:{params:{rid:string}}){
             <div className="grid gap-x-5 gap-y-3 w-full sm:w-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {
                 MenuResponse.data.map((item:any, index:number)=>(
-                    <div key={index} className="h-[150px] sm:w-[280px] sm:h-[320px] bg-white p-3 rounded-lg shadow-md flex sm:flex-col items-center justify-around">
+                    <div key={index} className="h-[150px] sm:w-[280px] sm:h-[320px] bg-white p-3 rounded-lg shadow-md flex sm:flex-col border-2 border-gray-100 items-center justify-around">
                         <div className="aspect-[16/10] content-center flex justify-center">
                             <Image src={item.image} alt="Product Picture" width={300} height={300} 
                             className=" self-start w-40 h-auto sm:w-auto  sm:self-center rounded-md "/>
@@ -171,7 +171,7 @@ export default function Foodorder({params}:{params:{rid:string}}){
             </div>
 
             
-            <div className='flex flex-nowrap flex-col w-full mt-5 bg-teal-600 h-20 rounded-md shadow-md border-2 justify-center items-end pr-5'>
+            <div className='flex flex-nowrap flex-col w-full mt-5 bg-teal-600 h-20 rounded-b-lg shadow-md border-2 justify-center items-end pr-5'>
                 <div className='text-sm sm:text-base text-white h-fit w-fit font-semibold'>Total Items : {calculateTotalItem()}</div>
                 <div className='text-base sm:text-xl h-fit w-fit font-semibold text-white '>Total Price : {calculateTotalPrice()} ฿</div>
             </div>
