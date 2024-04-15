@@ -311,7 +311,7 @@ exports.addTable = async(req,res,next) => {
         if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin'){
             return res.status(401).json({
                 success:false,
-                message:`User ${req.user.id} is not authorize to delete this bootcamp`
+                message:`User ${req.user.id} is not authorize to reserve this table`
             });
         }
         
@@ -342,9 +342,9 @@ exports.addTable = async(req,res,next) => {
         });
     }
 };
-//@desc add Table 
+//@desc remove Table 
 //@route DELETE /api/v1/reservations/:id/tables/:tableid
-//Public
+//Private
 exports.removeTable=async (req,res,next)=>{
     try{
         let reservation = await Reservation.findById(req.params.id);
@@ -355,6 +355,12 @@ exports.removeTable=async (req,res,next)=>{
             return res.status(401).json({
                 success:false,
                 message:`User ${req.user.id} is not authorize to delete this reserve table`
+            });
+        }
+        if(!reservation.reserveTable.includes(req.params.tableid)) {
+            return res.status(400).json({
+                success: false,
+                message: `The table with id ${req.params.tableid} is not in this reservation`
             });
         }
         reservation.removeTable(req.params.tableid);

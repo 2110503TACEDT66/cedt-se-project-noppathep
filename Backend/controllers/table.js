@@ -32,7 +32,7 @@ exports.getTable = async (req,res,next)=>{
     try{
         const table = await Table.findById(req.params.id).populate('restaurant');
         if(!table){
-            return res.status(400).json({success:false});
+            return res.status(404).json({ success: false, message: `No table with the id of ${req.params.id}` });
         }
         res.status(200).json({
             success:true,
@@ -40,18 +40,22 @@ exports.getTable = async (req,res,next)=>{
         });
     }catch(err){
         console.log(err)
-        res.status(400).json({success:false});
+        res.status(400).json({
+            success:false,
+            message:'Cannot get Table'
+        });
     }
 };
 
 //@desc add Table for this restaurantID(:id)
-//@route POST /api/v1/tables/:id
+//@route POST /api/v1/restaurant/:restaurantId
 //@access Praivate
 exports.addTable = async (req, res, next) => {
     try {
-        const restaurantId = req.params.id;
+        const restaurantId = req.params.restaurantId;
         
         const restaurant = await Restaurant.findById(restaurantId);
+        console.log(restaurantId)
         if (!restaurant) {
             return res.status(404).json({ success: false, message: `No restaurant with the id of ${restaurantId}` });
         }
@@ -83,11 +87,17 @@ exports.updateTable= async (req,res,next)=>{
             runValidator:true
         });
         if(!table){
-            return res.status(400).json({success:false});
+            return res.status(400).json({
+                success:false,
+                message : 'Cannot find Table'
+            });
         }
         res.status(200).json({success:true,data:table});
     }catch(err){
-        res.status(400).json({success:false});
+        res.status(400).json({
+            success:false,
+            message:'Cannot Update Table'
+        });
     }
 };
 
@@ -98,11 +108,17 @@ exports.deleteTable = async(req,res,next)=>{
     try{
         const table = await Table.findById(req.params.id);
         if(!table){
-            return res.status(404).json({success:false});
+            return res.status(404).json({
+                success:false,
+                message : 'Cannot find Table'
+            });
         }
         await table.deleteOne();
         res.status(200).json({success:true,data:{}});
     }catch(err){
-        res.status(400).json({success:false});
+        res.status(400).json({
+            success:false,
+            message:'Cannot Delete Table'
+        });
     }
 };
