@@ -20,23 +20,22 @@ import { Close, Edit } from '@mui/icons-material';
 import Link from 'next/link';
 import updateUserProfile from '@/libs/user/updateUserProfile';
 import dayjs from 'dayjs';
+import deleteRestaurant from '@/libs/restaurant/deleteRestaurant';
 
 export default function RestaurantList({profile}:{profile:any}) {
 
     const router = useRouter()
 
     const { data: session, status } = useSession();
-    const [allReservation, setAllReservation] = useState<any>(null);
 
     const [allRestaurant, setAllRestaurant] = useState<any>(null);
 
     useEffect(() => {
         const fetchData = async () => {
-        // console.log("finding");
+        console.log("finding");
         const Restaurants = await getRestaurants();
         setAllRestaurant(Restaurants);
-        const reservations = await getReservations(session?.user.token || "");
-        setAllReservation(reservations.data);
+        console.log(Restaurants);
       };
       fetchData();
     }, []);
@@ -81,10 +80,10 @@ export default function RestaurantList({profile}:{profile:any}) {
     //=======================================================
 
     //==================<profile editing>====================
-    const removeReservation = async (rid:string)=>{
+    const removeRestaurant = async (rid:string)=>{
 
         Swal.fire({
-            title: "Do you want to delete this reservation?",
+            title: "Do you want to delete this restaurant?",
             showConfirmButton:true,
             showCancelButton: true,
             confirmButtonText: "Sure, delete it",
@@ -92,8 +91,8 @@ export default function RestaurantList({profile}:{profile:any}) {
           }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                await deleteReservation(rid , session?.user.token || "");
-                Swal.fire("Reservation Deleted!", "", "success");
+                await deleteRestaurant(session?.user.token || "", rid);
+                Swal.fire("Restaurant Deleted!", "", "success");
                 window.location.reload();
             } else return;
           });
@@ -156,7 +155,7 @@ export default function RestaurantList({profile}:{profile:any}) {
     }
 
     //waiting for fetched data
-    if(!allReservation){return <p>Loading ... <LinearProgress/></p>}
+    if(!allRestaurant){return <p>Loading ... <LinearProgress/></p>}
 
 
     return (
@@ -249,44 +248,69 @@ export default function RestaurantList({profile}:{profile:any}) {
                 )}
 
                 {
-                    allRestaurant.length > 0
-                        ?
-                            <div className='flex flex-col gap-y-4 w-full md:w-[720px] bg-slate-200 p-2 items-center sm:mx-4 rounded-sm'>
-                            {
-                                allRestaurant.map((item: any) => 
-                                (
-                                    <div className='bg-slate-50 shadow-md w-full md:w-[700px] h-[200px] rounded-md'>
+                    allRestaurant.data.length > 0 && (
+                        <div className='flex flex-col gap-y-4 w-full md:w-[720px] bg-slate-200 p-2 items-center sm:mx-4 rounded-sm'>
+                            {allRestaurant.data
+                                .filter((item: any) => item.owner === profile.data._id) // Filter restaurants by owner
+                                .map((item: any) => (
+                                    <div key={item._id} className='bg-slate-50 shadow-md w-full md:w-[700px] h-[200px] rounded-md'>
                                         <div className='h-full w-full flex flex-row items-center px-5'>
-                                            
                                             <Image
-                                                src= {"/img/thaispice.jpg"}
-                                                alt={"Image"}
+                                                src="/img/thaispice.jpg"
+                                                alt="Image"
                                                 width={150}
                                                 height={100}
                                                 className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 sm:rounded-none sm:w-[150px] sm:h-auto"
                                             />
-                                        
                                             <div className='w-full flex flex-col gap-2 pl-3 pb-3'>
-
-                                                {
-                                                    !editStates[item._id] &&
+                                                {!editStates[item._id] && (
                                                     <button className='ml-auto w-fit h-fit py-0' onClick={(e) => {toggleEditState(item._id);}}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
-                                                }
+                                                )}
+
+                                                {/* ------------------Below this are informations------------------ */}
+
+                                                <Link href={`Restaurant/${item.id}`}>
+                                                    <div className='text-left text-lg font-semibold text-teal-700 underline hover:text-teal-900'>
+                                                        Restaurant: {item.name}
+                                                    </div>
+                                                </Link>
+
+                                                <div className='text-left text-sm font-medium text-gray-600'>
+                                                    Reservation Count: {item.reservations.length}
+                                                </div>
+
+                                                {
+                                                editStates[item._id]
+                                                ?   <div className='ml-auto flex flex-row gap-2'>
+                                                        <button onClick={ ()=>{toggleEditState(item._id)}} className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
+                                                            Save
+                                                        </button>
+                                                        <button onClick={ ()=>toggleEditState(item._id) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
+                                                            Cancel Editing
+                                                        </button>
+                                                    </div>
+                                                :   <div className='ml-auto flex flex-row gap-2'>
+                                                        <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
+                                                                onClick={()=>{router.push(``)}}
+                                                        >
+                                                            View Reservations
+                                                        </button>
+                                                        <button className="block rounded-md bg-red-600 hover:bg-red-700 px-2 py-1 text-white shadow-sm" 
+                                                                onClick={()=>removeRestaurant(item._id)}
+                                                        >
+                                                           Delete Restaurant
+                                                        </button>
+                                                    </div>
+                                            }
                                             </div>
                                         </div>
                                     </div>
                                 ))
                             }
-                            </div>
-                            
-                        :   <div className="w-[95%] md:max-w-[700px] h-72 flex flex-col flex-nowrap items-center justify-center gap-y-3 bg-slate-200 mx-5 ">
-                                <div className='text-lg text-slate-600'>You have no restaurant</div>
-                                <Link href={'/addRestaurant'} className='w-fit text-xl font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
-                                    Make some restaurant !
-                                </Link>
-                            </div>
+                        </div>
+                    )
                 }
             </div>
         </div>

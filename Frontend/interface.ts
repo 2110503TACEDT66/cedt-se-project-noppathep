@@ -1,6 +1,7 @@
 export interface RestaurantModel {
     _id: string,
     name: string,
+    owner: string,
     address:{
       district: string,
       province: string,
