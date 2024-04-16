@@ -3,10 +3,15 @@ const mongoose = require('mongoose');
 const RestaurantSchema = new mongoose.Schema({
     name:{
         type: String,
-        required:[true,'Plase add a name'],
+        required:[true,'Please add a name'],
         unique: true,
         trim:true,
         maxlength:[50,'Name can not be more than 50 charector']
+    },
+    owner: {
+        type: mongoose.Schema.ObjectId,
+        required: [true, 'Please add owner'],
+        unique: false
     },
     address:{
         district:{type:String,required: [true,'Please add an address']},

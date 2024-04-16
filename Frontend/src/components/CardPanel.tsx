@@ -2,7 +2,7 @@
 import { useEffect, useReducer, useRef, useState } from "react";
 import Card from "./Card";
 import Link from "next/link";
-import getRestaurants from "@/libs/getRestaurants";
+import getRestaurants from "@/libs/restaurant/getRestaurants";
 
 export default async function CardPanel(){
 

@@ -3,8 +3,8 @@ import DateReserve from '@/components/DateReserve';
 import { useEffect, useState } from 'react';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import getRestaurants from '@/libs/getRestaurants';
-import createdReservation from '@/libs/createdReservation';
+import getRestaurants from '@/libs/restaurant/getRestaurants';
+import createdReservation from '@/libs/reservation/createdReservation';
 import { getSession, useSession } from 'next-auth/react';
 
 export default function ReservationForm({profile}:{profile:any}) {
