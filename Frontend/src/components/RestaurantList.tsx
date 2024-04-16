@@ -19,7 +19,7 @@ import dayjs from 'dayjs';
 import deleteRestaurant from '@/libs/restaurant/deleteRestaurant';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-export default function RestaurantList({profile}:{profile:any}) {
+export default function     RestaurantList({profile}:{profile:any}) {
 
     const router = useRouter()
 
@@ -103,6 +103,7 @@ export default function RestaurantList({profile}:{profile:any}) {
     // Function to toggle the editing state for a specific reservation
     const toggleEditState = (reservationId: string) => {
         // TODO : Switch to edit restaurant page
+        router.push('/editrestaurant')
     };
 
 
@@ -252,7 +253,7 @@ export default function RestaurantList({profile}:{profile:any}) {
 
                                                 <div className='ml-auto flex flex-row gap-2'>
                                                         <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
-                                                                onClick={()=>{router.push(``)}}
+                                                                onClick={()=>{router.push(`/restaurantreserve`)}}
                                                                 // TODO : View reservations page
                                                                 // ทำให้ reservation page เป็น component ที่ใส่ reservation data ที่ filter เฉพาะของร้านนี้
                                                                 // ทำไว้เผื่อสำหรับหน้าแสดงของ admin เลย
