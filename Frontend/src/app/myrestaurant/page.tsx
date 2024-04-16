@@ -12,7 +12,7 @@ export default async function myRestaurant() {
 
     if (session) {
         profile = await getUserProfile(session.user.token);
-        if (profile == "user") return <p className='text-black text-xl text-center'>Unauthorized ... <LinearProgress /></p>;
+        if (profile.data.role == "user") return <p className='text-black text-xl text-center'>Unauthorized ... <LinearProgress /></p>;
     } else {
         return  <p className='text-black text-xl text-center'>Please go back and login ... <LinearProgress /></p>;
     }

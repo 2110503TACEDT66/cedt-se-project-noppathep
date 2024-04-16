@@ -21,7 +21,7 @@ import Link from 'next/link';
 import updateUserProfile from '@/libs/user/updateUserProfile';
 import dayjs from 'dayjs';
 
-export default function BookingList({profile}:{profile:any}) {
+export default function MyReservation({profile}:{profile:any}) {
 
     const router = useRouter()
 

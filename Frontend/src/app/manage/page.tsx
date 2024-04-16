@@ -11,7 +11,7 @@ export default async function manage() {
 
     if (session) {
         profile = await getUserProfile(session.user.token);
-        if (profile !== "admin") return <p className='text-black text-xl text-center'>Unauthorized ... <LinearProgress /></p>;
+        if (profile.data.role !== "admin") return <p className='text-black text-xl text-center'>Unauthorized ... <LinearProgress /></p>;
     } else {
         return  <p className='text-black text-xl text-center'>Please go back and login ... <LinearProgress /></p>;
     }
@@ -19,7 +19,7 @@ export default async function manage() {
     return (
         <main>
             <Suspense fallback={<p className='text-black text-xl text-center' >Loading ... <LinearProgress /></p>}>
-                <ManageList></ManageList>
+                <ManageList profile={profile}></ManageList>
             </Suspense>
         </main>
     );
