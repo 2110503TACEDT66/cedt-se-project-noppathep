@@ -33,7 +33,7 @@ export default async function restaurantReserve({params}:{params:{rid:string}}) 
                     <div className=" md-10 p-10 text-black shadow-sm relative text-2xl font-semibold text-start sm:text-center">
                         {restaurant.data.name}'s Reservation
                         <div className='text-left text-sm font-medium text-gray-600 p-10'>
-                            Reservation Count: {restaurant.data.count}
+                            Reservation Count: {restaurant.data.reservations.length}
                         </div>
 
                         {/* Pass reservations data to ReservationList component */}
