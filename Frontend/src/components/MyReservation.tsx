@@ -309,10 +309,12 @@ export default function MyReservation({profile}:{profile:any}) {
                                             {
                                                 editStates[item._id]
                                                 ?   <div className='ml-auto flex flex-row gap-2'>
-                                                        <button onClick={ ()=>{editReservation(item._id); toggleEditState(item._id)}} className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
+                                                        <button onClick={ ()=>{editReservation(item._id); toggleEditState(item._id)}} 
+                                                        className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
                                                             Save
                                                         </button>
-                                                        <button onClick={ ()=>toggleEditState(item._id) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
+                                                        <button onClick={ ()=>toggleEditState(item._id) } 
+                                                        className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
                                                             Cancel Editing
                                                         </button>
                                                     </div>
