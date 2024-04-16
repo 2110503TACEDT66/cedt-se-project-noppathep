@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { Suspense } from 'react';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import getUserProfile from '@/libs/user/getUserProfile';
-import RestaurantList from '@/components/RestaurantList';
+import RestaurantList from '@/components/MyRestaurant';
 
 export default async function myRestaurant() {
     const session = await getServerSession(authOptions);

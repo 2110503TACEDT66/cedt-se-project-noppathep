@@ -1,5 +1,5 @@
 
-import BookingList from '@/components/ReservationList';
+import BookingList from '@/components/MyReservation';
 import LinearProgress from '@mui/material/LinearProgress';
 import { getServerSession } from 'next-auth/next';
 import { Suspense } from 'react';
