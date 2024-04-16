@@ -1,21 +1,21 @@
 import Link from "next/link";
 import Card from "./Card";
 
+export default async function RestaurantList({ RestaurantsJson }: { RestaurantsJson: any }) {
+    const RestaurantReady = await RestaurantsJson;
 
-export default  async function RestaurantList({RestaurantsJson}:{RestaurantsJson:any}){
-    const RestaurantReady = await RestaurantsJson 
-    return(
+    return (
         <>
-        <div className="text-black">You have {RestaurantReady.count} restaurant.</div>
-        <div style={{margin:"20px", display:"flex",flexDirection:"row",flexWrap:"wrap",justifyContent:"space-around",alignContent:"space-around"}}>
-        {
-            RestaurantReady.data.map((RestaurantItem:any)=>(
-                <Link href={`/Restaurant/${RestaurantItem._id}`} className="w-1/5">
-                <Card RestaurantName={RestaurantItem.name} imgSrc={RestaurantItem.image}/>
-                 </Link>
-            ))
-        }
-      </div>
+            <div className="text-black">You have {RestaurantReady.count} restaurants.</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {RestaurantReady.data.map((RestaurantItem: any) => (
+                    <Link href={`/Restaurant/${RestaurantItem._id}`} key={RestaurantItem._id}>
+                        <div className="flex justify-center">
+                            <Card RestaurantName={RestaurantItem.name} imgSrc={RestaurantItem.image} />
+                        </div>
+                    </Link>
+                ))}
+            </div>
         </>
-    )
+    );
 }
