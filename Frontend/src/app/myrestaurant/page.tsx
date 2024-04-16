@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { Suspense } from 'react';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import getUserProfile from '@/libs/user/getUserProfile';
-import RestaurantList from '@/components/MyRestaurant';
+import MyRestaurant from '@/components/MyRestaurant';
 
 export default async function myRestaurant() {
     const session = await getServerSession(authOptions);
@@ -20,7 +20,7 @@ export default async function myRestaurant() {
     return (
         <main>
             <Suspense fallback={<p className='text-black text-xl text-center' >Loading ... <LinearProgress /></p>}>
-                <RestaurantList profile={profile}></RestaurantList>
+                <MyRestaurant profile={profile}></MyRestaurant>
             </Suspense>
         </main>
     );

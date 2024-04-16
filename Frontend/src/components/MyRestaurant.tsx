@@ -15,7 +15,7 @@ import updateUserProfile from '@/libs/user/updateUserProfile';
 import deleteRestaurant from '@/libs/restaurant/deleteRestaurant';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
-export default function RestaurantList({profile}:{profile:any}) {
+export default function MyRestaurant({profile}:{profile:any}) {
 
     const router = useRouter()
 
@@ -97,9 +97,9 @@ export default function RestaurantList({profile}:{profile:any}) {
     const [editStates, setEditStates] = useState<{ [key: string]: boolean }>({});
     
     // Function to toggle the editing state for a specific reservation
-    const toggleEditState = () => {
+    const toggleEditState = (rid:string) => {
         // Switch to edit restaurant page
-        router.push('/editrestaurant')
+        router.push(`/editrestaurant/${rid}`);
     };
 
 
@@ -230,7 +230,7 @@ export default function RestaurantList({profile}:{profile:any}) {
                                             />
                                             <div className='w-full flex flex-col gap-2 pl-3 pb-3'>
                                                 {!editStates[item._id] && (
-                                                    <button className='ml-auto w-fit h-fit py-0' onClick={(e) => {toggleEditState();}}>
+                                                    <button className='ml-auto w-fit h-fit py-0' onClick={(e) => {toggleEditState(item.id);}}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
                                                 )}
