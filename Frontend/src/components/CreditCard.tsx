@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 
 export default function CreditCard() {
-    const [cardNumber, setCardNumber] = useState('');
+    const [cardNumber, setCardNumber] = useState('################');
     const [cardHolder, setCardHolder] = useState('');
-    const [expMonth, setExpMonth] = useState('');
-    const [expYear, setExpYear] = useState('');
+    const [expMonth, setExpMonth] = useState('MM');
+    const [expYear, setExpYear] = useState('YY');
     const [cvv, setCvv] = useState('');
     const [isFlipped, setIsFlipped] = useState(false);
 
@@ -54,7 +54,7 @@ export default function CreditCard() {
                         <div className="mt-5">
                             <span>EXPIRES</span>
                             <div className="expiration">
-                                <span className="exp-month">{expMonth} </span>
+                                <span className="exp-month">{expMonth}/</span>
                                 <span className="exp-year">{expYear}</span>
                             </div>
                         </div>
@@ -95,16 +95,16 @@ export default function CreditCard() {
                         <span className="block text-gray-400">EXPIRATION YY</span>
                         <select name="" id="" className="year-input w-full px-4 py-2 rounded-lg border border-gray-300 text-gray-700 bg-white" onChange={handleExpYearChange}>
                             <option value="year" disabled selected>YEAR</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
-                            <option value="2028">2028</option>
-                            <option value="2029">2029</option>
-                            <option value="2030">2030</option>
-                            <option value="2031">2031</option>
-                            <option value="2032">2032</option>
-                            <option value="2033">2033</option>
+                            <option value="24">2024</option>
+                            <option value="25">2025</option>
+                            <option value="26">2026</option>
+                            <option value="27">2027</option>
+                            <option value="28">2028</option>
+                            <option value="29">2029</option>
+                            <option value="30">2030</option>
+                            <option value="31">2031</option>
+                            <option value="32">2032</option>
+                            <option value="33">2033</option>
                         </select>
                     </div>
                     <div className="inputBox flex-1">

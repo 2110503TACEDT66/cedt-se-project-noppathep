@@ -1,11 +1,10 @@
-
 import LinearProgress from '@mui/material/LinearProgress';
 import { getServerSession } from 'next-auth/next';
 import { Suspense } from 'react';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import getUserProfile from '@/libs/getUserProfile';
 import CreditCard from '@/components/CreditCard';
-import AddCard from '@/components/AddCard';
+import Cards from '@/components/MyCard';
 
 
 export default async function credit() {
@@ -19,7 +18,7 @@ export default async function credit() {
 
     return (
         <main>
-            <AddCard/>
+            <Cards/>
         </main>
     );
 }
