@@ -250,12 +250,7 @@ exports.orderFood =async (req,res,next)=>{
                 message:`User ${req.user.id} is not authorize to delete this bootcamp`
             });
         }
-        if(reservation.foodOrder.length>=10&&req.user.role!=='admin'){
-            return res.status(400).json({
-                success:false,
-                message:`User with the id ${req.user.id} has already order more than 10 item`
-            });
-        }
+
         const item = await Menu.findById(req.body.id);
         if(!item){
             return res.status(404).json({success:false,message:`There are no such item on menu`});
