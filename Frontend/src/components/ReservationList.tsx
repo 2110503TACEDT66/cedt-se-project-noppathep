@@ -7,7 +7,7 @@ import deleteReservation from '@/libs/deleteReservation';
 import LinearProgress from '@mui/material/LinearProgress';
 import updateReservation from '@/libs/updateReservation';
 import Select from '@mui/material/Select';
-import { Button, Input } from '@mui/material';
+import { Button, Input, Rating } from '@mui/material';
 
 import Swal from 'sweetalert2'
 
@@ -15,7 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import getRestaurants from '@/libs/getRestaurants';
 import DateReserve from './DateReserve';
 import  Dayjs  from 'dayjs';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Close, Edit } from '@mui/icons-material';
 import Link from 'next/link';
 import updateUserProfile from '@/libs/updateUserProfile';
@@ -134,6 +134,8 @@ export default function BookingList({profile}:{profile:any}) {
             else return;
           });
     }
+
+    const path = usePathname();
 
 
     //just for date formatting
@@ -316,8 +318,15 @@ export default function BookingList({profile}:{profile:any}) {
                                                             Cancel Editing
                                                         </button>
                                                     </div>
-                                                :   <div className='ml-auto flex flex-row gap-2'>
-                                                        <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
+                                                :   <div className='flex flex-row gap-2'>
+                                                        <Rating className="items-start" defaultValue={item.rating?.rating} onChange={(e, v) => {
+                                                                if(item.rating == null){
+                                                                    router.push(`${path}/${item._id}/rate/?rating=${v}`)
+                                                                }else {
+                                                                    router.push(`${path}/${item._id}/rate/?rated=true&rating=${v}&comment=${(encodeURIComponent(item.rating?.comment))}`)}
+                                                            }
+                                                        }/>
+                                                        <button className="ml-auto rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
                                                                 onClick={()=>{router.push(`/Orderfood/${item._id}`)}}
                                                         >
                                                             Order

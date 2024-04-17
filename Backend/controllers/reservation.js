@@ -12,11 +12,14 @@ exports.getReservations=async (req,res,next)=>{
         query = Reservation.find({user:req.user.id}).populate({
             path:'restaurant',
             select:'name province tel'
-        });}else{
+        })
+        .populate('rating');}
+    else{
         query = Reservation.find().populate({
             path:"restaurant",
             select:'name tel'
-        });}
+        })
+        .populate('rating');}
     try{
         const reservations = await query;
         res.status(200).json({
@@ -44,7 +47,7 @@ exports.getReservation=async (req,res,next)=>{
             path: 'foodOrder', 
             model: 'Menu',
             select: 'name price'
-          });
+          }).populate('rating');
         if(!reservation){
             return res.status(404).json({success:false,message:`No reservation with the id of ${req.parms.id}`});
         }

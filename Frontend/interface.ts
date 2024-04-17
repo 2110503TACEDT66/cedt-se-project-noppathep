@@ -17,7 +17,15 @@ export interface RestaurantModel {
 export interface ReservationItem {
     _id:string
     user: string,
-    restaurant : string,
-    foodOrder : string[],
-    apptDate : string
+    restaurant: string,
+    foodOrder: string[],
+    apptDate: string
   }
+
+export interface Rating {
+  rating: number
+  user: string
+  restaurant: string
+  reservation: string
+  comment: string
+}
