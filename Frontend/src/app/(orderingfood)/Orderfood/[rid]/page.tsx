@@ -1,8 +1,8 @@
 'use client'
-import getRestaurant from '@/libs/getRestaurant';
-import getMenu from '@/libs/getMenu';
+import getRestaurant from '@/libs/restaurant/getRestaurant';
+import getMenu from '@/libs/restaurant/getMenu';
 import Image from 'next/image';
-import getReservation from '@/libs/getReservation';
+import getReservation from '@/libs/reservation/getReservation';
 import { LinearProgress } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import { useSession } from 'next-auth/react';

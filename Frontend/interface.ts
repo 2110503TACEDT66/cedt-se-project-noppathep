@@ -1,6 +1,7 @@
 export interface RestaurantModel {
     _id: string,
     name: string,
+    owner: string,
     address:{
       district: string,
       province: string,
@@ -21,3 +22,14 @@ export interface ReservationItem {
     foodOrder : string[],
     apptDate : string
   }
+
+export interface userProfile{
+  success:true,
+  data:{
+    name:string,
+    role:string,
+    email:string,
+    tel:string,
+    createdAt:Date,
+  }
+}

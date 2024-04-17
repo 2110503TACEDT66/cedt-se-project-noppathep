@@ -1,6 +1,6 @@
 import CardPanel from '@/components/CardPanel'
 import RestaurantCatalog from '@/components/RestaurantCatalog'
-import getRestaurants from '@/libs/getRestaurants'
+import getRestaurants from '@/libs/restaurant/getRestaurants'
 import { LinearProgress } from '@mui/material'
 import { Suspense } from 'react'
 

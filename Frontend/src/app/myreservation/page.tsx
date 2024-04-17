@@ -1,10 +1,10 @@
 
-import BookingList from '@/components/ReservationList';
+import MyReservation from '@/components/MyReservation';
 import LinearProgress from '@mui/material/LinearProgress';
 import { getServerSession } from 'next-auth/next';
 import { Suspense } from 'react';
 import { authOptions } from '../api/auth/[...nextauth]/route';
-import getUserProfile from '@/libs/getUserProfile';
+import getUserProfile from '@/libs/user/getUserProfile';
 
 
 export default async function mybooking() {
@@ -13,15 +13,15 @@ export default async function mybooking() {
 
     if (session) {
         profile = await getUserProfile(session.user.token);
+        if (profile.data.role == "owner") return <p className='text-black text-xl text-center'>Unauthorized ... <LinearProgress /></p>;
     } else {
-        
         return  <p className='text-black text-xl text-center'>Please go back and login ... <LinearProgress /></p>;
     }
 
     return (
         <main>
             <Suspense fallback={<p className='text-black text-xl text-center' >Loading ... <LinearProgress /></p>}>
-                <BookingList profile={profile}></BookingList>
+                <MyReservation profile={profile}></MyReservation>
             </Suspense>
         </main>
     );
