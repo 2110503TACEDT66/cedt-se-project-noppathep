@@ -27,6 +27,9 @@ const ReservationSchema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'Table'
     }]
+},{
+    toJSON:{virtuals:true},
+    toObject:{virtuals:true}
 });
 
 ReservationSchema.methods.addTable = function(tableId) {
@@ -54,6 +57,13 @@ ReservationSchema.methods.removeItem = function(menuItemId) {
     }
     return this.save();
 };
+
+ReservationSchema.virtual('rating', {
+    ref:'Rating',
+    localField:'_id',
+    foreignField:'reservation',
+    justOne: true
+});
 
 
 module.exports=mongoose.model('Reservation',ReservationSchema);

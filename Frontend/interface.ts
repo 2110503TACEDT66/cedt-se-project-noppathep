@@ -21,7 +21,7 @@ export interface ReservationItem {
     restaurant : string,
     foodOrder : string[],
     apptDate : string
-  }
+}
 
 export interface userProfile{
   success:true,
@@ -32,4 +32,12 @@ export interface userProfile{
     tel:string,
     createdAt:Date,
   }
+}
+
+export interface Rating {
+  rating: number
+  user: string
+  restaurant: string
+  reservation: string
+  comment: string
 }
