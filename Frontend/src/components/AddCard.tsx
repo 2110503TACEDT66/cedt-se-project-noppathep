@@ -19,7 +19,7 @@ export default function AddCard() {
   const [isCardFlipped, setIsCardFlipped] = useState(false);
 
   const updateStateValues = useCallback(
-    (keyName, value) => {
+    (keyName: keyof Creditcard, value: string) => {
       setState({
         ...state,
         [keyName]: value || '',
