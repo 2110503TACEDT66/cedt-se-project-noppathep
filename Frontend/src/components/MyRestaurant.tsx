@@ -228,9 +228,9 @@ export default function MyRestaurant({profile}:{profile:any}) {
                                                 height={100}
                                                 className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 sm:rounded-none sm:w-[150px] sm:h-auto"
                                             />
-                                            <div className='w-full flex flex-col gap-2 pl-3 pb-3'>
+                                            <div className='w-full flex flex-col gap-2 pl-3 pb-3 relative'>
                                                 {!editStates[item._id] && (
-                                                    <button className='ml-auto w-fit h-fit py-0' onClick={(e) => {toggleEditState(item.id);}}>
+                                                    <button className='ml-auto w-fit h-fit py-0 absolute right-0' onClick={(e) => {toggleEditState(item.id);}}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
                                                 )}
@@ -239,7 +239,7 @@ export default function MyRestaurant({profile}:{profile:any}) {
 
                                                 <Link href={`Restaurant/${item.id}`}>
                                                     <div className='text-left text-lg font-semibold text-teal-700 underline hover:text-teal-900'>
-                                                        Restaurant: {item.name}
+                                                        {item.name}
                                                     </div>
                                                 </Link>
 
