@@ -116,7 +116,7 @@ export default function MyReservation({profile}:{profile:any}) {
     const handleShowRating = (rating:any, comment:any) => {
         Swal.fire({
             title: 'Your Rating Comment',
-            text: `You rated ${rating} stars and says:<br> ${comment}`,
+            text: `You rated ${rating} stars and says: ${comment}`,
             icon: 'info',
             confirmButtonText: 'Close'
         });
