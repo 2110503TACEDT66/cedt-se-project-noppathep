@@ -8,7 +8,8 @@
     Creditcard,
     fetchCreditCardList,
     updateLocalStorageCards,
-  } from '../Creditcard';
+  } from '../../Creditcard';
+  import Link from 'next/link';
 
   const initialState: Creditcard = {
     id: '',
@@ -116,11 +117,13 @@
         <Container>
           <Row className="justify-content-center">
             <Col md={3} className="">
+            <Link href="/yourcard">
               <div className="d-grid gap-1 delete-card">
-                <Button variant="link" size="lg" onClick={handleDeleteAction}>
-                  Delete Card
-                </Button>{' '}
+                  <Button variant="link" size="lg" onClick={handleDeleteAction}>
+                    Delete Card
+                  </Button>{' '}
               </div>
+            </Link>
             </Col>
           </Row>
         </Container>

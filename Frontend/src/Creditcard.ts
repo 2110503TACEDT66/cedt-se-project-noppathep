@@ -39,8 +39,7 @@ export interface Creditcard {
         );
         creditCardsList = [...localStorageData];
       } else {
-        creditCardsList = [...apiData];
-        updateLocalStorageCards(creditCardsList);
+        
       }
   
       return creditCardsList;

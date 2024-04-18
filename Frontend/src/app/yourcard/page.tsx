@@ -3,8 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import { Suspense } from 'react';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import getUserProfile from '@/libs/getUserProfile';
-import CreditCard from '@/components/CreditCard';
-import Cards from '@/components/MyCard';
+import Cards from '@/components/CreditCard/MyCard';
 
 
 export default async function credit() {
@@ -17,7 +16,7 @@ export default async function credit() {
     }
 
     return (
-        <main>
+        <main className='bg-gradient-to-r from-slate-600 to-slate-300'>
             <Cards/>
         </main>
     );

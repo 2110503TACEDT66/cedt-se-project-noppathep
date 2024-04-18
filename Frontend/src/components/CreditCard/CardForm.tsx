@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Creditcard } from '../Creditcard';
+import { Creditcard } from '../../Creditcard';
+import Link from 'next/link';
 
 const currentYear = new Date().getFullYear();
 const monthsArr = Array.from({ length: 12 }, (x, i) => {
@@ -62,6 +63,7 @@ export default function CardForm(props: CardFormProps) {
     // validate errors
     if (!isFormHasErrors()) {
       handleSubmitAction();
+      
     }
   };
 
@@ -108,9 +110,9 @@ export default function CardForm(props: CardFormProps) {
   };
 
   return (
-    <div className="card-form">
+    <div className="card-form m-20 bg-emerald-100">
       <div className="card-list">{children}</div>
-      <div className="card-form__inner">
+      <div className="card-form__inner bg-emerald-100">
         <div className="card-input">
           <label htmlFor="cardNumber" className="card-input__label">
             Card Number
@@ -223,11 +225,13 @@ export default function CardForm(props: CardFormProps) {
         </div>
         <div className="card-form__row">
           <div className="card-form__col">
-            <div className="d-grid gap-2">
-              <Button variant="primary" size="lg" onClick={handleSubmitAction}>
-                Confirm
-              </Button>{' '}
-            </div>
+            <Link href={'/yourcard'}>
+              <div className="rounded d-grid gap-2 mt-2">
+                  <Button variant="primary" className="bg-gradient-to-r from-emerald-600 to-emerald-300 text-white border border-cyan-600 font-semibold mr-8 py-2 px-2 m-2 round z-30 hover:bg-cyan-600 hover:border-transparent hover:opacity-80 hover:tracking-wider transition-colors" size="lg" onClick={handleConfirmAction}>
+                    Confirm
+                  </Button>{' '}
+              </div>
+            </Link>
           </div>
         </div>
       </div>

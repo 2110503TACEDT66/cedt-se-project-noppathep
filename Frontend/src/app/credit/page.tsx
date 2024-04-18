@@ -4,8 +4,7 @@ import { getServerSession } from 'next-auth/next';
 import { Suspense } from 'react';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import getUserProfile from '@/libs/getUserProfile';
-import CreditCard from '@/components/CreditCard';
-import AddCard from '@/components/AddCard';
+import AddCard from '@/components/CreditCard/AddCard';
 
 
 export default async function credit() {

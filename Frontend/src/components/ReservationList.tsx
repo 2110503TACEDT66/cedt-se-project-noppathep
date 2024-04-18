@@ -228,11 +228,9 @@ export default function BookingList({profile}:{profile:any}) {
                                 <tr>
                                     <th>Credit/Debit Card</th>
                                     <td>
-                                        {
-                                        isEditProfile
-                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => setNewCard(event.target.value)} placeholder={newCard} />
-                                            : <>{newCard}</>
-                                        }
+                                    <Link href={'/yourcard'} className='w-fit text-m font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
+                                        Check your added card here!
+                                    </Link>
                                     </td>
                                 </tr>
                                 <tr>

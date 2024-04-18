@@ -5,7 +5,9 @@ import {
   SwitchTransition,
   TransitionGroup,
 } from 'react-transition-group';
-import './CardFunction.scss';
+import './CardFunction.scss'
+import './card.scss'
+
 
 const CARDS = {
   visa: '^4',
@@ -74,7 +76,7 @@ function Card(props: CardProp) {
         <div className="card-item__cover">
           <img
             alt=""
-            src={`/card-background/${BACKGROUND_IMG}`}
+            src={`/img/${BACKGROUND_IMG}`}
             className="card-item__bg"
           />
         </div>
@@ -82,14 +84,14 @@ function Card(props: CardProp) {
         <div className="card-item__wrapper">
           <div className="card-item__top">
             <img
-              src={'/card-asserts/chip.png'}
+              src={'/img/chip.png'}
               alt=""
               className="card-item__chip"
             />
             <div className="card-item__type">
               <img
                 alt={useCardType}
-                src={`/card-type/${useCardType}.png`}
+                src={`/img/${useCardType}.png`}
                 className="card-item__typeImg"
               />
             </div>
@@ -180,7 +182,7 @@ function Card(props: CardProp) {
         <div className="card-item__cover">
           <img
             alt=""
-            src={`/card-background/${BACKGROUND_IMG}`}
+            src={`/img/${BACKGROUND_IMG}`}
             className="card-item__bg"
           />
         </div>
@@ -205,7 +207,7 @@ function Card(props: CardProp) {
           <div className="card-item__type">
             <img
               alt="card-type"
-              src={`/card-type/${useCardType}.png`}
+              src={`/img/${useCardType}.png`}
               className="card-item__typeImg"
             />
           </div>

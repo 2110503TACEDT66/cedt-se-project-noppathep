@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Link} from 'react-router-dom';
-import { Creditcard,fetchCreditCardList } from '../Creditcard';
+import Link from 'next/link';
+import { Creditcard,fetchCreditCardList } from '../../Creditcard';
 import CreditCardBox from './CardFunction';
 import Row from 'react-bootstrap/Row';
 import { Button, Col, Container } from 'react-bootstrap';
@@ -20,7 +20,7 @@ export default function Cards() {
   }
 
   return (
-    <Router> {/* Wrap your component with Router */}
+    <Router>
       <>
         <h1 className="home-page-heading">Your Cards</h1>
         <Container>
@@ -36,7 +36,7 @@ export default function Cards() {
                     <Card.Text>
                       You can add,edit and delete card any time..
                     </Card.Text>
-                    <Card.Link href="/credit">Add Card</Card.Link>
+                    <Link href="/credit">Add Card</Link>
                   </Card.Body>
                 </Card>
               </>
@@ -45,7 +45,7 @@ export default function Cards() {
               <Col md={4} key={id} className="mb-3">
                 <Link
                   key={id}
-                  to={`/Editcard/${card.id}`}
+                  href={`/Editcard/${card.id}`}
                   className="col-md-3 credit-card"
                 >
                   <CreditCardBox
@@ -62,13 +62,15 @@ export default function Cards() {
           </Row>
           <Row className="justify-content-center">
             <Col md={4} className="mt-3">
+              <Link href={'/credit'}>
                 <Button
                   className="add-new-card"
-                  variant="primary"
+                  variant='primary'
                   size="lg"
                 >
                   Add New Card
                 </Button>{' '}
+              </Link>
             </Col>
           </Row>
         </Container>

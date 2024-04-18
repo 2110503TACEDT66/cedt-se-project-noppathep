@@ -3,7 +3,7 @@ import React, { Fragment, useCallback, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import Card from './CardFunction';
 import CardForm from './CardForm';
-import { Creditcard, updateLocalStorageCards } from '../Creditcard';
+import { Creditcard, updateLocalStorageCards } from '../../Creditcard';
 
 const initialState: Creditcard = {
   id: '',
