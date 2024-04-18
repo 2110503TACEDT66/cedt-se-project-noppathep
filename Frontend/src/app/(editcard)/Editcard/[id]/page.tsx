@@ -1,10 +1,9 @@
 import CardPanel from '@/components/CardPanel'
 import EditCard from '@/components/CreditCard/EditCard'
 import RestaurantCatalog from '@/components/RestaurantCatalog'
-import getRestaurants from '@/libs/getRestaurants'
 import { LinearProgress } from '@mui/material'
 import { Suspense } from 'react'
-import getUserProfile from '@/libs/getUserProfile';
+import getUserProfile from '@/libs/user/getUserProfile';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { getServerSession } from 'next-auth/next';
 

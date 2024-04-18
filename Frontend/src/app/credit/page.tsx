@@ -3,7 +3,7 @@ import LinearProgress from '@mui/material/LinearProgress';
 import { getServerSession } from 'next-auth/next';
 import { Suspense } from 'react';
 import { authOptions } from '../api/auth/[...nextauth]/route';
-import getUserProfile from '@/libs/getUserProfile';
+import getUserProfile from '@/libs/user/getUserProfile';
 import AddCard from '@/components/CreditCard/AddCard';
 
 
