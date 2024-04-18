@@ -1,4 +1,4 @@
-export default async function userRegister(userEmail:string,userPassword:string,telephoneNum:string,userName:string){
+export default async function userRegister(userEmail:string,userPassword:string,telephoneNum:string,userName:string, userRole:string){
 
     const response = await fetch("http://localhost:5000/api/v1/auth/register",{
         method:"POST",
@@ -10,7 +10,7 @@ export default async function userRegister(userEmail:string,userPassword:string,
             email:userEmail,
             password:userPassword,
             telephone:telephoneNum,    
-            role:"user"
+            role:userRole // could be "user" or "owner" (restaurant owner)
         })
     })
     if(!response.ok){

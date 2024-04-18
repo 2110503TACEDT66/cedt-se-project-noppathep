@@ -1,6 +1,7 @@
 export interface RestaurantModel {
     _id: string,
     name: string,
+    owner: string,
     address:{
       district: string,
       province: string,
@@ -11,7 +12,8 @@ export interface RestaurantModel {
       open: string,
       close: string
   }
-    tel: string
+    tel: string,
+    image:string
   }
 
 export interface ReservationItem {
@@ -20,4 +22,23 @@ export interface ReservationItem {
     restaurant : string,
     foodOrder : string[],
     apptDate : string
+}
+
+export interface userProfile{
+  success:true,
+  data:{
+    name:string,
+    role:string,
+    email:string,
+    tel:string,
+    createdAt:Date,
   }
+}
+
+export interface Rating {
+  rating: number
+  user: string
+  restaurant: string
+  reservation: string
+  comment: string
+}
