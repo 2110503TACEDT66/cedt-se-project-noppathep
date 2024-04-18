@@ -13,7 +13,8 @@ export interface RestaurantModel {
       close: string
   }
     tel: string,
-    image:string
+    image:string,
+    tables:number
   }
 
 export interface ReservationItem {
@@ -41,4 +42,10 @@ export interface Rating {
   restaurant: string
   reservation: string
   comment: string
+}
+
+export interface TableModel{
+  _id:string,
+  size:number,
+  restaurant:string
 }

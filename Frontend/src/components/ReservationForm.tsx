@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import getRestaurants from '@/libs/restaurant/getRestaurants';
+import getTables from '@/libs/table/getTables';
 import createdReservation from '@/libs/reservation/createdReservation';
 import { getSession, useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -19,6 +20,7 @@ export default function ReservationForm({profile}:{profile:any}) {
     const fetchData = async () => {
       console.log("finding");
       const Restaurants = await getRestaurants();
+      //const Table = await getTables(Restaurants._id);
       setRestaurantsList(Restaurants.data);
     };
     fetchData();
@@ -141,9 +143,23 @@ export default function ReservationForm({profile}:{profile:any}) {
                       <p><b>Region:</b> {findRestaurantFromId(location)?.address.region}</p>
                       <p><b>Contact:</b> {findRestaurantFromId(location)?.tel}</p>
                       <p><b>Opening Hours</b>: {findRestaurantFromId(location)?.openingHours.open} - {findRestaurantFromId(location)?.openingHours.close}</p>
-                    
+                      <p style={{ margin: '20px 0' }}></p>
+                      <p><b>The table available:</b> {findRestaurantFromId(location)?.tables}</p>
+                      <div className=' max-w-[600px]  h-fit bg-white shadow-sm rounded-md mb-4'>
+                        <div className='w-full flex items-center justify-between min-h-[75px]'>
+                          <div className='w-[calc(20%-10px)] h-[60px] bg-gray-200 rounded-md'style={{ margin: '10px' }}></div>
+                          <div className='w-[calc(20%-10px)] h-[60px] bg-gray-200 rounded-md'style={{ margin: '10px' }}></div>
+                          <div className='w-[calc(20%-10px)] h-[60px] bg-gray-200 rounded-md'style={{ margin: '10px' }}></div>
+                          <div className='w-[calc(20%-10px)] h-[60px] bg-gray-200 rounded-md'style={{ margin: '10px' }}></div>
+                        </div>
+                        <div className='w-full flex items-center justify-between min-h-[75px]'>
+                          <div className='w-[calc(20%-10px)] h-[60px] bg-gray-200 rounded-md'style={{ margin: '10px' }}></div>
+                          <div className='w-[calc(20%-10px)] h-[60px] bg-gray-200 rounded-md'style={{ margin: '10px' }}></div>
+                          <div className='w-[calc(20%-10px)] h-[60px] bg-gray-200 rounded-md'style={{ margin: '10px' }}></div>
+                          <div className='w-[calc(20%-10px)] h-[60px] bg-gray-200 rounded-md'style={{ margin: '10px' }}></div>
+                        </div>
+                      </div>
                     </div>
-
                     <Image src={findRestaurantFromId(location)!.image} alt="restaurant image" width={1280} height={720} className='w-40 sm:w-52 h-auto rounded-md mb-3 sm:mb-0'/>
                   </div>
                 : <div className='text-gray-500 w-full font-semibold text-lg text-center'>Please Choose Your Restaurant</div>
