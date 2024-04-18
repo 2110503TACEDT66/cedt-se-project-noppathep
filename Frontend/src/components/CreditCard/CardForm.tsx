@@ -63,7 +63,7 @@ export default function CardForm(props: CardFormProps) {
     // validate errors
     if (!isFormHasErrors()) {
       handleSubmitAction();
-      
+      window.location.href = "/yourcard";
     }
   };
 
@@ -208,6 +208,7 @@ export default function CardForm(props: CardFormProps) {
               <Form.Control
                 type="text"
                 className="card-input__input"
+                minLength={4}
                 maxLength={4}
                 autoComplete="off"
                 name="cardCvv"
@@ -225,13 +226,13 @@ export default function CardForm(props: CardFormProps) {
         </div>
         <div className="card-form__row">
           <div className="card-form__col">
-            <Link href={'/yourcard'}>
+            {/* <Link href={'/yourcard'}> */}
               <div className="rounded d-grid gap-2 mt-2">
                   <Button variant="primary" className="bg-gradient-to-r from-emerald-600 to-emerald-300 text-white border border-cyan-600 font-semibold mr-8 py-2 px-2 m-2 round z-30 hover:bg-cyan-600 hover:border-transparent hover:opacity-80 hover:tracking-wider transition-colors" size="lg" onClick={handleConfirmAction}>
                     Confirm
                   </Button>{' '}
               </div>
-            </Link>
+            {/* </Link> */}
           </div>
         </div>
       </div>

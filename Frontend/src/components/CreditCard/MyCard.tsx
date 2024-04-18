@@ -36,7 +36,7 @@ export default function Cards() {
                     <Card.Text>
                       You can add,edit and delete card any time..
                     </Card.Text>
-                    <Link href="/credit">Add Card</Link>
+                    {/* <Link href="/credit">Add Card</Link> */}
                   </Card.Body>
                 </Card>
               </>
@@ -61,7 +61,7 @@ export default function Cards() {
             ))}
           </Row>
           <Row className="justify-content-center">
-            <Col md={4} className="mt-3">
+            <Col md={4} className="my-3">
               <Link href={'/credit'}>
                 <Button
                   className="add-new-card"
