@@ -265,7 +265,7 @@ export default function MyReservation({profile}:{profile:any}) {
                             {
                                 allReservation.map((item: any) => 
                                 (
-                                    <div className='bg-slate-50 shadow-md w-full md:w-[700px] h-[200px] rounded-md'>
+                                    <div className='bg-slate-50 shadow-md w-full h-[220px] md:w-[700px] md:h-[200px] rounded-md'>
                                         <div className='h-full w-full flex flex-row items-center px-5'>
                                             
                                             <Image
@@ -276,11 +276,11 @@ export default function MyReservation({profile}:{profile:any}) {
                                                 className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 sm:rounded-none sm:w-[150px] sm:h-auto"
                                             />
                                         
-                                            <div className='w-full flex flex-col gap-2 pl-3 pb-3'>
+                                            <div className='w-full flex flex-col gap-2 pl-3 pb-3 relative'>
 
                                                 {
                                                     !editStates[item._id] &&
-                                                    <button className='ml-auto w-fit h-fit py-0' onClick={(e) => {toggleEditState(item._id); setLocation(item.restaurant._id); setBookingDate(item.apptDate);}}>
+                                                    <button className='ml-auto w-fit h-fit py-0 absolute right-0' onClick={(e) => {toggleEditState(item._id); setLocation(item.restaurant._id); setBookingDate(item.apptDate);}}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
                                                 }
@@ -298,8 +298,8 @@ export default function MyReservation({profile}:{profile:any}) {
                                                             ))}
                                                         </Select>
                                                     :   <Link href={`Restaurant/${item.restaurant.id}`}>
-                                                            <div className='text-left text-lg font-semibold  text-teal-700 underline hover:text-teal-900'>
-                                                                Restaurant: {item.restaurant.name}
+                                                            <div className='text-left text-sm sm:text-lg font-semibold  text-teal-700 underline hover:text-teal-900'>
+                                                                {item.restaurant.name}
                                                             </div>
                                                         </Link>
                                                 }
@@ -319,16 +319,12 @@ export default function MyReservation({profile}:{profile:any}) {
                                                 <div className='text-gray-600 text-sm font-medium'>
                                                     {
                                                         item.rating != null
-                                                        ? (
+                                                        && (
                                                             <span>
                                                                 <button className='rounded-md bg-yellow-500 hover:bg-yellow-700 px-2 py-1 text-white shadow-sm'
                                                                 onClick={(e) => handleShowRating(item.rating.rating, item.rating.comment)}>
                                                                     View your score
                                                                 </button>
-                                                            </span>
-                                                        ) : (
-                                                            <span>
-                                                                You haven't rate this restaurant yet!
                                                             </span>
                                                         )
                                                     }
@@ -361,7 +357,7 @@ export default function MyReservation({profile}:{profile:any}) {
                                                         >
                                                             Order
                                                         </button>
-                                                        <button className="block rounded-md bg-red-600 hover:bg-red-700 px-2 py-1 text-white shadow-sm" 
+                                                        <button className="rounded-md bg-red-600 hover:bg-red-700 px-2 py-1 text-white shadow-sm" 
                                                                 onClick={()=>removeReservation(item._id)}
                                                         >
                                                             Cancel Reservation
