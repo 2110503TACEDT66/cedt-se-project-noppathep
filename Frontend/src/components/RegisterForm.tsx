@@ -16,15 +16,6 @@ export default function RegisterForm(reRoute:any) {
     const [errorMessage, setErrorMessage] = useState('');
     const [isLoad, setIsLoad] = useState(false);
 
-    // const handleSubmit = (event:any) => {
-    //     event.preventDefault();
-    //     const res = userRegister(email,password,telephone,name, role);
-    //     if(res != null) {
-    //     //put router
-    //        alert("Please go login");
-    //     }
-        
-    // };
 
     const handleRegister = async (event:any) => {
         event.preventDefault();
