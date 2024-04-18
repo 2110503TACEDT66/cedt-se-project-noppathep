@@ -1,5 +1,5 @@
 "use client"
-import getRatingByReservation from '@/libs/getRatingByReservation';
+// import getRatingByReservation from '@/libs/getRatingByReservation';
 import rate from '@/libs/rate';
 import unrate from '@/libs/unrate';
 import { LinearProgress, Rating } from '@mui/material';

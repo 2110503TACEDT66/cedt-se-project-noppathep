@@ -246,6 +246,10 @@ export default function MyRestaurant({profile}:{profile:any}) {
                                                 <div className='text-left text-sm font-medium text-gray-600'>
                                                     Reservation Count: {item.reservations.length}
                                                 </div>
+                                                <div className='text-left text-sm font-medium text-gray-600'>
+                                                    {/* ADD RATING */}
+                                                    Reservation Rating: 
+                                                </div>
 
                                                 <div className='ml-auto flex flex-row gap-2'>
                                                         <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 

@@ -20,6 +20,7 @@ import { Close, Edit } from '@mui/icons-material';
 import Link from 'next/link';
 import updateUserProfile from '@/libs/user/updateUserProfile';
 import dayjs from 'dayjs';
+import Rating from '@mui/material/Rating';
 
 export default function MyReservation({profile}:{profile:any}) {
 
@@ -111,6 +112,15 @@ export default function MyReservation({profile}:{profile:any}) {
             [reservationId]: !prevState[reservationId]
         }));
     };
+
+    const handleShowRating = (rating:any, comment:any) => {
+        Swal.fire({
+            title: 'Your Rating Comment',
+            text: `You rated ${rating} stars and says:<br> ${comment}`,
+            icon: 'info',
+            confirmButtonText: 'Close'
+        });
+    }
 
     const editReservation = async (itemID:string) => {
         Swal.fire({
@@ -305,7 +315,25 @@ export default function MyReservation({profile}:{profile:any}) {
                                                 <div className='text-left text-sm font-medium text-gray-600'>
                                                     Food Order count: {item.foodOrder.length}
                                                 </div>
-                                
+
+                                                <div className='text-gray-600 text-sm font-medium'>
+                                                    {
+                                                        item.rating != null
+                                                        ? (
+                                                            <span>
+                                                                <button className='rounded-md bg-yellow-500 hover:bg-yellow-700 px-2 py-1 text-white shadow-sm'
+                                                                onClick={(e) => handleShowRating(item.rating.rating, item.rating.comment)}>
+                                                                    View your score
+                                                                </button>
+                                                            </span>
+                                                        ) : (
+                                                            <span>
+                                                                You haven't rate this restaurant yet!
+                                                            </span>
+                                                        )
+                                                    }
+                                                </div>
+
                                             {
                                                 editStates[item._id]
                                                 ?   <div className='ml-auto flex flex-row gap-2'>
@@ -319,6 +347,15 @@ export default function MyReservation({profile}:{profile:any}) {
                                                         </button>
                                                     </div>
                                                 :   <div className='ml-auto flex flex-row gap-2'>
+                                                        {
+                                                            item.rating == null && (
+                                                                <button className="rounded-md bg-yellow-500 hover:bg-yellow-700 px-2 py-1 text-white shadow-sm" 
+                                                                        onClick={()=>{router.push(`/myreservation/${item._id}/rate`)}}
+                                                                >
+                                                                    Rate
+                                                                </button>
+                                                            )
+                                                        }
                                                         <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
                                                                 onClick={()=>{router.push(`/Orderfood/${item._id}`)}}
                                                         >

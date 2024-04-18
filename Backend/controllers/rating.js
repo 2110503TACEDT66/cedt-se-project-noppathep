@@ -28,7 +28,7 @@ exports.getRatingByRestaurant = async(req,res,rext) => {
             count: ratings.length,
             averageRating: averageRating.toFixed(2),
             data: ratings
-        });  
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, message: 'Server Error' });
