@@ -66,6 +66,25 @@ exports.addRating = async(req,res,next) => {
             return res.status(404).json({ success: false, message: `No restaurant with the id of ${reservationId}` });
         }
         const rating = await Rating.findOne({ reservation : reservationId });
+            //update Restaurant.rating
+            const RestaurantRate = await Restaurant.findById(reservation.restaurant).populate('rating');
+            console.log(RestaurantRate.avarageRating);
+            console.log(reservation.restaurant);
+            let totalRating = 0;
+            RestaurantRate.rating.forEach(rate => {
+                totalRating += rate.rating;
+            });
+            const averageRating = totalRating / RestaurantRate.rating.length;
+            
+            const newRestaurantRate = await Restaurant.findByIdAndUpdate(
+                reservation.restaurant,
+                {avarageRating:averageRating.toFixed(2)},
+            {
+                new:true,
+                runValidator:true
+            });
+            console.log(newRestaurantRate.avarageRating);
+            //        
         if(!rating) {
             const restaurantId = reservation.restaurant;
             const restaurant = await Restaurant.findById(restaurantId);
@@ -82,8 +101,7 @@ exports.addRating = async(req,res,next) => {
             req.body.restaurant = restaurantId;
             
             const rating = await Rating.create(req.body);
-            updateRating(restaurantId);
-            console.log("yes")
+            console.log("yes");
             return res.status(200).json({
                 success: true,
                 data: rating
@@ -95,6 +113,7 @@ exports.addRating = async(req,res,next) => {
         });
         
         return res.status(200).json({success: true, data: updateRating});
+
     } catch (err) {
         console.log(err)
         res.status(500).json({
@@ -113,7 +132,7 @@ exports.deleteRating = async(req,res,next) => {
         const reservationId = req.params.reservationId;     
         const reservation = await Reservation.findById(reservationId);
         if (!reservation) {
-            return res.status(404).json({ success: false, message: `No restaurant with the id of ${reservationId}` });
+            return res.status(404).json({ success: false, message: `No reservation with the id of ${reservationId}` });
         }
         const rating = await Rating.find({ reservation : reservationId });
         if(!rating) {
@@ -124,8 +143,22 @@ exports.deleteRating = async(req,res,next) => {
         }
         const deleterating = await Rating.findById(rating[0]);
         await deleterating.deleteOne();
-        updateRating(reservation.restaurant);
-        res.status(200).json({success:true,data:{}});
+        //update Restaurant.rating
+        const RestaurantRate = await Restaurant.getRestaurant(reservation.restaurant);
+        console.log(RestaurantRate.avarageRating);
+        let totalRating = 0;
+        RestaurantRate.rating.forEach(rate => {
+            totalRating += rate.rating;
+        });
+        const averageRating = totalRating / RestaurantRate.rating.length;
+
+        await Restaurant.findByIdAndUpdate(restaurantId,{avarageRating:averageRating.toFixed(2)},{
+            new:true,
+            runValidator:true
+        });
+        console.log(RestaurantRate.avarageRating);
+        //
+        return res.status(200).json({success:true,data:{}});
     }catch(err){
         res.status(500).json({
             success:false,
@@ -133,26 +166,3 @@ exports.deleteRating = async(req,res,next) => {
         });
     }
 }
-
-const updateRating = async (id)=>{
-    try{
-        const oldRate = await Restaurant.getRestaurant(id);
-        console.log(oldRate.rating);
-        let totalRating = 0;
-        oldRate.rating.forEach(rate => {
-            totalRating += rate.rating;
-        });
-        const averageRating = totalRating / oldRate.rating.length;
-
-        const restaurant = await Restaurant.findByIdAndUpdate(id,{rating:averageRating.toFixed(2)},{
-            new:true,
-            runValidator:true
-        });
-        if(!restaurant){
-            return res.status(400).json({success:false});
-        }
-        res.status(200).json({success:true,data:restaurant});
-    }catch(err){
-        res.status(400).json({success:false});
-    }
-};
