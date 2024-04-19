@@ -82,6 +82,7 @@ exports.addRating = async(req,res,next) => {
             req.body.restaurant = restaurantId;
             
             const rating = await Rating.create(req.body);
+            updateRating(restaurantId);
             console.log("yes")
             return res.status(200).json({
                 success: true,
@@ -123,6 +124,7 @@ exports.deleteRating = async(req,res,next) => {
         }
         const deleterating = await Rating.findById(rating[0]);
         await deleterating.deleteOne();
+        updateRating(reservation.restaurant);
         res.status(200).json({success:true,data:{}});
     }catch(err){
         res.status(500).json({
@@ -131,3 +133,26 @@ exports.deleteRating = async(req,res,next) => {
         });
     }
 }
+
+const updateRating = async (id)=>{
+    try{
+        const oldRate = await Restaurant.getRestaurant(id);
+        console.log(oldRate.rating);
+        let totalRating = 0;
+        oldRate.rating.forEach(rate => {
+            totalRating += rate.rating;
+        });
+        const averageRating = totalRating / oldRate.rating.length;
+
+        const restaurant = await Restaurant.findByIdAndUpdate(id,{rating:averageRating.toFixed(2)},{
+            new:true,
+            runValidator:true
+        });
+        if(!restaurant){
+            return res.status(400).json({success:false});
+        }
+        res.status(200).json({success:true,data:restaurant});
+    }catch(err){
+        res.status(400).json({success:false});
+    }
+};

@@ -12,7 +12,7 @@ exports.getRestaurants = async(req,res,next)=>{
     let queryStr = JSON.stringify(req.query);
     queryStr=queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-    query = Restaurant.find(JSON.parse(queryStr)).populate('reservations').populate('tables').populate('rating');
+    query = Restaurant.find(JSON.parse(queryStr)).populate('reservations').populate('tables');
     //select
     if(req.query.select){
         const fields = req.query.select.split(',').join(' ');
@@ -50,10 +50,10 @@ exports.getRestaurants = async(req,res,next)=>{
             }
         }
         res.status(200).json({
-            success:true, 
-            count: restaurants.length,
-            pagination,
-            data:restaurants});
+            success:true,
+            count:restaurants.length,
+            data:restaurants
+        });
     }catch(err){
         res.status(400).json({success:false});
     }
@@ -65,20 +65,13 @@ exports.getRestaurants = async(req,res,next)=>{
 //@acess Public
 exports.getRestaurant = async (req,res,next)=>{
     try{
-        const restaurant = await Restaurant.findById(req.params.id).populate('menus').populate('tables').populate('reservations').populate('rating');
+        const restaurant = await Restaurant.findById(req.params.id).populate('menus').populate('tables').populate('reservations');
         if(!restaurant){
             return res.status(400).json({success:false});
         }
-        let totalRating = 0;
-        restaurant.rating.forEach(rate => {
-            totalRating += rate.rating;
-        });
-        const averageRating = totalRating / restaurant.rating.length;
         res.status(200).json({
             success:true,
-            data:restaurant,
-            RatingCount: restaurant.rating.length,
-            averageRating: averageRating.toFixed(2)
+            data:restaurant
         });
     }catch(err){
         res.status(400).json({success:false});
@@ -126,5 +119,8 @@ exports.deleteRestaurant=async(req,res,next)=>{
         res.status(400).json({success:false});
     }
 };
+
+
+
 
 

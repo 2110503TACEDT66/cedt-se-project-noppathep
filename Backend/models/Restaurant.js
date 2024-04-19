@@ -27,6 +27,9 @@ const RestaurantSchema = new mongoose.Schema({
     openingHours: {
         open: { type: String, required: true,match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/},
         close: { type: String, required: true,match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]||24:00$/}
+    },
+    rating:{
+        type:Number
     }
 },{
     toJSON:{virtuals:true},
@@ -54,13 +57,6 @@ RestaurantSchema.virtual('tables',{
     justOne:false
 });
 
-RestaurantSchema.virtual('rating',{
-    ref:'Rating',
-    localField:'_id',
-    foreignField:'restaurant',
-    justOne:false
-});
-
 RestaurantSchema.pre('deleteOne',{document:true,query:false},async function(next){
     console.log(`Reservation being remove form restaurant ${this._id}`);
     await this.model('Reservation').deleteMany({restrautant:this._id});
@@ -69,6 +65,8 @@ RestaurantSchema.pre('deleteOne',{document:true,query:false},async function(next
     await this.model('Menu').deleteMany({restrautant:this._id});
     next();
 });
+
+
 
 
 module.exports=mongoose.model('Restaurant',RestaurantSchema);
