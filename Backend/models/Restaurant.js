@@ -28,8 +28,9 @@ const RestaurantSchema = new mongoose.Schema({
         open: { type: String, required: true,match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/},
         close: { type: String, required: true,match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]||24:00$/}
     },
-    avarageRating:{
-        type:Number
+    avarageRating:{ //misspell
+        type:Number,
+        default : 0
     }
 },{
     toJSON:{virtuals:true},
