@@ -65,26 +65,7 @@ exports.addRating = async(req,res,next) => {
         if (!reservation) {
             return res.status(404).json({ success: false, message: `No restaurant with the id of ${reservationId}` });
         }
-        const rating = await Rating.findOne({ reservation : reservationId });
-            //update Restaurant.rating
-            const RestaurantRate = await Restaurant.findById(reservation.restaurant).populate('rating');
-            console.log(RestaurantRate.avarageRating);
-            console.log(reservation.restaurant);
-            let totalRating = 0;
-            RestaurantRate.rating.forEach(rate => {
-                totalRating += rate.rating;
-            });
-            const averageRating = totalRating / RestaurantRate.rating.length;
-            
-            const newRestaurantRate = await Restaurant.findByIdAndUpdate(
-                reservation.restaurant,
-                {avarageRating:averageRating.toFixed(2)},
-            {
-                new:true,
-                runValidator:true
-            });
-            console.log(newRestaurantRate.avarageRating);
-            //        
+        const rating = await Rating.findOne({ reservation : reservationId });       
         if(!rating) {
             const restaurantId = reservation.restaurant;
             const restaurant = await Restaurant.findById(restaurantId);
@@ -102,6 +83,25 @@ exports.addRating = async(req,res,next) => {
             
             const rating = await Rating.create(req.body);
             console.log("yes");
+        //update Restaurant.rating
+            const RestaurantRate = await Restaurant.findById(reservation.restaurant).populate('rating');
+            console.log(RestaurantRate.averageRating);
+            console.log(reservation.restaurant);
+            let totalRating = 0;
+            RestaurantRate.rating.forEach(rate => {
+                totalRating += rate.rating;
+            });
+            const averageRating = totalRating / RestaurantRate.rating.length;
+            
+            const newRestaurantRate = await Restaurant.findByIdAndUpdate(
+                reservation.restaurant,
+                {averageRating:averageRating.toFixed(2)},
+            {
+                new:true,
+                runValidator:true
+            });
+            console.log(newRestaurantRate.averageRating);
+        // 
             return res.status(200).json({
                 success: true,
                 data: rating
@@ -111,7 +111,25 @@ exports.addRating = async(req,res,next) => {
             new: true,
             runValidator:true
         });
-        
+        //update Restaurant.rating
+            const RestaurantRate = await Restaurant.findById(reservation.restaurant).populate('rating');
+            console.log(RestaurantRate.averageRating);
+            console.log(reservation.restaurant);
+            let totalRating = 0;
+            RestaurantRate.rating.forEach(rate => {
+                totalRating += rate.rating;
+            });
+            const averageRating = totalRating / RestaurantRate.rating.length;
+            
+            const newRestaurantRate = await Restaurant.findByIdAndUpdate(
+                reservation.restaurant,
+                {averageRating:averageRating.toFixed(2)},
+            {
+                new:true,
+                runValidator:true
+            });
+            console.log(newRestaurantRate.averageRating);
+        //
         return res.status(200).json({success: true, data: updateRating});
 
     } catch (err) {
@@ -145,18 +163,18 @@ exports.deleteRating = async(req,res,next) => {
         await deleterating.deleteOne();
         //update Restaurant.rating
         const RestaurantRate = await Restaurant.getRestaurant(reservation.restaurant);
-        console.log(RestaurantRate.avarageRating);
+        console.log(RestaurantRate.averageRating);
         let totalRating = 0;
         RestaurantRate.rating.forEach(rate => {
             totalRating += rate.rating;
         });
         const averageRating = totalRating / RestaurantRate.rating.length;
 
-        await Restaurant.findByIdAndUpdate(restaurantId,{avarageRating:averageRating.toFixed(2)},{
+        await Restaurant.findByIdAndUpdate(reservation.restaurant,{averageRating:averageRating.toFixed(2)},{
             new:true,
             runValidator:true
         });
-        console.log(RestaurantRate.avarageRating);
+        console.log(RestaurantRate.averageRating);
         //
         return res.status(200).json({success:true,data:{}});
     }catch(err){

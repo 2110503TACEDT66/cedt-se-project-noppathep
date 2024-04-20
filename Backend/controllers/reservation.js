@@ -12,12 +12,12 @@ exports.getReservations=async (req,res,next)=>{
         query = Reservation.find({user:req.user.id}).populate({
             path:'restaurant',
             select:'name province tel'
-        });}
+        }).populate("rating");}
     else{
         query = Reservation.find().populate({
             path:"restaurant",
             select:'name tel'
-        });}
+        }).populate("rating");}
     try{
         const reservations = await query;
         res.status(200).json({
@@ -116,7 +116,7 @@ exports.addReservation=async (req,res,next)=>{
         if(reservationTime > oneHourBeforeClose) {
             return res.status(400).json({
                     success: false,
-                    message: 'Reservation must be befor restaurant close time 1 hour'
+                    message: 'Reservation must be before restaurant close time 1 hour'
             });
         }
         const reservation = (await Reservation.create(req.body));

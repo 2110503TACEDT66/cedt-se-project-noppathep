@@ -28,7 +28,7 @@ const RestaurantSchema = new mongoose.Schema({
         open: { type: String, required: true,match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/},
         close: { type: String, required: true,match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]||24:00$/}
     },
-    avarageRating:{ //misspell
+    averageRating:{ //misspell
         type:Number,
         default : 0
     }
@@ -71,6 +71,9 @@ RestaurantSchema.pre('deleteOne',{document:true,query:false},async function(next
     next();
     console.log(`All menus being remove form restaurant ${this._id}`);
     await this.model('Menu').deleteMany({restrautant:this._id});
+    next();
+    console.log(`All Rating being remove form restaurant ${this._id}`);
+    await this.model('Rating').deleteMany({restrautant:this._id});
     next();
 });
 
