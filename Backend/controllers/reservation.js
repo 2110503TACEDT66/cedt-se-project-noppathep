@@ -101,8 +101,17 @@ exports.addReservation=async (req,res,next)=>{
         const openTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(open.split(':')[0]), parseInt(open.split(':')[1]));
         const closeTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(close.split(':')[0]), parseInt(close.split(':')[1]));
         
+        console.log(reservationTime.getDate().toString())
+
+        if(reservationTime.getDate().toString() != reservationTime.toUTCString().substring(5,7)) {
+            closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
+            openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
+        }
+        closeTime.setTime(closeTime.getTime() + (7 * 60 * 60 * 1000));
+        openTime.setTime(openTime.getTime() + (7 * 60 * 60 * 1000));
+
         if(closeTime < openTime) {
-            closeTime.setDay(closeTime.getDay()+1);
+            closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000));
         }
 
         if(reservationTime > closeTime || reservationTime < openTime) {
@@ -119,6 +128,7 @@ exports.addReservation=async (req,res,next)=>{
                     message: 'Reservation must be before restaurant close time 1 hour'
             });
         }
+        console.log(req.body)
         const reservation = (await Reservation.create(req.body));
         res.status(201).json({
             success: true,
@@ -165,10 +175,19 @@ exports.updateReservation=async (req,res,next)=>{
 
             const openTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(open.split(':')[0]), parseInt(open.split(':')[1]));
             const closeTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(close.split(':')[0]), parseInt(close.split(':')[1]));
-        
-            if(closeTime < openTime) {
-                closeTime.setDay(closeTime.getDay()+1);
+            
+            if(reservationTime.getDate().toString() != reservationTime.toUTCString().substring(5,7)) {
+                closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
+                openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
             }
+            closeTime.setTime(closeTime.getTime() + (7 * 60 * 60 * 1000));
+            openTime.setTime(openTime.getTime() + (7 * 60 * 60 * 1000));
+
+            if(closeTime < openTime) {
+                closeTime.setDay(closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000)));
+            }
+            console.log(reservationTime)
+            console.log(openTime)
 
             if(reservationTime > closeTime || reservationTime < openTime) {
                 return res.status(400).json({
