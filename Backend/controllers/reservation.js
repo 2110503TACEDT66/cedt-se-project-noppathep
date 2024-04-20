@@ -236,7 +236,7 @@ exports.deleteReservation=async (req,res,next)=>{
                 message:`User ${req.user.id} is not authorize to delete this bootcamp`
             });
         }
-        await reservation.deleteOne();
+    await reservation.deleteOne();
         res.status(200).json({
             success: true,
             data:{}

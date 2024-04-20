@@ -162,20 +162,24 @@ exports.deleteRating = async(req,res,next) => {
         const deleterating = await Rating.findById(rating[0]);
         await deleterating.deleteOne();
         //update Restaurant.rating
-        const RestaurantRate = await Restaurant.getRestaurant(reservation.restaurant);
+        const RestaurantRate = await Restaurant.findById(reservation.restaurant).populate('rating');
         console.log(RestaurantRate.averageRating);
+        console.log(reservation.restaurant);
         let totalRating = 0;
         RestaurantRate.rating.forEach(rate => {
             totalRating += rate.rating;
         });
         const averageRating = totalRating / RestaurantRate.rating.length;
-
-        await Restaurant.findByIdAndUpdate(reservation.restaurant,{averageRating:averageRating.toFixed(2)},{
+        
+        const newRestaurantRate = await Restaurant.findByIdAndUpdate(
+            reservation.restaurant,
+            {averageRating:averageRating.toFixed(2)},
+        {
             new:true,
             runValidator:true
         });
-        console.log(RestaurantRate.averageRating);
-        //
+        console.log(newRestaurantRate.averageRating);
+    // 
         return res.status(200).json({success:true,data:{}});
     }catch(err){
         res.status(500).json({

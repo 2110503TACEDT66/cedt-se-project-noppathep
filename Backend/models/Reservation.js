@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Restaurant  = require('../models/Restaurant');
 
 const ReservationSchema = new mongoose.Schema({
     apptDate:{
@@ -63,6 +64,30 @@ ReservationSchema.virtual('rating', {
     localField:'_id',
     foreignField:'reservation',
     justOne: true
+});
+
+ReservationSchema.pre('deleteOne',{document:true,query:false},async function(next){
+    console.log(`All Rating being remove from reservation ${this._id}`);
+    await this.model('Rating').deleteOne({reservation:this._id});
+     //update Restaurant.rating
+        const RestaurantRate = await Restaurant.findById(this.restaurant).populate('rating');
+        console.log(RestaurantRate.averageRating);
+        let totalRating = 0;
+        RestaurantRate.rating.forEach(rate => {
+            totalRating += rate.rating;
+        });
+        const averageRating = totalRating / RestaurantRate.rating.length;
+        
+        const newRestaurantRate = await Restaurant.findByIdAndUpdate(
+            this.restaurant,
+            {averageRating:averageRating.toFixed(2)},
+        {
+            new:true,
+            runValidator:true
+        });
+        console.log(newRestaurantRate.averageRating);
+    // 
+    next();
 });
 
 
