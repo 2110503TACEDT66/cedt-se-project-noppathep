@@ -7,7 +7,7 @@ import deleteReservation from '@/libs/reservation/deleteReservation';
 import LinearProgress from '@mui/material/LinearProgress';
 import updateReservation from '@/libs/reservation/updateReservation';
 import Select from '@mui/material/Select';
-import { Button, Input } from '@mui/material';
+import Profile from './Profile';
 
 import Swal from 'sweetalert2'
 
@@ -20,7 +20,6 @@ import { Close, Edit } from '@mui/icons-material';
 import Link from 'next/link';
 import updateUserProfile from '@/libs/user/updateUserProfile';
 import dayjs from 'dayjs';
-import Rating from '@mui/material/Rating';
 
 export default function MyReservation({profile}:{profile:any}) {
 
@@ -173,88 +172,7 @@ export default function MyReservation({profile}:{profile:any}) {
         <div className=''>
             <div className='flex flex-col xl:py-5 xl:flex-row mt-4 gap-5 items-center justify-around'>
                 
-                {profile && (
-                    <div className="w-full  md:max-w-[700px] h-full xl:self-start xl:ml-5 p-2 border-2 border-gray-100 text-black shadow-lg" 
-                         key={profile.data.id}
-                    >
-
-                        <table className='w-full'>
-                            <tbody className='[&>tr>th]:text-start [&>tr>th]:px-4 [&>tr>th]:w-44 sm:[&>tr>th]:w-52 sm:[&>tr>td]:w-96 [&>tr]:h-11'>
-                                <th colSpan={2} className='relative text-2xl font-semibold text-start sm:text-center p-2'>
-                                    User Profile
-                                        {
-                                            isEditProfile
-                                                ?
-                                                <span className='absolute right-2 space-x-2'>
-                                                    <button onClick={ ()=>editProfile() } className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
-                                                        save
-                                                    </button>
-                                                    <button onClick={ ()=>setEditProfile(false) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
-                                                        cancel editing
-                                                    </button>
-                                                </span>
-                                                :
-                                                <span className='absolute right-2 space-x-2'>
-                                                    <button onClick={ ()=>setEditProfile(true) } className='text-sm text-gray-700 font-normal bg-gray-200 hover:bg-gray-300 rounded-md px-2 p-1'>
-                                                        Edit profile    
-                                                    </button>    
-                                                </span>
-                                        }
-                                </th>
-
-                                <tr>
-                                    <th>Name</th>
-                                    <td>
-                                        {
-                                        isEditProfile
-                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => setNewName(event.target.value)} placeholder={newName}/>
-                                            : <>{newName}</>
-                                        }
-                                    </td>
-                                </tr>
-                                
-                                <tr>
-                                    <th>Email</th>
-                                    <td>
-                                        {
-                                        isEditProfile
-                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => setNewEmail(event.target.value)} placeholder={newEmail}/>
-                                            : <>{newEmail}</>
-                                        }
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th>Tel.</th>
-                                    <td>
-                                        {
-                                        isEditProfile
-                                            ? <Input className='w-full sm:w-[80%]' color='info' onChange={ event => setNewTel(event.target.value)} placeholder={newTel}/>
-                                            : <>{newTel}</>
-                                        }
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <th>Credit/Debit Card</th>
-                                    <td>
-                                    <Link href={'/yourcard'} className='w-fit text-m font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
-                                        Check your added card here!
-                                    </Link>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Points</th>
-                                    <td>9999</td>
-                                </tr>
-                                <tr>
-                                    <th>Member since</th>
-                                    <td>{formatDate(profile.data.createdAt)}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                )}
+            <Profile profile={profile} />
 
                 {
                     allReservation.length > 0
