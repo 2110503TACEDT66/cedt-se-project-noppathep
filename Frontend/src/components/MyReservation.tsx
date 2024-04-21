@@ -185,7 +185,7 @@ export default function MyReservation({profile}:{profile:any}) {
                                         <div className='h-full w-full flex flex-row items-center px-5'>
                                             
                                             <Image
-                                                src= {"/img/thaispice.jpg"}
+                                                src= {item.restaurant.image}
                                                 alt={"Image"}
                                                 width={150}
                                                 height={100}
