@@ -80,7 +80,7 @@ export default function MyRestaurant({profile}:{profile:any}) {
                                     <div key={item._id} className='bg-slate-50 shadow-md w-full md:w-[700px] h-[200px] rounded-md'>
                                         <div className='h-full w-full flex flex-row items-center justify-center px-5'>
                                             <Image
-                                                src="/img/thaispice.jpg"
+                                                src={item.image}
                                                 alt="Image"
                                                 width={150}
                                                 height={100}

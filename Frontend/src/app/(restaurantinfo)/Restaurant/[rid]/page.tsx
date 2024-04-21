@@ -1,8 +1,6 @@
-
 import getRestaurant from '@/libs/restaurant/getRestaurant';
 import getMenu from '@/libs/restaurant/getMenu';
 import Image from 'next/image';
-import InteractiveCard from '@/components/InteractiveCard';
 
 
 export default async function RestaurantPage({params}:{params:{rid:string}}){
@@ -35,6 +33,10 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
                     <tr>
                         <td>Tel.</td>
                         <td>{RestaurantDetail.data.tel}</td>
+                    </tr>
+                    <tr>
+                        <td>Rating:</td>
+                        <td>{`${RestaurantDetail.data.averageRating}`} ★</td>
                     </tr>
                     <tr>
                         <td>Opening hours :</td>

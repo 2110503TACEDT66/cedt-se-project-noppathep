@@ -11,7 +11,8 @@ export interface RestaurantModel {
     openingHours: {
       open: string,
       close: string
-  }
+    },
+    averageRating: number,
     tel: string,
     image:string
   }
