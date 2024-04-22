@@ -26,10 +26,10 @@ const CommentRatingCatalog = ({ ratingJson }: { ratingJson: any }) => {
     return (
         <div className="w-full flex flex-col gap-3 justify-center items-center mt-5">
             <div className="text-xl font-bold">
-                What others say
+                What others say {ratingJson.count}
             </div>
             {comments.slice(0, visibleComments).map((item: any) => (
-                <div key={item._id} className="w-[500px] px-4 py-2 text-left bg-slate-200 rounded-lg text-black">
+                <div key={item._id} className="w-full sm:w-[500px] px-4 py-2 text-left bg-slate-200 rounded-lg text-black">
                     <div className="">
                         <strong>User</strong> {item.user}
                     </div>

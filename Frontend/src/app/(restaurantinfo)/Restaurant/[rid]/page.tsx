@@ -19,11 +19,11 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
     return(
         <main className="text-center p-5 text-black">
             <h1 className="text-lg font-medium">{RestaurantDetail.data.name}</h1>
-            <div className="flex flex-row my-5 flex-wrap">
+            <div className="flex flex-row my-5 gap-3 flex-wrap">
                 <Image src={RestaurantDetail.data.image} 
                 alt='restaurant logo' width={0} height={0} sizes="100vw"
                 className='rounded-lg w-full sm:w-[20%]'/>
-            <table className='table-auto border-separate border-spacing-2 bg-gray-100'>
+            <table className='table-auto border-separate border-spacing-2 bg-gray-100 w-full sm:w-fit rounded-lg p-2 text-left'>
                 <tbody>
                     <tr>
                         <td>Address:</td>
@@ -46,7 +46,7 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
                         <td>{RestaurantDetail.data.averageRating} <Rating size='small' value={RestaurantDetail.data.averageRating} readOnly/></td>
                     </tr>
                     <tr>
-                        <td>Opening hours :</td>
+                        <td>Opening hours:</td>
                         <td>{RestaurantDetail.data.openingHours.open} - {RestaurantDetail.data.openingHours.close}</td>
                     </tr>
                 </tbody>

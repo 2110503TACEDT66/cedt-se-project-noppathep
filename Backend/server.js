@@ -31,6 +31,15 @@ app.use(limiter);
 app.use(hpp());
 app.use(cors());
 
+// // Add cache control headers doesn't work nutty
+// app.use((req, res, next) => {
+//     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+//     res.setHeader('Pragma', 'no-cache');
+//     res.setHeader('Expires', '0');
+//     res.setHeader('Surrogate-Control', 'no-store');
+//     next();
+// });
+
 const auth = require('./routes/auth');
 app.use('/api/v1/auth', auth);
 
