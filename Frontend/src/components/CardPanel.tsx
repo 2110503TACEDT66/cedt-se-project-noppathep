@@ -7,6 +7,7 @@ import getRestaurants from "@/libs/restaurant/getRestaurants";
 export default async function CardPanel(){
 
     const RestaurantResponse = await getRestaurants()
+    console.log(RestaurantResponse)
 
     if(!RestaurantResponse) return (<p>Restaurant is Loading</p>)
 

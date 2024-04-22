@@ -1,6 +1,8 @@
 import getRestaurant from '@/libs/restaurant/getRestaurant';
 import getMenu from '@/libs/restaurant/getMenu';
 import Image from 'next/image';
+import CommentRatingCatalog from '@/components/CommentRatingCatalog';
+import getRatingByRestaurant from '@/libs/restaurant/getRatingByRestaurant';
 
 
 export default async function RestaurantPage({params}:{params:{rid:string}}){
@@ -8,6 +10,10 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
     const RestaurantDetail = await getRestaurant(params.rid)
     const MenuResponse = await getMenu(params.rid)
     if(!MenuResponse) return (<p>Menu is Loading</p>)
+        
+    console.log(RestaurantDetail)
+    const comments = await getRatingByRestaurant(params.rid);
+    if(!comments) return (<p>Comment is Loading</p>)
 
     return(
         <main className="text-center p-5 text-black">
@@ -36,7 +42,7 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
                     </tr>
                     <tr>
                         <td>Rating:</td>
-                        <td>{`${RestaurantDetail.data.averageRating}`} ★</td>
+                        <td>{RestaurantDetail.data.averageRating} ★</td>
                     </tr>
                     <tr>
                         <td>Opening hours :</td>
@@ -57,6 +63,7 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
                     </div>
                 ))}
             </div>
+            <CommentRatingCatalog ratings={comments}/>
         </main>
     )
 }
