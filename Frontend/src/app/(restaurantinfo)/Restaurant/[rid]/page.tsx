@@ -3,7 +3,7 @@ import getMenu from '@/libs/restaurant/getMenu';
 import Image from 'next/image';
 import CommentRatingCatalog from '@/components/CommentRatingCatalog';
 import getRatingByRestaurant from '@/libs/restaurant/getRatingByRestaurant';
-
+import Rating from '@mui/material/Rating';
 
 export default async function RestaurantPage({params}:{params:{rid:string}}){
 
@@ -13,15 +13,16 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
         
     console.log(RestaurantDetail)
     const comments = await getRatingByRestaurant(params.rid);
+    // console.log(comments)
     if(!comments) return (<p>Comment is Loading</p>)
 
     return(
         <main className="text-center p-5 text-black">
             <h1 className="text-lg font-medium">{RestaurantDetail.data.name}</h1>
-            <div className="flex flex-row my-5">
+            <div className="flex flex-row my-5 flex-wrap">
                 <Image src={RestaurantDetail.data.image} 
                 alt='restaurant logo' width={0} height={0} sizes="100vw"
-                className='rounded-lg w-[20%]'/>
+                className='rounded-lg w-full sm:w-[20%]'/>
             <table className='table-auto border-separate border-spacing-2 bg-gray-100'>
                 <tbody>
                     <tr>
@@ -42,7 +43,7 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
                     </tr>
                     <tr>
                         <td>Rating:</td>
-                        <td>{RestaurantDetail.data.averageRating} ★</td>
+                        <td>{RestaurantDetail.data.averageRating} <Rating size='small' value={RestaurantDetail.data.averageRating} readOnly/></td>
                     </tr>
                     <tr>
                         <td>Opening hours :</td>
@@ -63,7 +64,7 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
                     </div>
                 ))}
             </div>
-            <CommentRatingCatalog ratings={comments}/>
+            <CommentRatingCatalog ratingJson={comments}/>
         </main>
     )
 }

@@ -2,13 +2,11 @@
 import Image from 'next/image';
 import InteractiveCard from './InteractiveCard';
 import Rating from '@mui/material/Rating';
-import { useState } from 'react';
 
-export default function Card({ RestaurantName, imgSrc,RatingChange }: { RestaurantName: string, imgSrc: string,RatingChange?:Function }) {
-    const [value, setValue] = useState<number | null>(5);
+export default function Card({ RestaurantName, imgSrc,rating }: { RestaurantName: string, imgSrc: string,rating?:number }) {
     return (
         <InteractiveCard>
-            <div className='h-[300px] round-lg shadow-lg bg-white flex-auto' >
+            <div className='h-[300px] round-lg shadow-lg bg-white flex-auto relative' >
                 <div className='width-full h-[70%] relative rounded-t-lg'>
                     <Image
                         src={imgSrc}
@@ -18,17 +16,11 @@ export default function Card({ RestaurantName, imgSrc,RatingChange }: { Restaura
                     />
                 </div>
                 <div className='w-full h-[10%] p-[10px] text-black'>{RestaurantName}</div>
-                <div className='p-[10px] h-[20%]'>
-                    {
-                        RatingChange? <Rating
-                        id={RestaurantName + 'Rating'}
-                        name={RestaurantName + ' Rating'}
-                        data-testid={RestaurantName + ' Rating'}
-                        value={value}
-                        onChange={(event, newValue) => {event.stopPropagation();event.preventDefault();setValue(newValue);RatingChange(RestaurantName,newValue)}}
-                        onClick={(e)=>e.stopPropagation()} 
-                   /> : ''
-                    }
+                <div className='absolute right-0 bottom-0'>
+                    <Rating 
+                    value={rating}
+                    readOnly
+                    />
                 </div>
             </div>
         </InteractiveCard>
