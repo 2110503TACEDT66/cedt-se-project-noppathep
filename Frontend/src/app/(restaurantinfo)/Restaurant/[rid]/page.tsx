@@ -11,9 +11,9 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
     const MenuResponse = await getMenu(params.rid)
     if(!MenuResponse) return (<p>Menu is Loading</p>)
         
-    console.log(RestaurantDetail)
+    // console.log(RestaurantDetail)
     const comments = await getRatingByRestaurant(params.rid);
-    // console.log(comments)
+    // console.log(comments.count)
     if(!comments) return (<p>Comment is Loading</p>)
 
     return(
