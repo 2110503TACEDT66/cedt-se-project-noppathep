@@ -138,9 +138,12 @@ export default function Foodorder({params}:{params:{rid:string}}){
     return(
         <main className="flex flex-col items-center text-center p-5 text-black">
 
-            <h1 className="text-2xl font-medium mb-4">{RestaurantDetail.data.name}</h1>
+            <h1 className="text-2xl font-bold mb-4">{RestaurantDetail.data.name}</h1>
             
-            <div className="grid gap-x-5 gap-y-3 w-full sm:w-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+            {
+                MenuResponse.data.length!=0
+                ?
+                <div className="grid gap-x-5 gap-y-3 pb-5 w-full sm:w-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {
                 MenuResponse.data.map((item:any, index:number)=>(
                     <div key={index} className="h-[150px] sm:w-[280px] sm:h-[320px] bg-white p-3 rounded-lg shadow-md flex sm:flex-col border-2 border-gray-100 items-center justify-around">
@@ -169,11 +172,19 @@ export default function Foodorder({params}:{params:{rid:string}}){
                 ))
                 }
             </div>
+            :<div className='w-full h-28 flex items-center justify-center bg-gray-50 text-gray-600'>
+                <h2>Menu not available right now</h2>
+            </div>
+
+            }
 
             
-            <div className='flex flex-nowrap flex-col w-full mt-5 bg-teal-600 h-20 rounded-b-lg shadow-md border-2 justify-center items-end pr-5'>
-                <div className='text-sm sm:text-base text-white h-fit w-fit font-semibold'>Total Items : {calculateTotalItem()}</div>
-                <div className='text-base sm:text-xl h-fit w-fit font-semibold text-white '>Total Price : {calculateTotalPrice()} ฿</div>
+            <div className='flex flex-nowrap w-full bg-teal-600 h-20 rounded-b-lg shadow-md border-2 pr-5'>
+                <button className=' self-center ml-2 sm:ml-7 mr-auto size-fit bg-orange-500 hover:bg-orange-700 rounded-md font-semibold text-gray-200 p-2 transition-colors focus:ring-2 focus:ring-gray-200'>Pay Now</button>
+                <div className='ml-auto self-center'>
+                    <div className='text-sm sm:text-base text-white h-fit w-fit font-semibold'>Total Items : {calculateTotalItem()}</div>
+                    <div className='text-base sm:text-xl h-fit w-fit font-semibold text-white '>Total Price : {calculateTotalPrice()} ฿</div>
+                </div>
             </div>
 
         </main>

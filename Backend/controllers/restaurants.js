@@ -65,7 +65,7 @@ exports.getRestaurants = async(req,res,next)=>{
 //@acess Public
 exports.getRestaurant = async (req,res,next)=>{
     try{
-        const restaurant = await Restaurant.findById(req.params.id).populate('menus').populate('tables').populate('reservations').populate('rating');
+        const restaurant = await Restaurant.findById(req.params.id).populate('menus').populate('tables').populate({path:'reservations',populate:{path:'user',model:'User',select:'name'}}).populate('rating');
         if(!restaurant){
             return res.status(400).json({success:false});
         }

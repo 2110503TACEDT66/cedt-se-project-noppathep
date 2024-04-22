@@ -14,6 +14,9 @@ import MenuItem from '@mui/material/MenuItem';
 import DateReserve from './DateReserve';
 import getRestaurants from '@/libs/restaurant/getRestaurants';
 
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ReservationForOwner from './ReservationForOwner';
+
 export default function ReservationList({ reservationJson }: { reservationJson: any }) {
     const [session, setSession] = useState<Session|null>(null);
     const [role, setRole] = useState<string>("");
@@ -89,12 +92,12 @@ export default function ReservationList({ reservationJson }: { reservationJson: 
     };
 
     return (
-        <div className="w-full flex flex-col bg-slate-100 p-4 rounded-md">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {reservations.map((item: any) => (
-                    <div key={item._id} className="bg-slate-200 rounded-lg p-3 flex flex-col items-start relative">
+        <div className=" flex flex-col sm:max-w-[700px] sm:mx-auto items-center text-base sm:text-lg bg-slate-200 p-3 rounded-sm">
+            <div className="flex min-w-[300px] w-full max-w-[650px] flex-col flex-nowrap gap-y-4">
+                {/* {reservations.map((item: any) => (
+                    <div key={item._id} className="bg-slate-50 shadow-md rounded-lg p-3 flex flex-col items-start relative">
                         <div className="mb-2">
-                            <strong>User ID:</strong> {item.user}
+                            <strong>User ID:</strong> {item.user._id}
                         </div>
                         {
                             editStates[item._id] && RestaurantResponse?.data
@@ -127,8 +130,11 @@ export default function ReservationList({ reservationJson }: { reservationJson: 
                                     <strong>Date:</strong> {dayjs(item.apptDate).format("DD/MM/YYYY HH:mm")}
                                 </div>
                         }
-                        <div className="mb-2">
-                            <strong>Order Count:</strong> {item.foodOrder.length}
+                        <div className="mb-2 space-x-3">
+                            <strong>Order Count:</strong> {item.foodOrder.length} 
+                            <button className=' hover:underline-offset-4 hover:underline text-blue-500 text-base font-medium'><ArrowDropDownIcon color='info' fontSize='small' />
+                                <span className=''>view</span>
+                            </button>
                         </div>
                         {session && role === "admin" && !editStates[item._id] 
                         ? (
@@ -163,7 +169,17 @@ export default function ReservationList({ reservationJson }: { reservationJson: 
                             </div>
                         )}
                     </div>
-                ))}
+                ))} */}
+
+                {
+                    reservations.map((item:any)=>(
+                        <ReservationForOwner reservationData={item} />
+                    ))
+                }
+
+                
+
+
             </div>
         </div>
     );
