@@ -10,9 +10,9 @@ export default async function CardPanel(){
 
     return(
     <main>
-      <div className="flex flex-row flex-wrap mt-3 gap-3 justify-center items-center">
+      <div className="flex flex-row flex-wrap mt-3 mb-5 gap-3 justify-center items-center">
         {
-            RestaurantResponse.data.map((RestaurantItem:any)=>(
+            RestaurantResponse.data.slice(0, 5).map((RestaurantItem:any)=>(
                 <Link href={`/Restaurant/${RestaurantItem._id}`} className="w-[200px]">
                 <Card RestaurantName={RestaurantItem.name} imgSrc={RestaurantItem.image} rating={RestaurantItem.averageRating}/>
                  </Link>
