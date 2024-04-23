@@ -20,7 +20,7 @@ export default async function TopMenu(){
             {
                 session ? 
                 <Link href="/api/auth/signout">
-                    <div className='flex items-center h-full px-2 text-cyan-600 text-sm'>Sign-out of {session.user?.name}</div>
+                    <div className='flex items-center h-full px-2 text-cyan-600 text-sm truncate '>Sign-out of {session.user?.name}</div>
                 </Link> 
                 : 
                 <Link href="/api/auth/signin">
@@ -53,7 +53,7 @@ export default async function TopMenu(){
             }
             
             <TopMenuItem title='Reservation' pageRef='/reservation'/>
-            <Link href="/">
+            <Link href="/" className='ml-4'>
             <Image src='/img/logo.jpg' className={styles.logoimg} alt='logo' width={0} height={0} sizes='100vh'/>
             </Link>
         </div>

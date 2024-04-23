@@ -19,10 +19,10 @@
 }
 
 .itemcontainer{
-    width:120px;
-    text-align: center;
-    margin-top: auto;
-    margin-bottom: auto;
+    width:fit-content;
+    padding: 5px;
+    text-align: left;
+    align-self: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 10pt;
     color: gray;

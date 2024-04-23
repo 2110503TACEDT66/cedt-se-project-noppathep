@@ -6,7 +6,7 @@ export default  async function RestaurantCatalog({RestaurantsJson}:{RestaurantsJ
     const RestaurantReady = await RestaurantsJson
     return(
         <>
-        <div className="text-black">Just kidding... We only have {RestaurantReady.count} restaurant.</div>
+        <div className="text-black">We only have {RestaurantReady.count} restaurant.</div>
         <div className="text-black">You can view the menu by clicking restaurant card .</div>
         <div className="flex flex-row flex-wrap mt-3 gap-3 justify-center items-center">
         {

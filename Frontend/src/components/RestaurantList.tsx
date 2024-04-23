@@ -6,7 +6,7 @@ export default async function RestaurantList({ RestaurantsJson }: { RestaurantsJ
 
     return (
         <div>
-            <div className="text-black">You have {RestaurantReady.count} restaurants.</div>
+            <div className="text-black text-center my-3 text-lg">There are <strong>{RestaurantReady.count}</strong> restaurants</div>
             <div className="flex flex-row flex-wrap gap-4 items-center justify-center">
                 {RestaurantReady.data.map((RestaurantItem: any) => (
                     <Link href={`/Restaurant/${RestaurantItem._id}`} key={RestaurantItem._id}>
