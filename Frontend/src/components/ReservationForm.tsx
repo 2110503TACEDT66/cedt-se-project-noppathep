@@ -125,7 +125,7 @@ export default function ReservationForm({profile}:{profile:any}) {
 
         </form>
 
-        <div className='w-full flex items-center max-w-[600px] min-h-[250px] h-fit bg-gray-100 shadow-sm rounded-md mb-4'>
+        <div className='w-full flex items-center max-w-[650px] min-h-[250px] h-fit bg-gray-100 shadow-sm rounded-md mb-4'>
             {
               findRestaurantFromId(location)
                 ? 
@@ -140,6 +140,7 @@ export default function ReservationForm({profile}:{profile:any}) {
                       </p>
                       <p><b>Region:</b> {findRestaurantFromId(location)?.address.region}</p>
                       <p><b>Contact:</b> {findRestaurantFromId(location)?.tel}</p>
+                      <p><b>Rating:</b> {findRestaurantFromId(location)?.averageRating}</p>
                       <p><b>Opening Hours</b>: {findRestaurantFromId(location)?.openingHours.open} - {findRestaurantFromId(location)?.openingHours.close}</p>
                     
                     </div>

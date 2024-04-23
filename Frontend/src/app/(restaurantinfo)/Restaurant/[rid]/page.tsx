@@ -1,24 +1,29 @@
-
 import getRestaurant from '@/libs/restaurant/getRestaurant';
 import getMenu from '@/libs/restaurant/getMenu';
 import Image from 'next/image';
-import InteractiveCard from '@/components/InteractiveCard';
-
+import CommentRatingCatalog from '@/components/CommentRatingCatalog';
+import getRatingByRestaurant from '@/libs/restaurant/getRatingByRestaurant';
+import Rating from '@mui/material/Rating';
 
 export default async function RestaurantPage({params}:{params:{rid:string}}){
 
     const RestaurantDetail = await getRestaurant(params.rid)
     const MenuResponse = await getMenu(params.rid)
     if(!MenuResponse) return (<p>Menu is Loading</p>)
+        
+    // console.log(RestaurantDetail)
+    const comments = await getRatingByRestaurant(params.rid);
+    // console.log(comments.count)
+    if(!comments) return (<p>Comment is Loading</p>)
 
     return(
         <main className="text-center p-5 text-black">
             <h1 className="text-lg font-medium">{RestaurantDetail.data.name}</h1>
-            <div className="flex flex-row my-5">
+            <div className="flex flex-row my-5 gap-3 flex-wrap">
                 <Image src={RestaurantDetail.data.image} 
                 alt='restaurant logo' width={0} height={0} sizes="100vw"
-                className='rounded-lg w-[20%]'/>
-            <table className='table-auto border-separate border-spacing-2 bg-gray-100'>
+                className='rounded-lg w-full sm:w-[20%]'/>
+            <table className='table-auto border-separate border-spacing-2 bg-gray-100 w-full sm:w-fit rounded-lg p-2 text-left'>
                 <tbody>
                     <tr>
                         <td>Address:</td>
@@ -37,7 +42,11 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
                         <td>{RestaurantDetail.data.tel}</td>
                     </tr>
                     <tr>
-                        <td>Opening hours :</td>
+                        <td>Rating:</td>
+                        <td>{RestaurantDetail.data.averageRating} <Rating size='small' value={RestaurantDetail.data.averageRating} readOnly/></td>
+                    </tr>
+                    <tr>
+                        <td>Opening hours:</td>
                         <td>{RestaurantDetail.data.openingHours.open} - {RestaurantDetail.data.openingHours.close}</td>
                     </tr>
                 </tbody>
@@ -55,6 +64,7 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
                     </div>
                 ))}
             </div>
+            <CommentRatingCatalog ratingJson={comments}/>
         </main>
     )
 }
