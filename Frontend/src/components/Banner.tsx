@@ -1,10 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import styles from './banner.module.css';
 import Image from 'next/image';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 
 
 export default function Banner(){
@@ -13,69 +11,80 @@ export default function Banner(){
 
     const {data:session} = useSession()
 
-    const [slideIndex, setSlideIndex] = useState(0);
+    const [slideIndex, setSlideIndex] = useState<number>(0);
 
     useEffect(() => {
+        const storedIndex = parseInt(localStorage.getItem('slideIndex') || '0');
+        setSlideIndex(storedIndex);
+        showSlides(storedIndex);
+      }, []);
+  
+    useEffect(() => {
         const interval = setInterval(() => {
-          showSlides(slideIndex + 1);
+            showSlides(slideIndex + 1);
         }, 5500);
-    
+      
         return () => clearInterval(interval);
-      }, [slideIndex]);
+    }, [slideIndex]);
     
-      const showSlides = (n: number) => {
-        const slides = document.getElementsByClassName("mySlides") as HTMLCollectionOf<HTMLElement>;
-        for (let i = 0; i < slides.length; i++) {
-          slides[i].style.display = "none";
-        }
-        if (n >= slides.length) { n = 0 }
-        if (n < 0) { n = slides.length - 1 }
-        slides[n].style.display = "block";
-        setSlideIndex(n);
+    const showSlides = (n: number) => {
+      const slides = document.getElementsByClassName("mySlides") as HTMLCollectionOf<HTMLElement>;
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].classList.add('hidden'); // Hide all slides
+        slides[i].classList.remove('fade-in'); // Remove fade-in class from all slides
       }
-
-      const plusSlides = (n: number) => {
-        showSlides(slideIndex + n);
-      }
+      if (n >= slides.length) { n = 0 }
+      if (n < 0) { n = slides.length - 1 }
+      slides[n].classList.remove('hidden'); // Show current slide
+      setTimeout(() => {
+        slides[n].classList.add('fade-in'); // Add fade-in class to the current slide for transition effect
+      }, 50); // Delay to ensure the class is applied after hiding the previous slide
+      setSlideIndex(n);
+      localStorage.setItem('slideIndex', String(n));
+    }
+    
+    const plusSlides = (n: number) => {
+      showSlides(slideIndex + n);
+    }
     
     return(
-        <div className="block p-5 m-0 w-[100vw] h-[80vh] relative">
+        <div className="block p-5 m-0 w-[100vw] h-[80vh] relative bg-black">
             <div className="slideshow-container">
-      <div className="mySlides fade">
-      <Image src='/img/cover.jpg' alt ='cover' fill ={true} objectFit = 'cover' className='brightness-50'/>
-      </div>
+              <div className="mySlides fade">
+                <Image src='/img/cover.jpg' alt ='cover' fill={true} className='brightness-50 object-cover'/>
+              </div>
 
-      <div className="mySlides fade">
-      <Image src='/img/cover2.jpg' alt ='cover' fill ={true} objectFit = 'cover' className='brightness-50'/>
-      </div>
+              <div className="mySlides fade hidden">
+                <Image src='/img/cover2.jpg' alt ='cover' fill={true} className='brightness-50 object-cover'/>
+              </div>
 
-      <div className="mySlides fade">
-      <Image src='/img/cover3.jpg' alt ='cover' fill ={true} objectFit = 'cover' className='brightness-50'/>
-      </div>
+              <div className="mySlides fade hidden">
+                <Image src='/img/cover3.jpg' alt ='cover' fill={true} className='brightness-50 object-cover'/>
+              </div>
 
-      <div className="mySlides fade">
-      <Image src='/img/cover4.jpg' alt ='cover' fill ={true} objectFit = 'cover' className='brightness-50'/>
-      </div>
+              <div className="mySlides fade hidden">
+                <Image src='/img/cover4.jpg' alt ='cover' fill={true} className='brightness-50 object-cover'/>
+              </div>
 
-      <div className="mySlides fade">
-      <Image src='/img/cover5.jpg' alt ='cover' fill ={true} objectFit = 'cover' className='brightness-50'/>
-      </div>
+              <div className="mySlides fade hidden">
+                <Image src='/img/cover5.jpg' alt ='cover' fill={true} className='brightness-50 object-cover'/>
+              </div>
 
-      <div className="mySlides fade">
-      <Image src='/img/cover6.jpg' alt ='cover' fill ={true} objectFit = 'cover' className='brightness-50'/>
-      </div>
+              <div className="mySlides fade hidden">
+                <Image src='/img/cover6.jpg' alt ='cover' fill={true} className='brightness-50 object-cover'/>
+              </div>
 
-      <div className="mySlides fade">
-      <Image src='/img/cover7.jpg' alt ='cover' fill ={true} objectFit = 'cover' className='brightness-50'/>
-      </div>
+              <div className="mySlides fade hidden">
+                <Image src='/img/cover7.jpg' alt ='cover' fill={true} className='brightness-50 object-cover'/>
+              </div>
 
-      <div className="mySlides fade">
-      <Image src='/img/cover8.jpg' alt ='cover' fill ={true} objectFit = 'cover' className='brightness-50'/>
-      </div>
+              <div className="mySlides fade hidden">
+                <Image src='/img/cover8.jpg' alt ='cover' fill={true} className='brightness-50 object-cover'/>
+              </div>
 
-        <a className="absolute top-1/2 left-0 transform -translate-y-1/2 prev" onClick={() => plusSlides(-1)}>&#10094;</a>
-        <a className="absolute top-1/2 right-0 transform -translate-y-1/2 next" onClick={() => plusSlides(1)}>&#10095;</a>
-    </div>
+              <button className="absolute top-1/2 left-5 transform -translate-y-1/2 prev h-[200px] w-[80px] hover:bg-zinc-700/50 rounded-lg" onClick={() => plusSlides(-1)}>&#10094;</button>
+              <button className="absolute top-1/2 right-5 transform -translate-y-1/2 next h-[200px] w-[80px] hover:bg-zinc-700/50 rounded-lg" onClick={() => plusSlides(1)}>&#10095;</button>
+            </div>
             <div className="absolute  left-7 top-12 text-start z-20 text-white">
                 <h1 className='text-5xl font-medium'>World class Restautant is here</h1>
                 <h3 className='text-2xl font-serif'>Reserve your seat for your Love one now</h3>

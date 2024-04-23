@@ -43,44 +43,7 @@ export default function MyReservation({profile}:{profile:any}) {
   
     const [bookingDate, setBookingDate] = useState(Dayjs);
     const [location, setLocation] = useState('');
-
-    //==================<profile editing>====================
-    const [isEditProfile , setEditProfile] = useState<boolean>(false);
-    const [newName, setNewName] = useState<string>(profile.data.name);
-    const [newEmail, setNewEmail] = useState<string>(profile.data.email);
-    const [newTel, setNewTel] = useState<string>(profile.data.telephone);
-    const [newCard, setNewCard] = useState<string>('');
-
-    const editProfile = ()=>{
-        
-        Swal.fire({
-          title: "Do you want to save the changes?",
-          showCancelButton: true,
-          
-          confirmButtonText: "Save"
-        }).then((result) => {
-          if (result.isConfirmed && session != null) {
-
-            updateUserProfile(
-                session?.user._id,
-                session?.user.token,
-                newName,
-                newEmail,
-                newTel,
-                newCard
-            );
-
-            Swal.fire("Your profile has been changed", "", "success");
-            setEditProfile(false)
-          } 
-          else return;
-        });
-
     
-    }
-    //=======================================================
-
-    //==================<profile editing>====================
     const removeReservation = async (rid:string)=>{
 
         Swal.fire({
