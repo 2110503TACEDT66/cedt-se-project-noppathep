@@ -409,17 +409,20 @@ exports.paidReservation=async (req,res,next)=>{
             model: 'Menu',
             select: 'name price'
           });
+
         if(!reservation){
             return res.status(404).json({success:false,message:`No reservation with the id of ${req.params.id}`});
         }
+
         let totalPrice = 0;
         reservation.foodOrder.forEach(menuItem => {
           totalPrice += menuItem.price;
         });
-        if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin'){
+
+        if(reservation.user._id.toString()!==req.user.id&&req.user.role!=='admin'){
             return res.status(401).json({
                 success:false,
-                message:`User ${req.user.id} is not authorize to delete this reserve table`
+                message:`User ${req.user.id} is not authorize to delete this reservation`
             });
         }
         if(reservation.paid){
@@ -441,16 +444,17 @@ exports.paidReservation=async (req,res,next)=>{
                 points:gainpoint
             })
         reservation = await Reservation.findById(req.params.id).populate("user");
+
         res.status(200).json({
             success: true,
             data:reservation,
-            message :`Congrat you gain ${gainpoint}`
+            message :`You have gained ${gainpoint} point`
         });
     }catch(error){
         console.log(error);
         return res.status(500).json({
             success:false,
-            message:'Cannot paid'
+            message:'Cannot make a payment, Please try again'
         });
     }
 };

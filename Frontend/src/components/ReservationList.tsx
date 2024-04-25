@@ -65,7 +65,6 @@ export default function ReservationList({ reservationJson }: { reservationJson: 
                 itemID,
                 session.user.token,
                 bookingDate,
-                location
               )
   
               Swal.fire("Your reservation has been changed", "", "success");

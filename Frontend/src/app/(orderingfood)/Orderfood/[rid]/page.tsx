@@ -4,18 +4,20 @@ import getMenu from '@/libs/restaurant/getMenu';
 import Image from 'next/image';
 import getReservation from '@/libs/reservation/getReservation';
 import { LinearProgress } from '@mui/material';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import orderFood from '@/libs/orderFood';
 import deleteOrder from '@/libs/deleteOrder';
 import React from 'react';
 import Swal from 'sweetalert2';
-import Link from 'next/link';
+import payReservation from '@/libs/reservation/payReservation';
+import { useRouter } from 'next/navigation';
 
 
 export default function Foodorder({params}:{params:{rid:string}}){
 
     //setup all state
+    const router = useRouter();
     const { data: session, status } = useSession();
     const [RestaurantDetail, setRestaurantDetail] = useState<any>(null);
     const [MenuResponse, setMenuResponse] = useState<any>(null);
@@ -52,9 +54,9 @@ export default function Foodorder({params}:{params:{rid:string}}){
         }
       };
       fetchData();
-
-
     }, []);
+
+
 
     const handleAdd = (item:any) => {
         const res = orderFood(reservation.data._id,session?session.user.token:"",item._id)
@@ -71,7 +73,6 @@ export default function Foodorder({params}:{params:{rid:string}}){
             } else { alert("order failed") }
         })
     }
-
     const handleDelete = (item:any) => {
 
         //do nothing if id not existed in editedOrder
@@ -94,6 +95,37 @@ export default function Foodorder({params}:{params:{rid:string}}){
                 }
             } else { alert("delete failed") }
         })
+    }
+
+    //mark reservation as 'paid' by calling backendAPI using payReservation() (for now)
+    const handlePayReservation = async (reservationId:string) =>{
+        Swal.fire({
+            title: "Pay a reservation?",
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+            confirmButtonColor:"green"
+
+          }).then((result) => {
+
+            if (result.isConfirmed && session != null) {
+                payReservation(reservationId,session.user.token)
+                    .then(()=>{
+                        //success popup
+                        Swal.fire("Your payment has been recieved", "make sure to be arrive in time!", "success")
+                        .then((result) =>{
+                            if(result.isDismissed ||result.isConfirmed){
+                                router.push('/myreservation');
+                            }
+                        });
+                    })
+                    .catch((err)=>{
+                        //error popup
+                        Swal.fire("ERROR",err.message, "error");
+                    });
+
+            } 
+            else return;
+          });
     }
 
 
@@ -119,9 +151,11 @@ export default function Foodorder({params}:{params:{rid:string}}){
     //====================================
 
     //show loading until finish fetching
-    if(!MenuResponse||!RestaurantDetail) return (<LinearProgress />)
-
-
+    if(!MenuResponse||!RestaurantDetail) return (<LinearProgress />);
+    //redirect if already paid this reservation
+    if(reservation.data.paid) router.replace('/myreservation');
+    
+    
     //get initial number of order and store in 'amount'
     let amount = new Map<string,number>();
     const amountInit = ()=>{
@@ -180,7 +214,10 @@ export default function Foodorder({params}:{params:{rid:string}}){
 
             
             <div className='flex flex-nowrap w-full bg-teal-600 h-20 rounded-b-lg shadow-md border-2 pr-5'>
-                <button className=' self-center ml-2 sm:ml-7 mr-auto size-fit bg-orange-500 hover:bg-orange-700 rounded-md font-semibold text-gray-200 p-2 transition-colors focus:ring-2 focus:ring-gray-200'>Pay Now</button>
+                <button className=' self-center ml-2 sm:ml-7 mr-auto size-fit bg-orange-500 hover:bg-orange-700 rounded-md font-semibold text-gray-200 p-2 transition-colors focus:ring-2 focus:ring-gray-200'
+                    onClick={()=>handlePayReservation(params.rid)}>
+                    Pay Now
+                </button>
                 <div className='ml-auto self-center'>
                     <div className='text-sm sm:text-base text-white h-fit w-fit font-semibold'>Total Items : {calculateTotalItem()}</div>
                     <div className='text-base sm:text-xl h-fit w-fit font-semibold text-white '>Total Price : {calculateTotalPrice()} ฿</div>
