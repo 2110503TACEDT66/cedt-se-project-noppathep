@@ -194,6 +194,10 @@ export default function MyReservation({profile}:{profile:any}) {
                                                 <div className='text-left text-sm font-medium text-gray-600'>
                                                     Food Order count: {item.foodOrder.length}
                                                 </div>
+                                                
+                                                <div className='text-left text-sm font-medium text-gray-600'>
+                                                    Table pick count: {item.reserveTable.length}
+                                                </div>
 
                                                 <div className='text-gray-600 text-sm font-medium'>
                                                     {
@@ -222,6 +226,10 @@ export default function MyReservation({profile}:{profile:any}) {
                                                         </button>
                                                     </div>
                                                 :   <div className='ml-auto flex flex-row gap-2'>
+                                                        <button className="rounded-md bg-green-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
+                                                                onClick={()=>{router.push(`/Table/${item._id}`)}}>
+                                                            Pick Table
+                                                        </button>
                                                         {
                                                             item.rating == null && (
                                                                 <button className="rounded-md bg-yellow-500 hover:bg-yellow-700 px-2 py-1 text-white shadow-sm" 
