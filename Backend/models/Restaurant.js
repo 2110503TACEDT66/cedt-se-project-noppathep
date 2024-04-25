@@ -65,15 +65,16 @@ RestaurantSchema.virtual('rating',{
     justOne:false
 });
 
-RestaurantSchema.pre('deleteOne',{document:true,query:false},async function(next){
-    console.log(`All Reservation being remove form restaurant ${this._id}`);
-    await this.model('Reservation').deleteMany({restrautant:this._id});
-    console.log(`All menus being remove form restaurant ${this._id}`);
-    await this.model('Menu').deleteMany({restrautant:this._id});
-    console.log(`All Rating being remove form restaurant ${this._id}`);
-    await this.model('Rating').deleteMany({restrautant:this._id});
+RestaurantSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
+    console.log(`All Reservation being removed from restaurant ${this._id}`);
+    await this.model('Reservation').deleteMany({ restaurant: this._id });
+    console.log(`All menus being removed from restaurant ${this._id}`);
+    await this.model('Menu').deleteMany({ restaurant: this._id });
+    console.log(`All Ratings being removed from restaurant ${this._id}`);
+    await this.model('Rating').deleteMany({ restaurant: this._id });
     next();
 });
+
 
 
 
