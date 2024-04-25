@@ -39,14 +39,19 @@ exports.getReservations=async (req,res,next)=>{
 //@acess Public
 exports.getReservation=async (req,res,next)=>{
     try{
-        const reservation = await Reservation.findById(req.params.id).populate({
+        const reservation = await Reservation.findById(req.params.id)
+        .populate({
             path:'restaurant',
             select:'name province tel image'
         }).populate({
+            select:'name province tel'
+        })
+        .populate({
             path: 'foodOrder', 
             model: 'Menu',
             select: 'name price'
-          });
+        });
+        
         if(!reservation){
             return res.status(404).json({success:false,message:`No reservation with the id of ${req.parms.id}`});
         }

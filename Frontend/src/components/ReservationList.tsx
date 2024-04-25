@@ -93,93 +93,12 @@ export default function ReservationList({ reservationJson }: { reservationJson: 
 
     return (
         <div className=" flex flex-col sm:max-w-[700px] sm:mx-auto items-center text-base sm:text-lg bg-slate-200 p-3 rounded-sm">
-            <div className="flex min-w-[300px] w-full max-w-[650px] flex-col flex-nowrap gap-y-4">
-                {/* {reservations.map((item: any) => (
-                    <div key={item._id} className="bg-slate-50 shadow-md rounded-lg p-3 flex flex-col items-start relative">
-                        <div className="mb-2">
-                            <strong>User ID:</strong> {item.user._id}
-                        </div>
-                        {
-                            editStates[item._id] && RestaurantResponse?.data
-                            ?   
-                                <div className="mb-2 flex gap-2">
-                                    <strong>Restaurant:</strong>
-                                    <Select variant="standard" name="location" className="h-[em] w-[200px]" value={location} onChange={(e)=>{setLocation(e.target.value);}} displayEmpty>
-                                    {location ? null : (
-                                        <MenuItem value="" disabled>
-                                            {item.restaurant.name}
-                                        </MenuItem>
-                                    )}
-                                        {RestaurantResponse?.data.map((RestaurantItem:any)=>(
-                                        <MenuItem value={RestaurantItem._id}>{RestaurantItem.name}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </div>
-                            :   <div className="mb-2">
-                                    <strong>Restaurant:</strong> {item.restaurant.name}
-                                </div>
-                        }
-        
-                        {
-                            editStates[item._id]
-                            ?   <div className="mb-2 flex gap-2">
-                                    <strong>Date:</strong>
-                                    <DateReserve defaultDate={dayjs(item.apptDate)} onDateChange={(value:any) => { setBookingDate(value) }} />
-                                </div>
-                            :   <div className="mb-2">
-                                    <strong>Date:</strong> {dayjs(item.apptDate).format("DD/MM/YYYY HH:mm")}
-                                </div>
-                        }
-                        <div className="mb-2 space-x-3">
-                            <strong>Order Count:</strong> {item.foodOrder.length} 
-                            <button className=' hover:underline-offset-4 hover:underline text-blue-500 text-base font-medium'><ArrowDropDownIcon color='info' fontSize='small' />
-                                <span className=''>view</span>
-                            </button>
-                        </div>
-                        {session && role === "admin" && !editStates[item._id] 
-                        ? (
-                            <div className='absolute right-2 bottom-2 flex gap-1'>
-                                <button
-                                    className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm"
-                                    onClick={() => toggleEditState(item._id)}
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    className="block rounded-md bg-red-600 hover:bg-red-700 px-2 py-1 text-white shadow-sm"
-                                    onClick={() => handleDelete(item.restaurant)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
-                        ) : (
-                            <div className='absolute right-2 bottom-2 flex gap-1'>
-                                <button
-                                    className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'
-                                    onClick={ ()=>{editReservation(item._id); toggleEditState(item._id)}}
-                                >
-                                    Confirm
-                                </button>
-                                <button
-                                    className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'
-                                    onClick={() => toggleEditState(item._id)}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                ))} */}
-
+            <div className="flex min-w-[300px] w-full max-w-[650px] min-h-[350px] overflow-y-auto flex-col flex-nowrap gap-y-4">
                 {
-                    reservations.map((item:any)=>(
-                        <ReservationForOwner reservationData={item} />
+                    reservations.map((item:any,idx:number)=>(
+                        <ReservationForOwner key={idx} reservationData={item}/>
                     ))
                 }
-
-                
-
-
             </div>
         </div>
     );
