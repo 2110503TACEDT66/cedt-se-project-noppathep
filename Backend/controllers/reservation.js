@@ -448,7 +448,7 @@ exports.paidReservation=async (req,res,next)=>{
         res.status(200).json({
             success: true,
             data:reservation,
-            message :`You have gained ${gainpoint} point`
+            message :`You have gained ${gainpoint} points`
         });
     }catch(error){
         console.log(error);

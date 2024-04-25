@@ -57,9 +57,9 @@ export default function ReservationForOwner(
             confirmButtonText: "Sure, delete it",
             cancelButtonColor: "#d33"
         }).then(async (result) => {
-            if (result.isConfirmed) {
-                await deleteReservation(rid, ownerId.current);
-                Swal.fire("Reservation Deleted!", "", "success");
+            if (result.isConfirmed && session?.user.token) {
+                await deleteReservation(rid, session.user.token);
+                Swal.fire("Reservation deleted!", "", "success");
                 window.location.reload();
             }
         });

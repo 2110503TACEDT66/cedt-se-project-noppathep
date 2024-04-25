@@ -57,7 +57,6 @@ export default function Foodorder({params}:{params:{rid:string}}){
     }, []);
 
 
-
     const handleAdd = (item:any) => {
         const res = orderFood(reservation.data._id,session?session.user.token:"",item._id)
         res.then(result => {
@@ -109,9 +108,9 @@ export default function Foodorder({params}:{params:{rid:string}}){
 
             if (result.isConfirmed && session != null) {
                 payReservation(reservationId,session.user.token)
-                    .then(()=>{
+                    .then((res)=>{
                         //success popup
-                        Swal.fire("Your payment has been recieved", "make sure to be arrive in time!", "success")
+                        Swal.fire("Your payment has been recieved", `${res.message}</br>make sure to arrive in time!`, "success")
                         .then((result) =>{
                             if(result.isDismissed ||result.isConfirmed){
                                 router.push('/myreservation');
@@ -155,7 +154,7 @@ export default function Foodorder({params}:{params:{rid:string}}){
     //redirect if already paid this reservation
     if(reservation.data.paid) router.replace('/myreservation');
     
-    
+
     //get initial number of order and store in 'amount'
     let amount = new Map<string,number>();
     const amountInit = ()=>{

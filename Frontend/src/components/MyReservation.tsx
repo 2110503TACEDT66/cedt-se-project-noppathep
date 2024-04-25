@@ -121,9 +121,9 @@ export default function MyReservation({profile}:{profile:any}) {
 
             if (result.isConfirmed && session != null) {
                 payReservation(reservationId,session.user.token)
-                    .then(()=>{
+                    .then((res)=>{
                         //success popup
-                        Swal.fire("Your payment has been recieved", "make sure to be arrive in time!", "success")
+                        Swal.fire("Your payment has been recieved", `${res.message}</br>make sure to arrive in time!`, "success")
                         .then((result) =>{
                             if(result.isDismissed ||result.isConfirmed){
                                 window.location.reload();
