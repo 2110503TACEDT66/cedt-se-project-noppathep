@@ -129,7 +129,9 @@ exports.addReservation=async (req,res,next)=>{
                     message: 'Reservation must be before restaurant close time 1 hour'
             });
         }
-        console.log(req.body)
+        console.log(req.body);
+
+        req.body.apptDate = new Date(reservationTime.getTime() - (7*60*60*1000))
         const reservation = (await Reservation.create(req.body));
         res.status(201).json({
             success: true,
@@ -165,15 +167,7 @@ exports.updateReservation=async (req,res,next)=>{
             const restaurant = await Restaurant.findById(reservation.restaurant);
             const { open, close } = restaurant.openingHours;
             const today = new Date();
-            const thailandTime = new Date(today.getTime() + (7 * 60 * 60 * 1000));
-            const reservationTime = new Date(apptDate);
-            if(reservationTime < thailandTime) {
-                return res.status(400).json({
-                   success : false,
-                   message : "Reservation must be scheduled for a time after today"
-                })
-            }
-
+            const reservationTime = new Date (new Date(apptDate).getTime() + (7 * 60 * 60 * 1000));
             const openTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(open.split(':')[0]), parseInt(open.split(':')[1]));
             const closeTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(close.split(':')[0]), parseInt(close.split(':')[1]));
             
@@ -189,6 +183,7 @@ exports.updateReservation=async (req,res,next)=>{
             }
             console.log(reservationTime)
             console.log(openTime)
+            console.log(closeTime)
 
             if(reservationTime > closeTime || reservationTime < openTime) {
                 return res.status(400).json({
