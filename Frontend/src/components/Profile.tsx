@@ -137,7 +137,7 @@ export default function Profile({profile}:{profile:any}) {
                                 </tr>
                                 <tr>
                                     <th>Points</th>
-                                    <td>9999</td>
+                                    <td>{profile.data.points}</td>
                                 </tr>
                                 <tr>
                                     <th>Member since</th>
