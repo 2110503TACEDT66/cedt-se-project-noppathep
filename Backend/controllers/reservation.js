@@ -2,6 +2,7 @@ const Reservation = require('../models/Reservation');
 const Restaurant  = require('../models/Restaurant');
 const Menu  = require('../models/Menu');
 const Table = require('../models/Table');
+const User = require('../models/User');
 
 //@desc Get all reservation
 //@route GET /api/v1/reservations
@@ -393,6 +394,65 @@ exports.removeTable=async (req,res,next)=>{
         return res.status(500).json({
             success:false,
             message:'Cannot delete table reserve'
+        });
+    }
+};
+
+//@desc paid 
+//@route UPDATE /api/v1/reservations/:id/paid
+//Private
+exports.paidReservation=async (req,res,next)=>{
+    try{
+        let reservation = await Reservation.findById(req.params.id).populate({
+            path:'user',
+            select:'points'
+        }).populate({
+            path: 'foodOrder', 
+            model: 'Menu',
+            select: 'name price'
+          });
+        if(!reservation){
+            return res.status(404).json({success:false,message:`No reservation with the id of ${req.params.id}`});
+        }
+        let totalPrice = 0;
+        reservation.foodOrder.forEach(menuItem => {
+          totalPrice += menuItem.price;
+        });
+        if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin'){
+            return res.status(401).json({
+                success:false,
+                message:`User ${req.user.id} is not authorize to delete this reserve table`
+            });
+        }
+        if(reservation.paid){
+            return res.status(401).json({
+                success:false,
+                message:`This reservstion is already paid`,
+                data:reservation});
+        }
+        await Reservation.findByIdAndUpdate(req.params.id,
+            {
+                paid:true
+            });
+        //console.log(totalPrice);
+        const gainpoint = Math.floor(0.1*(totalPrice)) + reservation.user.points;
+        //console.log(gainpoint);
+        //console.log(reservation.user._id)
+        await User.findByIdAndUpdate(reservation.user._id,
+            {
+                points:gainpoint
+            })
+        reservation = await Reservation.findById(req.params.id).populate("user");
+        res.status(200).json({
+            success: true,
+            data:reservation,
+            message :`Congrat you gain ${gainpoint}`
+        });
+    }catch(error){
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:'Cannot paid'
         });
     }
 };
