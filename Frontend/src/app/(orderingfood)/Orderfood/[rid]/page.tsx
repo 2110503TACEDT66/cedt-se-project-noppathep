@@ -11,7 +11,8 @@ import deleteOrder from '@/libs/deleteOrder';
 import React from 'react';
 import Swal from 'sweetalert2';
 import Link from 'next/link';
-
+import PointShop from '@/components/PointShop';
+import getUserProfile from '@/libs/user/getUserProfile';
 
 export default function Foodorder({params}:{params:{rid:string}}){
 
@@ -21,6 +22,8 @@ export default function Foodorder({params}:{params:{rid:string}}){
     const [MenuResponse, setMenuResponse] = useState<any>(null);
     const [reservation, setreservation] = useState<any>(null);
     const [editedOrder, setEditedOrder] = useState<Map<string,number>>(new Map());
+
+    const [profile, setProfile] = useState<any>(null);
 
     //fetch all data need on first render
     useEffect(() => {
@@ -34,6 +37,8 @@ export default function Foodorder({params}:{params:{rid:string}}){
             setRestaurantDetail(restaurant)
             const menu= await getMenu(restaurant.data._id)
             setMenuResponse(menu)
+            const profile = await getUserProfile(session.user.token);
+            setProfile(profile);
             
             let amount = new Map<string,number>();
             reservation.data.foodOrder.map((item: any, index: number) => {
@@ -44,7 +49,6 @@ export default function Foodorder({params}:{params:{rid:string}}){
                 }
             });
             setEditedOrder(new Map<string,number>(amount));
-
 
 
         } else {
@@ -176,6 +180,7 @@ export default function Foodorder({params}:{params:{rid:string}}){
                 <div className='text-base sm:text-xl h-fit w-fit font-semibold text-white '>Total Price : {calculateTotalPrice()} ฿</div>
             </div>
 
+            <PointShop profile={profile} />
         </main>
     );
 }

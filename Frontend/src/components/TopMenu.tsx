@@ -71,10 +71,14 @@ export default async function TopMenu(){
                                         </Link>
                                     )
                                 }
-
-                                <Link href="/reservation" underline="none" className="w-full text-center p-2 pl-3 pr-3 text-2xl hover:bg-slate-800 text-gray-100">
-                                    <div className="text-gray-100 line-clamp-1"><RestaurantMenuIcon fontSize="medium" /> &nbsp;&nbsp;Reservation</div>
-                                </Link>
+                                {
+                                    // only user can make reservation
+                                    profile.data.role == "user" && (
+                                        <Link href="/reservation" underline="none" className="w-full text-center p-2 pl-3 pr-3 text-2xl hover:bg-slate-800 text-gray-100">
+                                            <div className="text-gray-100 line-clamp-1"><RestaurantMenuIcon fontSize="medium" /> &nbsp;&nbsp;Reservation</div>
+                                        </Link>
+                                    )
+                                }
                             </div>
                         )
                     }
@@ -118,7 +122,12 @@ export default async function TopMenu(){
                     </Link>
                 }
                 
-                <TopMenuItem title='Reservation' pageRef='/reservation'/>
+                {
+                    // only user can make reservation
+                    session && profile.data.role == "user" && (
+                        <TopMenuItem title='Reservation' pageRef='/reservation'/>
+                    )
+                }
             </Hidden>
 
             <Link href="/" className='ml-4'>
