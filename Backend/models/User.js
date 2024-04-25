@@ -23,11 +23,11 @@ const UserSchema=new mongoose.Schema({
         ]
     },
     card: {
-        cardNumber: {type:String, required:[true,'Please add a card number'], maxlength:16},
-        cardHolder: {type:String, required:[true,'Please add a card holder']},
-        cardExpMonth: {type:String, required:[true,'Please add a card expire month']},
-        cardExpYear: {type:String, required:[true,'Please add a card expire year']},
-        cardCVV: {type:String, required:[true,'Please add a card cvv']},
+        cardNumber: {type:String, required:false, maxlength:16},
+        cardHolder: {type:String, required:false},
+        cardExpMonth: {type:String, required:false},
+        cardExpYear: {type:String, required:false},
+        cardCVV: {type:String, required:false},
     },
     points: {
         type: Number,

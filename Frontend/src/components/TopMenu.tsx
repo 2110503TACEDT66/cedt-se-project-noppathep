@@ -87,40 +87,42 @@ export default async function TopMenu(){
             
             <Hidden smDown>
 
-                {
-                    session ? 
-                    <Link href="/api/auth/signout">
-                        <div className='flex items-center h-full px-2 text-cyan-600 text-sm truncate '>Sign-out of {session.user?.name}</div>
-                    </Link> 
-                    : 
-                    <Link href="/api/auth/signin">
-                        <div className='flex items-center h-full px-2 text-cyan-600 text-sm'>Sign-in</div>
-                    </Link>
-                }
-                {
-                    session?
-                    <div className='flex items-center h-full px-2 text-cyan-600 text-sm'>
-                        {
-                            profile.data.role == "user" && (
-                                <TopMenuItem title='My Reservation' pageRef='/myreservation'/>
-                            )
-                        }
-                        {
-                            profile.data.role === "owner" && (
-                                <TopMenuItem title='My Restaurant' pageRef='/myrestaurant'/>
-                            )
-                        }
-                        {
-                            profile.data.role === "admin" && (
-                                <TopMenuItem title='Manage' pageRef='/manage'/>
-                            )
-                        }
-                    </div>
-                    :
-                    <Link href="/api/auth/register">
-                        <div className='flex items-center h-full px-2 text-cyan-600 text-sm'>Register</div>
-                    </Link>
-                }
+                <div className='mr-auto flex flex-row'>
+                    {
+                        session ? 
+                        <Link href="/api/auth/signout">
+                            <div className='flex items-center h-full px-2 text-cyan-600 text-sm truncate '>Sign-out of {session.user?.name}</div>
+                        </Link> 
+                        : 
+                        <Link href="/api/auth/signin">
+                            <div className='flex items-center h-full px-2 text-cyan-600 text-sm'>Sign-in</div>
+                        </Link>
+                    }
+                    {
+                        session?
+                        <div className='flex items-center h-full px-2 text-cyan-600 text-sm'>
+                            {
+                                profile.data.role == "user" && (
+                                    <TopMenuItem title='My Reservation' pageRef='/myreservation'/>
+                                )
+                            }
+                            {
+                                profile.data.role === "owner" && (
+                                    <TopMenuItem title='My Restaurant' pageRef='/myrestaurant'/>
+                                )
+                            }
+                            {
+                                profile.data.role === "admin" && (
+                                    <TopMenuItem title='Manage' pageRef='/manage'/>
+                                )
+                            }
+                        </div>
+                        :
+                        <Link href="/api/auth/register">
+                            <div className='flex items-center h-full px-2 text-cyan-600 text-sm'>Register</div>
+                        </Link>
+                    }
+                </div>
                 
                 {
                     // only user can make reservation
