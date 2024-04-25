@@ -3,11 +3,9 @@
 export default function PointShop({ profile }: { profile: any }) {
     // Function to handle buying a coupon
     const buyCoupon = (points: number, discount: number) => {
-        // You can implement the logic to handle buying the coupon here
-        // For now, let's just log a message
+        // TODO : buy coupon backend(?)
         console.log(`You have successfully bought a coupon with ${points} points and received a discount of ${discount} bath.`);
     };
-    console.log(profile)
 
     return (
         <div className="text-black w-full">
