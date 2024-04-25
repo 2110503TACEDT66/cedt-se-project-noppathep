@@ -43,8 +43,6 @@ exports.getReservation=async (req,res,next)=>{
         .populate({
             path:'restaurant',
             select:'name province tel image'
-        }).populate({
-            select:'name province tel'
         })
         .populate({
             path: 'foodOrder', 
