@@ -20,6 +20,7 @@ import { Close, Edit } from '@mui/icons-material';
 import Link from 'next/link';
 import updateUserProfile from '@/libs/user/updateUserProfile';
 import dayjs from 'dayjs';
+import payReservation from '@/libs/reservation/payReservation';
 
 export default function MyReservation({profile}:{profile:any}) {
 
@@ -47,11 +48,12 @@ export default function MyReservation({profile}:{profile:any}) {
     const removeReservation = async (rid:string)=>{
 
         Swal.fire({
-            title: "Do you want to delete this reservation?",
+            title: "Do you want to cancel this reservation?",
+            text:"this action cannot be reverted",
             showConfirmButton:true,
+            confirmButtonColor: "#d33",
             showCancelButton: true,
-            confirmButtonText: "Sure, delete it",
-            cancelButtonColor: "#d33"
+            confirmButtonText: "Sure, cancel now",
           }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
@@ -84,6 +86,7 @@ export default function MyReservation({profile}:{profile:any}) {
         });
     }
 
+    //edit date of reservation
     const editReservation = async (itemID:string) => {
         Swal.fire({
             title: "Do you want to save the changes?",
@@ -96,8 +99,7 @@ export default function MyReservation({profile}:{profile:any}) {
               updateReservation(
                 itemID,
                 session.user.token,
-                bookingDate,
-                location
+                bookingDate
               )
   
               Swal.fire("Your reservation has been changed", "", "success");
@@ -107,6 +109,36 @@ export default function MyReservation({profile}:{profile:any}) {
           });
     }
 
+    //mark reservation as 'paid' by calling backendAPI using payReservation() (for now)
+    const handlePayReservation = async (reservationId:string) =>{
+        Swal.fire({
+            title: "Pay a reservation?",
+            showCancelButton: true,
+            confirmButtonText: "Confirm",
+            confirmButtonColor:"green"
+
+          }).then((result) => {
+
+            if (result.isConfirmed && session != null) {
+                payReservation(reservationId,session.user.token)
+                    .then((res)=>{
+                        //success popup
+                        Swal.fire("Your payment has been recieved", `${res.message}</br>make sure to arrive in time!`, "success")
+                        .then((result) =>{
+                            if(result.isDismissed ||result.isConfirmed){
+                                window.location.reload();
+                            }
+                        });
+                    })
+                    .catch((err)=>{
+                        //error popup
+                        Swal.fire("ERROR",err.message, "error");
+                    });
+
+            } 
+            else return;
+          });
+    }
 
     //just for date formatting
     function formatDate(time: Date | number): string {
@@ -137,53 +169,40 @@ export default function MyReservation({profile}:{profile:any}) {
                 
             <Profile profile={profile} />
 
-                {
+                {   //if have no reservation, display blank page + suggest to make a reserve
                     allReservation.length > 0
                         ?
                             <div className='flex flex-col gap-y-4 w-full md:w-[720px] bg-slate-200 p-2 items-center sm:mx-4 rounded-sm'>
-                            {
-                                allReservation.map((item: any) => 
+                            
+                            {   //display all current reservations of this user
+                                allReservation.map((item: any,index:number) => 
                                 (
-                                    <div className='bg-slate-50 shadow-md w-full h-[220px] md:w-[700px] md:h-[200px] rounded-md'>
+                                    <div key={index} className='bg-slate-50 shadow-md w-full h-[220px] md:w-[700px] md:h-[220px] rounded-md'>
                                         <div className='h-full w-full flex flex-row items-center px-5'>
                                             
                                             <Image
-                                                src= {item.restaurant.image}
+                                                src= {item.restaurant.image??'img/placeholder.svg'}
                                                 alt={"Image"}
                                                 width={150}
-                                                height={100}
-                                                className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 sm:rounded-none sm:w-[150px] sm:h-auto"
+                                                height={150}
+                                                priority={true}
+                                                className="size-14 self-start sm:self-center mt-12 rounded-full sm:mt-0 sm:rounded-sm sm:size-[150px]"
                                             />
                                         
-                                            <div className='w-full flex flex-col gap-2 pl-3 pb-3 relative'>
+                                            <div className='w-full flex flex-col gap-2 pt-3 pl-3 pb-3 relative'>
 
-                                                {
-                                                    !editStates[item._id] &&
+                                                {   //switching between normal-editing mode
+                                                    !editStates[item._id] && !item.paid &&
                                                     <button className='ml-auto w-fit h-fit py-0 absolute right-0' onClick={(e) => {toggleEditState(item._id); setLocation(item.restaurant._id); setBookingDate(item.apptDate);}}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
                                                 }
-                                
-                                                {
-                                                    editStates[item._id] 
-                                                    ?   <Select variant="standard" name="location" className="h-[em] w-[200px]" value={location} onChange={(e)=>{setLocation(e.target.value);}} displayEmpty>
-                                                        {location ? null : (
-                                                            <MenuItem value="" disabled>
-                                                                {item.restaurant.name}
-                                                            </MenuItem>
-                                                        )}
-                                                             {RestaurantResponse?.data.map((RestaurantItem:any)=>(
-                                                            <MenuItem value={RestaurantItem._id}>{RestaurantItem.name}</MenuItem>
-                                                            ))}
-                                                        </Select>
-                                                    :   <Link href={`Restaurant/${item.restaurant.id}`}>
-                                                            <div className='text-left text-sm sm:text-lg font-semibold  text-teal-700 underline hover:text-teal-900'>
-                                                                {item.restaurant.name}
-                                                            </div>
-                                                        </Link>
-                                                }
-                                
-                                                {
+
+                                                <Link href={`Restaurant/${item.restaurant.id}`} className='w-fit max-w-[80%] text-left text-base sm:text-lg font-semibold text-teal-700 underline hover:text-teal-900'>
+                                                        {item.restaurant.name}
+                                                </Link>
+                                                
+                                                {   //switching between normal-editing mode
                                                     editStates[item._id]
                                                     ?   <DateReserve defaultDate={dayjs(item.apptDate)} onDateChange={(value:any) => { setBookingDate(value) }} />
                                                     :   <div className='text-left text-sm font-medium text-gray-600'>
@@ -194,53 +213,76 @@ export default function MyReservation({profile}:{profile:any}) {
                                                 <div className='text-left text-sm font-medium text-gray-600'>
                                                     Food Order count: {item.foodOrder.length}
                                                 </div>
-
-                                                <div className='text-gray-600 text-sm font-medium'>
-                                                    {
-                                                        item.rating != null
-                                                        && (
-                                                            <span>
-                                                                <button className='rounded-md bg-yellow-500 hover:bg-yellow-700 px-2 py-1 text-white shadow-sm'
-                                                                onClick={(e) => handleShowRating(item.rating.rating, item.rating.comment)}>
-                                                                    View your score
-                                                                </button>
-                                                            </span>
-                                                        )
-                                                    }
+                                                
+                                                <div className='text-left text-sm font font-medium text-gray-600'>
+                                                    Status:&nbsp;
+                                                        {   //display reservation status
+                                                            item.paid
+                                                            ?<span className='font-semibold text-orange-600'>pending arrival</span>
+                                                            :<span className='font-semibold'>waiting for payment</span>
+                                                        }
                                                 </div>
 
-                                            {
+
+                                            {   //switching between normal-editing mode
                                                 editStates[item._id]
-                                                ?   <div className='ml-auto flex flex-row gap-2'>
+                                                ?   <div className='ml-auto flex flex-row gap-2 text-white [&>button]:max-h-9 [&>button]:font-semibold [&>button]:rounded-md [&>button]:shadow-sm'>
+
                                                         <button onClick={ ()=>{editReservation(item._id); toggleEditState(item._id)}} 
-                                                        className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
+                                                            className=' bg-green-600 hover:bg-green-700 px-2 p-1'>
                                                             Save
                                                         </button>
+
                                                         <button onClick={ ()=>toggleEditState(item._id) } 
-                                                        className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
+                                                            className=' bg-red-500 hover:bg-red-600 px-2 p-1'>
                                                             Cancel Editing
                                                         </button>
+                                                        
                                                     </div>
-                                                :   <div className='ml-auto flex flex-row gap-2'>
-                                                        {
-                                                            item.rating == null && (
-                                                                <button className="rounded-md bg-yellow-500 hover:bg-yellow-700 px-2 py-1 text-white shadow-sm" 
+                                                :   <div className='ml-auto flex flex-row gap-2 text-gray-50 [&>button]:max-h-9 [&>button]:font-semibold [&>button]:rounded-md [&>button]:shadow-sm '>
+
+                                     
+                                                            {   //appear after rated
+                                                                item.rating != null && !editStates[item._id]
+                                                                &&(
+                                                                    <button className='bg-yellow-500 hover:bg-yellow-700 px-2 py-1'
+                                                                    onClick={(e) => handleShowRating(item.rating.rating, item.rating.comment)}>
+                                                                        view score
+                                                                    </button>
+                                                                )
+                                                            }
+                                     
+
+                                                        {   //only when paid, disappear after rated once
+                                                            item.rating == null && item.paid && (
+                                                                <button className=" bg-yellow-500 hover:bg-yellow-700 px-2 py-1 " 
                                                                         onClick={()=>{router.push(`/myreservation/${item._id}/rate`)}}
                                                                 >
                                                                     Rate
                                                                 </button>
                                                             )
                                                         }
-                                                        <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
-                                                                onClick={()=>{router.push(`/Orderfood/${item._id}`)}}
-                                                        >
-                                                            Order
-                                                        </button>
-                                                        <button className="rounded-md bg-red-600 hover:bg-red-700 px-2 py-1 text-white shadow-sm" 
+
+                                                        {   //only when reservation not yet paid
+                                                            (!item.paid) &&
+                                                            <button className=" bg-green-600 hover:bg-green-700 px-5 py-1" 
+                                                                onClick={()=>{handlePayReservation(item._id)}}>Pay</button>
+                                                        }
+
+                                                        {   //only when reservation not yet paid
+                                                            (!item.paid) &&
+                                                            <button className=" bg-slate-400 hover:bg-slate-600 px-2 py-1 " 
+                                                                onClick={()=>{router.push(`/Orderfood/${item._id}`)}}>
+                                                                Order
+                                                            </button>
+                                                        }
+
+                                                        <button className=" bg-red-600 hover:bg-red-700 px-2 py-1 " 
                                                                 onClick={()=>removeReservation(item._id)}
                                                         >
-                                                            Cancel Reservation
+                                                            Cancel
                                                         </button>
+
                                                     </div>
                                             }
 

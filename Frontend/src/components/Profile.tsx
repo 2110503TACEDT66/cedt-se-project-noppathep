@@ -71,31 +71,34 @@ export default function Profile({profile}:{profile:any}) {
                     >
 
                         <table className='w-full'>
-                            <tbody className='[&>tr>th]:text-start [&>tr>th]:px-4 [&>tr>th]:w-44 sm:[&>tr>th]:w-52 sm:[&>tr>td]:w-96 [&>tr]:h-11'>
-                                <th colSpan={2} className='relative text-2xl font-semibold text-start sm:text-center p-2'>
-                                    User Profile
-                                        {
-                                            isEditProfile
-                                                ?
-                                                <span className='absolute right-2 space-x-2'>
-                                                    <button onClick={ ()=>editProfile() } className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
-                                                        save
-                                                    </button>
-                                                    <button onClick={ ()=>setEditProfile(false) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
-                                                        cancel editing
-                                                    </button>
-                                                </span>
-                                                :
-                                                <span className='absolute right-2 space-x-2'>
-                                                    <button onClick={ ()=>setEditProfile(true) } className='text-sm text-gray-700 font-normal bg-gray-200 hover:bg-gray-300 rounded-md px-2 p-1'>
-                                                        Edit profile    
-                                                    </button>    
-                                                </span>
-                                        }
-                                </th>
+                            <tbody className='[&>tr>:first-child]:text-start [&>tr>:first-child]:px-4 [&>tr>:first-child]:w-44 [&>tr>:first-child]:font-semibold sm:[&>tr>:first-child]:w-52 sm:[&>tr>td]:w-96 [&>tr]:h-11'>
+  
+                                <tr>
+                                    <td colSpan={2} className='relative text-2xl font-semibold text-start p-2'>
+                                        User Profile
+                                            {
+                                                isEditProfile
+                                                    ?
+                                                    <span className='absolute right-2 space-x-2'>
+                                                        <button onClick={ ()=>editProfile() } className='text-sm text-white font-normal bg-green-600 hover:bg-green-700 rounded-md px-2 p-1'>
+                                                            save
+                                                        </button>
+                                                        <button onClick={ ()=>setEditProfile(false) } className='text-sm text-white font-normal bg-red-500 hover:bg-red-600 rounded-md px-2 p-1'>
+                                                            cancel editing
+                                                        </button>
+                                                    </span>
+                                                    :
+                                                    <span className='absolute right-2 space-x-2'>
+                                                        <button onClick={ ()=>setEditProfile(true) } className='text-sm text-gray-700 font-normal bg-gray-200 hover:bg-gray-300 rounded-md px-2 p-1'>
+                                                            Edit profile    
+                                                        </button>    
+                                                    </span>
+                                            }
+                                    </td>
+                                </tr>
 
                                 <tr>
-                                    <th>Name</th>
+                                    <td>Name</td>
                                     <td>
                                         {
                                         isEditProfile
@@ -106,7 +109,7 @@ export default function Profile({profile}:{profile:any}) {
                                 </tr>
                                 
                                 <tr>
-                                    <th>Email</th>
+                                    <td>Email</td>
                                     <td>
                                         {
                                         isEditProfile
@@ -117,7 +120,7 @@ export default function Profile({profile}:{profile:any}) {
                                 </tr>
 
                                 <tr>
-                                    <th>Tel.</th>
+                                    <td>Tel.</td>
                                     <td>
                                         {
                                         isEditProfile
@@ -128,7 +131,7 @@ export default function Profile({profile}:{profile:any}) {
                                 </tr>
 
                                 <tr>
-                                    <th>Credit/Debit Card</th>
+                                    <td>Credit/Debit Card</td>
                                     <td>
                                         <Link href={'/yourcard'} className='w-fit text-m font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
                                             Check your added card here!
@@ -140,7 +143,7 @@ export default function Profile({profile}:{profile:any}) {
                                     <td>{profile.data.points}</td>
                                 </tr>
                                 <tr>
-                                    <th>Member since</th>
+                                    <td>Member since</td>
                                     <td>{formatDate(profile.data.createdAt)}</td>
                                 </tr>
                             </tbody>

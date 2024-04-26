@@ -30,9 +30,9 @@ export default async function restaurantReserve({params}:{params:{rid:string}}) 
     return(
         <main>
             <Suspense fallback={<p className='text-black text-xl text-center' >Loading ... <LinearProgress /></p>}>
-                    <div className=" md-10 p-10 text-black shadow-sm relative text-2xl font-semibold text-start sm:text-center">
+                    <div className="mt-5 px-2 text-black shadow-sm relative text-2xl font-semibold text-start sm:text-center">
                         {restaurant.data.name}'s Reservation
-                        <div className='text-left text-sm font-medium text-gray-600 p-10'>
+                        <div className='text-left text-sm font-medium sm:text-center text-gray-600 my-4'>
                             Reservation Count: {restaurant.data.reservations.length}
                         </div>
 
