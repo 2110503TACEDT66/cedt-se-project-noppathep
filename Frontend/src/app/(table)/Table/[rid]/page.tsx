@@ -43,6 +43,10 @@ export default function Table({ params }: { params: { rid: string } }) {
   }, [params.rid, session]);
 
   const handlePick = async (item: any) => {
+    const confirmed = confirm("Are you sure you want to pick this table?");
+    if (!confirmed) {
+      return; // If the user does not confirm, do nothing
+    }
     if (reservedTables.has(item._id)) {
       console.warn("This table is already reserved."); // Prevent further action if the table is reserved
       return; // If the table is already reserved, don't try to pick it
