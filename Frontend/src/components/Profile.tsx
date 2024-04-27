@@ -27,7 +27,6 @@ export default function Profile({profile}:{profile:any}) {
           if (result.isConfirmed && session != null) {
 
             updateUserProfile(
-                session?.user._id,
                 session?.user.token,
                 newName,
                 newEmail,

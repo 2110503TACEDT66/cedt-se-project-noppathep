@@ -15,6 +15,7 @@ import PointShop from '@/components/PointShop';
 import getUserProfile from '@/libs/user/getUserProfile';
 import payReservation from '@/libs/reservation/payReservation';
 import { useRouter } from 'next/navigation';
+import updatePoint from '@/libs/user/updatePoint';
 
 export default function Foodorder({params}:{params:{rid:string}}){
 
@@ -114,6 +115,12 @@ export default function Foodorder({params}:{params:{rid:string}}){
             if (result.isConfirmed && session != null) {
                 payReservation(reservationId,session.user.token)
                     .then((res)=>{
+                        let currentPoints = profile.data.points;
+                        selectedCoupons.forEach(coupon => {
+                            currentPoints -= coupon.points;
+                        });
+                        updatePoint(session.user.token, currentPoints);
+                        
                         //success popup
                         Swal.fire("Your payment has been recieved", `${res.message}</br>make sure to arrive in time!`, "success")
                         .then((result) =>{
@@ -136,12 +143,18 @@ export default function Foodorder({params}:{params:{rid:string}}){
     //==<total price/dishes>===
     const calculateTotalPrice = () => {
         let sum = 0;
-        MenuResponse.data.forEach((item:any , index:number)=>{
-            if(editedOrder.get(item._id)) {
+        MenuResponse.data.forEach((item: any, index: number) => {
+            if (editedOrder.get(item._id)) {
                 sum += editedOrder.get(item._id)! * item.price;
             }
-        })
-        return sum;
+        });
+    
+        // Apply discounts based on selected coupons
+        selectedCoupons.forEach((coupon) => {
+            sum -= coupon.discount;
+        });
+    
+        return sum > 0 ? sum : 0;
     }
     const calculateTotalItem = () => {
         let sum = 0;
@@ -153,6 +166,14 @@ export default function Foodorder({params}:{params:{rid:string}}){
         return sum;
     }
     //====================================
+
+    // New state variable to hold the selected coupons
+    const [selectedCoupons, setSelectedCoupons] = useState<{ points: number; discount: number }[]>([]);
+
+    // Callback function to receive updates from PointShop
+    const handleCouponsUpdate = (coupons: { points: number; discount: number }[]) => {
+        setSelectedCoupons(coupons);
+    };
 
     //show loading until finish fetching
     if(!MenuResponse||!RestaurantDetail) return (<LinearProgress />);
@@ -186,8 +207,8 @@ export default function Foodorder({params}:{params:{rid:string}}){
                 MenuResponse.data.map((item:any, index:number)=>(
                     <div key={index} className="h-[150px] sm:w-[280px] sm:h-[320px] bg-white p-3 rounded-lg shadow-md flex sm:flex-col border-2 border-gray-100 items-center justify-around">
                         <div className="aspect-[16/10] content-center flex justify-center">
-                            <Image src={item.image} alt="Product Picture" width={300} height={300} 
-                            className=" self-start w-40 h-auto sm:w-auto  sm:self-center rounded-md "/>
+                            <Image src={item.image??'/img/placeholder.svg'} alt="Product Picture" width={200} height={200} 
+                            className="self-start sm:self-center rounded-md "/>
                         </div>
 
                         <div className='w-[80%] flex flex-col flex-nowrap self-center items-center'>
@@ -228,7 +249,7 @@ export default function Foodorder({params}:{params:{rid:string}}){
                 </div>
             </div>
 
-            <PointShop profile={profile} />
+            <PointShop profile={profile} onCouponsUpdate={handleCouponsUpdate} />
         </main>
     );
 }

@@ -64,7 +64,7 @@ import getUserProfile from '@/libs/user/getUserProfile';
           cards.find((card) => card.id === parmId) ?? initialState;
         const selectedCardIndex = cards.indexOf(selectedCard);
         cards[selectedCardIndex] = state;
-        updateCard(session!.user._id, session!.user.token, cards);
+        updateCard(session!.user.token, cards);
       } catch (error: any) {
         alert(error);
         console.log(error);
@@ -86,7 +86,7 @@ import getUserProfile from '@/libs/user/getUserProfile';
         cards.find((card) => card.id === parmId) ?? initialState;
       const selectedCardIndex = cards.indexOf(selectedCard);
       cards.splice(selectedCardIndex, 1);
-      updateCard(session!.user._id, session!.user.token, cards);
+      updateCard(session!.user.token, cards);
       } catch (error: any) {
         alert(error);
         console.log(error);

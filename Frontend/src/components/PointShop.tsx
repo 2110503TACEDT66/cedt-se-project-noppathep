@@ -1,10 +1,41 @@
 "use client"
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-export default function PointShop({ profile }: { profile: any }) {
+type PointShopProps = {
+    profile: any;
+    onCouponsUpdate: (coupons: { points: number; discount: number }[]) => void;
+};
+
+export default function PointShop({ profile, onCouponsUpdate }: PointShopProps) {
+
+    const [selectedCoupons, setSelectedCoupons] = useState<{ points: number; discount: number }[]>([]);
+    const [currentPoints, setCurrentPoints] = useState(0);
+
+    useEffect(() => {
+        if (profile) {
+            setCurrentPoints(profile.data.points);
+        }
+    }, [profile]);
+
     // Function to handle buying a coupon
     const buyCoupon = (points: number, discount: number) => {
-        // TODO : buy coupon backend(?)
-        console.log(`You have successfully bought a coupon with ${points} points and received a discount of ${discount} bath.`);
+
+        if (currentPoints >= points) {
+            setSelectedCoupons([...selectedCoupons, { points, discount }]);
+            onCouponsUpdate([...selectedCoupons, { points, discount }]);
+            setCurrentPoints(currentPoints - points);
+        }
+    };
+    
+    // Function to remove a selected coupon
+    const removeCoupon = (index: number) => {
+        const updatedCoupons = [...selectedCoupons];
+        const pointsToAddBack = updatedCoupons[index].points;
+        updatedCoupons.splice(index, 1);
+        setSelectedCoupons(updatedCoupons);
+        onCouponsUpdate(updatedCoupons);
+        setCurrentPoints(currentPoints + pointsToAddBack);
     };
 
     return (
@@ -17,7 +48,7 @@ export default function PointShop({ profile }: { profile: any }) {
                                 {profile.data.name}
                             </div>
                             <div>
-                                You have {profile.data.points} points
+                                You have {currentPoints} points
                             </div>
                         </div>
                         <div>
@@ -39,6 +70,17 @@ export default function PointShop({ profile }: { profile: any }) {
                                     <button onClick={() => buyCoupon(1000, 50)} className="mt-4 bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg block w-full">Buy</button>
                                 </li>
                             </ul>
+                        </div>
+                        <div>
+                            <h2 className="text-lg font-semibold mb-4">Selected Coupons:</h2>
+                            <div>
+                                {selectedCoupons.map((coupon, index) => (
+                                    <div key={index} className="flex justify-center items-center gap-3">
+                                        <span>Coupon with {coupon.points} points and {coupon.discount} bath discount</span>
+                                        <button onClick={() => removeCoupon(index)} className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-lg">Remove</button>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 )

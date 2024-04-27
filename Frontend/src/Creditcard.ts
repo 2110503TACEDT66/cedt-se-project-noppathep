@@ -1,5 +1,3 @@
-import getUserProfile from "./libs/user/getUserProfile";
-import updateCard from "./libs/user/updateCard";
 
 export interface Creditcard {
     id: string;

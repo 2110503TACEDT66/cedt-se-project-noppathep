@@ -44,7 +44,7 @@ export default function AddCard() {
         ...state,
         id: uuid(),
       });
-      updateCard(session!.user._id, session!.user.token, newCardsList);
+      updateCard(session!.user.token, newCardsList);
     } catch (error: any) {
       alert(error);
       console.log(error);

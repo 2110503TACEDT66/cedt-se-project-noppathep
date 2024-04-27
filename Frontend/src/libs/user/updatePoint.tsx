@@ -1,6 +1,4 @@
-import { Creditcard } from "@/Creditcard";
-
-export default async function updateCard(token: string, card:Creditcard[]) {
+export default async function updatePoint(token: string, points:number) {
     const response = await fetch(`http://localhost:5000/api/v1/auth/update`, {
         method: "PUT",
         headers: {
@@ -8,7 +6,7 @@ export default async function updateCard(token: string, card:Creditcard[]) {
             "Content-Type": "application/json" 
         },
         body: JSON.stringify({ 
-            card: card
+            points: points
         })
     });
 
@@ -24,7 +22,7 @@ export default async function updateCard(token: string, card:Creditcard[]) {
             }
         } catch (error) {
             console.error("Error parsing error message:", error);
-            throw new Error("Cannot Update Card");
+            throw new Error("Cannot Update Points");
         }
     }
     return await response.json();
