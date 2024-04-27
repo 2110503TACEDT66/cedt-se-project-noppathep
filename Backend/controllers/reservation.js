@@ -12,12 +12,12 @@ exports.getReservations=async (req,res,next)=>{
     if(req.user.role !== 'admin'){
         query = Reservation.find({user:req.user.id}).populate({
             path:'restaurant',
-            select:'name province tel image'
+            select:'name province tel image openingHours'
         }).populate("rating");}
     else{
         query = Reservation.find().populate({
             path:"restaurant",
-            select:'name tel image'
+            select:'name tel image openingHours'
         }).populate("rating");}
     try{
         const reservations = await query;
@@ -42,7 +42,7 @@ exports.getReservation=async (req,res,next)=>{
         const reservation = await Reservation.findById(req.params.id)
         .populate({
             path:'restaurant',
-            select:'name province tel image'
+            select:'name province tel image openingHours'
         })
         .populate({
             path: 'foodOrder', 

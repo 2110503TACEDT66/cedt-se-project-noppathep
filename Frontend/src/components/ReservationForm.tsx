@@ -147,7 +147,7 @@ export default function ReservationForm({profile}:{profile:any}) {
                     
                     </div>
 
-                    <Image src={findRestaurantFromId(location)!.image} alt="restaurant image" width={1280} height={720} className='w-40 sm:w-52 h-auto rounded-md mb-3 sm:mb-0'/>
+                    <Image src={findRestaurantFromId(location)!.image??'img/placeholder.svg'} alt="restaurant image" width={1280} height={720} className='w-40 sm:w-52 h-auto rounded-md mb-3 sm:mb-0'/>
                   </div>
                 : <div className='text-gray-500 w-full font-semibold text-lg text-center'>Please Choose Your Restaurant</div>
             }

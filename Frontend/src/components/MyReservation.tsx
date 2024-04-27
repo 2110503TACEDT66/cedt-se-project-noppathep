@@ -205,7 +205,7 @@ export default function MyReservation({profile}:{profile:any}) {
                                                 {   //switching between normal-editing mode
                                                     editStates[item._id]
                                                     ?   <DateReserve defaultDate={dayjs(item.apptDate)} onDateChange={(value:any) => { setBookingDate(value) }} 
-                                                        minTime={item.openingHours.open} maxTime={item.openingHours.close}/>
+                                                        minTime={item.restaurant.openingHours.open} maxTime={item.restaurant.openingHours.close}/>
                                                     :   <div className='text-left text-sm font-medium text-gray-600'>
                                                             Reservation Date: {formatDate(item.apptDate)}
                                                         </div>
