@@ -164,6 +164,7 @@ export default function Foodorder({params}:{params:{rid:string}}){
     }
     //====================================
 
+
     // New state variable to hold the selected coupons
     const [selectedCoupons, setSelectedCoupons] = useState<{ points: number; discount: number; count: number }[]>([]);
 
@@ -171,7 +172,8 @@ export default function Foodorder({params}:{params:{rid:string}}){
     const handleCouponsUpdate = (coupons: { points: number; discount: number; count: number }[]) => {
         setSelectedCoupons(coupons);
     };
-
+            
+            
     //show loading until finish fetching
     if(!MenuResponse||!RestaurantDetail) return (<LinearProgress />);
     //redirect if already paid this reservation

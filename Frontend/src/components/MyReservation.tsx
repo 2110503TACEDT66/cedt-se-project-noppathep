@@ -208,10 +208,21 @@ export default function MyReservation({profile}:{profile:any}) {
                                                         </div>
                                                 }
 
-                                                <div className='text-left text-sm font-medium text-gray-600'>
-                                                    Food Order count: {item.foodOrder.length}
-                                                </div>
-                                                
+
+                                                {   
+                                                    !editStates[item._id] &&
+                                                    <div className='text-left text-sm font-medium text-gray-600'>
+                                                        Food Order count: {item.foodOrder.length}
+                                                    </div>
+                                                }
+
+                                                {
+                                                    !editStates[item._id] &&
+                                                    <div className='text-left text-sm font-medium text-gray-600'>
+                                                        Table pick count: {item.reserveTable.length}
+                                                    </div>
+                                                }
+                                
                                                 <div className='text-left text-sm font font-medium text-gray-600'>
                                                     Status:&nbsp;
                                                         {   //display reservation status
@@ -220,7 +231,6 @@ export default function MyReservation({profile}:{profile:any}) {
                                                             :<span className='font-semibold'>waiting for payment</span>
                                                         }
                                                 </div>
-
 
                                             {   //switching between normal-editing mode
                                                 editStates[item._id]
@@ -237,6 +247,7 @@ export default function MyReservation({profile}:{profile:any}) {
                                                         </button>
                                                         
                                                     </div>
+
                                                 :   <div className='ml-auto flex flex-row gap-2 text-gray-50 [&>button]:max-h-9 [&>button]:font-semibold [&>button]:rounded-md [&>button]:shadow-sm '>
 
                                      
@@ -261,13 +272,20 @@ export default function MyReservation({profile}:{profile:any}) {
                                                             )
                                                         }
 
-                                                        {   //only when reservation not yet paid
+
+                                                        {   //PAY BUTTON only when reservation not yet paid
                                                             (!item.paid) &&
                                                             <button className=" bg-green-600 hover:bg-green-700 px-5 py-1" 
-                                                                onClick={()=>{handlePayReservation(item._id)}}>Pay</button>
+                                                                onClick={()=>{handlePayReservation(item._id)}}>Pay
+                                                            </button>
                                                         }
 
-                                                        {   //only when reservation not yet paid
+                                                        <button className="rounded-md bg-orange-500 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
+                                                                onClick={()=>{router.push(`/Table/${item._id}`)}}>
+                                                            Pick Table
+                                                        </button>
+
+                                                        {   //ORDER BUTTON only when reservation not yet paid
                                                             (!item.paid) &&
                                                             <button className=" bg-slate-400 hover:bg-slate-600 px-2 py-1 " 
                                                                 onClick={()=>{router.push(`/Orderfood/${item._id}`)}}>
@@ -300,5 +318,6 @@ export default function MyReservation({profile}:{profile:any}) {
                 }
             </div>
         </div>
+        
     );
 }
