@@ -110,7 +110,9 @@ export default function ReservationForm({profile}:{profile:any}) {
               Choose your reservation date
             </label>
             <div className="mt-2 ">
-              <DateReserve defaultDate={null} onDateChange={(value:any) => { setBookingDate(value)} } />
+              <DateReserve defaultDate={null} onDateChange={(value:any) => { setBookingDate(value)} } 
+              minTime={findRestaurantFromId(location)?.openingHours.open || ""}
+              maxTime={findRestaurantFromId(location)?.openingHours.close || ""}/>
             </div>
           </div>
 

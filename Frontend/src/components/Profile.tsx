@@ -134,7 +134,7 @@ export default function Profile({profile}:{profile:any}) {
                                     <td>Credit/Debit Card</td>
                                     <td>
                                         <Link href={'/yourcard'} className='w-fit text-m font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
-                                            Check your added card here!
+                                            View
                                         </Link>
                                     </td>
                                 </tr>
