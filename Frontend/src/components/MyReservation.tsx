@@ -43,8 +43,7 @@ export default function MyReservation({profile}:{profile:any}) {
     }, []);
   
     const [bookingDate, setBookingDate] = useState(Dayjs);
-    const [location, setLocation] = useState('');
-    
+
     const removeReservation = async (rid:string)=>{
 
         Swal.fire({
@@ -95,17 +94,20 @@ export default function MyReservation({profile}:{profile:any}) {
             confirmButtonText: "Save"
           }).then((result) => {
             if (result.isConfirmed && session != null) {
-  
-              updateReservation(
-                itemID,
-                session.user.token,
-                bookingDate
-              )
-  
-              Swal.fire("Your reservation has been changed", "", "success");
-              window.location.reload();
+                
+                updateReservation(
+                    itemID,
+                    session.user.token,
+                    bookingDate
+                )
+                .then(()=>Swal.fire("Your reservation has been changed", "", "success"))
+                .catch((error)=>{
+                    Swal.fire(error.message,"","info");
+                    return;
+                })
             } 
             else return;
+
           });
     }
 
@@ -193,7 +195,7 @@ export default function MyReservation({profile}:{profile:any}) {
 
                                                 {   //switching between normal-editing mode
                                                     !editStates[item._id] && !item.paid &&
-                                                    <button className='ml-auto w-fit h-fit py-0 absolute right-0' onClick={(e) => {toggleEditState(item._id); setLocation(item.restaurant._id); setBookingDate(item.apptDate);}}>
+                                                    <button className='ml-auto w-fit h-fit py-0 absolute right-0' onClick={(e) => {toggleEditState(item._id); setBookingDate(item.apptDate);}}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
                                                 }
