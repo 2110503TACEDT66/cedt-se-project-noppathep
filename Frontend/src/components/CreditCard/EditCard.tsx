@@ -1,15 +1,15 @@
   'use client'
   import React, { Fragment, useCallback, useEffect, useState } from 'react';
   import { Button, Col, Container, Row } from 'react-bootstrap';
-  import { useNavigate, useParams } from 'react-router-dom';
+  import { useSession } from 'next-auth/react';
   import Card from './CardFunction';
   import CardForm from './CardForm';
   import {
     Creditcard,
-    fetchCreditCardList,
-    updateLocalStorageCards,
   } from '../../Creditcard';
   import Link from 'next/link';
+import updateCard from '@/libs/user/updateCard';
+import getUserProfile from '@/libs/user/getUserProfile';
 
   const initialState: Creditcard = {
     id: '',
@@ -21,6 +21,8 @@
   };
 
   export default function EditCard() {
+    const { data: session, status } = useSession();
+
     const path = window.location.pathname; // Get the current path
     const segments = path.split('/'); // Split the path into segments
     const idSegmentIndex = segments.indexOf('Editcard') + 1; // Find the index of 'Editcard' and add 1 to get the index of the id
@@ -35,7 +37,9 @@
     }, [parmId]);
   
     async function fetchData() {
-      const cards: Creditcard[] = await fetchCreditCardList();
+      const profile = await getUserProfile(session!.user.token);
+      
+      const cards: Creditcard[] = profile.data.card;
       setCardsData(cards);
       if (cards && cards.length > 0) {
         const selectedCard = cards.find((card) => card.id === parmId);
@@ -60,7 +64,7 @@
           cards.find((card) => card.id === parmId) ?? initialState;
         const selectedCardIndex = cards.indexOf(selectedCard);
         cards[selectedCardIndex] = state;
-        updateLocalStorageCards(cards);
+        updateCard(session!.user._id, session!.user.token, cards);
       } catch (error: any) {
         alert(error);
         console.log(error);
@@ -82,7 +86,7 @@
         cards.find((card) => card.id === parmId) ?? initialState;
       const selectedCardIndex = cards.indexOf(selectedCard);
       cards.splice(selectedCardIndex, 1);
-      updateLocalStorageCards(cards);
+      updateCard(session!.user._id, session!.user.token, cards);
       } catch (error: any) {
         alert(error);
         console.log(error);

@@ -3,7 +3,9 @@ import React, { Fragment, useCallback, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import Card from './CardFunction';
 import CardForm from './CardForm';
-import { Creditcard, updateLocalStorageCards } from '../../Creditcard';
+import { Creditcard } from '../../Creditcard';
+import updateCard from '@/libs/user/updateCard';
+import { useSession } from 'next-auth/react';
 
 const initialState: Creditcard = {
   id: '',
@@ -15,6 +17,8 @@ const initialState: Creditcard = {
 };
 
 export default function AddCard() {
+  const { data: session, status } = useSession();
+  
   const [state, setState] = useState<Creditcard>(initialState);
   const [isCardFlipped, setIsCardFlipped] = useState(false);
 
@@ -40,7 +44,7 @@ export default function AddCard() {
         ...state,
         id: uuid(),
       });
-      updateLocalStorageCards(newCardsList);
+      updateCard(session!.user._id, session!.user.token, newCardsList);
     } catch (error: any) {
       alert(error);
       console.log(error);

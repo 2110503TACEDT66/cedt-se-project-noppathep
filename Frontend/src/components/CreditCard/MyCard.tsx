@@ -1,21 +1,27 @@
 'use client'
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Creditcard,fetchCreditCardList } from '../../Creditcard';
+import { Creditcard } from '../../Creditcard';
 import CreditCardBox from './CardFunction';
 import Row from 'react-bootstrap/Row';
 import { Button, Col, Container } from 'react-bootstrap';
 import Card from 'react-bootstrap/Card';
 import { BrowserRouter as Router } from 'react-router-dom'; // Import BrowserRouter
+import { useSession } from 'next-auth/react';
+import getUserProfile from '@/libs/user/getUserProfile';
 
 export default function Cards() {
+  const { data: session, status } = useSession();
+
   const [cardsData, setCardsData] = useState<Creditcard[]>([]);
   useEffect(() => {
     fetchData();
   }, []);
 
   async function fetchData() {
-    const cards: Creditcard[] = await fetchCreditCardList();
+    const profile = await getUserProfile(session!.user.token);
+    
+    const cards: Creditcard[] = profile.data.card;
     setCardsData(cards);
   }
 

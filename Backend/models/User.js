@@ -23,6 +23,7 @@ const UserSchema=new mongoose.Schema({
         ]
     },
     card: {
+        id : {type:String, required:false},
         cardNumber: {type:String, required:false, maxlength:16},
         cardHolder: {type:String, required:false},
         cardExpMonth: {type:String, required:false},
