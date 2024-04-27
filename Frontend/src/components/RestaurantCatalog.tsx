@@ -12,7 +12,7 @@ export default  async function RestaurantCatalog({RestaurantsJson}:{RestaurantsJ
         {
             RestaurantReady.data.map((RestaurantItem:any)=>(
                 <Link href={`/Restaurant/${RestaurantItem._id}`} className="w-[200px]">
-                <Card RestaurantName={RestaurantItem.name} imgSrc={RestaurantItem.image} rating={RestaurantItem.averageRating}/>
+                <Card RestaurantName={RestaurantItem.name} imgSrc={RestaurantItem.image??'img/placeholder.svg'} rating={RestaurantItem.averageRating}/>
                  </Link>
             ))
         }

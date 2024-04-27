@@ -14,10 +14,10 @@ const RestaurantSchema = new mongoose.Schema({
         unique: false
     },
     address:{
-        district:{type:String,required: [true,'Please add an address']},
-        province:{type:String,required: [true,'Please add an address']},
-        postalcode:{type:String,required: [true,'Please add an address'],maxlength:5},
-        region:{type:String,required: [true,'Please add an address']}
+        district:{type:String,required: [true,'Please add a district']},
+        province:{type:String,required: [true,'Please add a province']},
+        postalcode:{type:String,required: [true,'Please add a postalcode'],maxlength:5},
+        region:{type:String,required: [true,'Please add a region']}
     },
     tel:{
         type:String,

@@ -23,10 +23,12 @@ const UserSchema=new mongoose.Schema({
         ]
     },
     card: {
-        type: String,
-        required: false,
-        unique: true,
-        minlength: [15, 'This is not a credit card number'],
+        id : {type:String, required:false},
+        cardNumber: {type:String, required:false, maxlength:16},
+        cardHolder: {type:String, required:false},
+        cardExpMonth: {type:String, required:false},
+        cardExpYear: {type:String, required:false},
+        cardCVV: {type:String, required:false},
     },
     points: {
         type: Number,

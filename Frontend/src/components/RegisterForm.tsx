@@ -101,6 +101,8 @@ export default function RegisterForm(reRoute:any) {
                             name="telephone" 
                             required
                             value={telephone}
+                            maxLength={10}
+                            minLength={10}
                             onChange={(e) => setTelephone(e.target.value)}
                             className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-gray-500" 
                         />

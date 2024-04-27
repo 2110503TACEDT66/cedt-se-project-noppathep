@@ -50,7 +50,7 @@ export default function ReservationForm({profile}:{profile:any}) {
               await createdReservation(location, session.user.token, bookingDate,profile.data._id);
             }
             console.log("Booking dispatched successfully.");
-            Swal.fire({title:'Reservation Complete!',text:"You can make your order in 'my Reservation'",icon:'success'})
+            Swal.fire({title:'Reservation Complete!',text:"You can make your order in 'My Reservation'",icon:'success'})
     
           } catch (error:any) {
             //any error will be display on form
@@ -110,7 +110,9 @@ export default function ReservationForm({profile}:{profile:any}) {
               Choose your reservation date
             </label>
             <div className="mt-2 ">
-              <DateReserve defaultDate={null} onDateChange={(value:any) => { setBookingDate(value)} } />
+              <DateReserve defaultDate={null} onDateChange={(value:any) => { setBookingDate(value)} } 
+              minTime={findRestaurantFromId(location)?.openingHours.open || ""}
+              maxTime={findRestaurantFromId(location)?.openingHours.close || ""}/>
             </div>
           </div>
 
@@ -145,7 +147,7 @@ export default function ReservationForm({profile}:{profile:any}) {
                     
                     </div>
 
-                    <Image src={findRestaurantFromId(location)!.image} alt="restaurant image" width={1280} height={720} className='w-40 sm:w-52 h-auto rounded-md mb-3 sm:mb-0'/>
+                    <Image src={findRestaurantFromId(location)!.image??'img/placeholder.svg'} alt="restaurant image" width={1280} height={720} className='w-40 sm:w-52 h-auto rounded-md mb-3 sm:mb-0'/>
                   </div>
                 : <div className='text-gray-500 w-full font-semibold text-lg text-center'>Please Choose Your Restaurant</div>
             }
