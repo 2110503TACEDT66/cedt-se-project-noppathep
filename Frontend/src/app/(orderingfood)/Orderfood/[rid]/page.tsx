@@ -110,30 +110,27 @@ export default function Foodorder({params}:{params:{rid:string}}){
             confirmButtonText: "Confirm",
             confirmButtonColor:"green"
 
-          }).then((result) => {
-
+          }).then(async (result) => {
             if (result.isConfirmed && session != null) {
-                payReservation(reservationId,session.user.token)
-                    .then((res)=>{
-                        let currentPoints = profile.data.points;
-                        selectedCoupons.forEach(coupon => {
-                            currentPoints -= coupon.points;
-                        });
-                        updatePoint(session.user.token, currentPoints);
-                        
-                        //success popup
-                        Swal.fire("Your payment has been recieved", `${res.message}</br>make sure to arrive in time!`, "success")
-                        .then((result) =>{
-                            if(result.isDismissed ||result.isConfirmed){
-                                router.push('/myreservation');
-                            }
-                        });
-                    })
-                    .catch((err)=>{
-                        //error popup
-                        Swal.fire("ERROR",err.message, "error");
-                    });
+                try {
+                    // Call the payReservation function
+                    const res = await payReservation(reservationId, session.user.token);
 
+                    // Update the user's points
+                    await updatePoint(session.user.token, res.points - selectedCoupons.reduce((total, coupon) => total + coupon.points, 0));
+    
+                    // Show the success popup
+                    Swal.fire("Your payment has been received", `${res.message}</br>make sure to arrive in time!`, "success")
+                    .then((result) =>{
+                        if(result.isDismissed || result.isConfirmed){
+                            router.push('/myreservation');
+                            router.refresh();
+                        }
+                    });
+                } catch (err:any) {
+                    // Show the error popup
+                    Swal.fire("ERROR", err.message, "error");
+                }
             } 
             else return;
           });
@@ -151,7 +148,7 @@ export default function Foodorder({params}:{params:{rid:string}}){
     
         // Apply discounts based on selected coupons
         selectedCoupons.forEach((coupon) => {
-            sum -= coupon.discount;
+            sum -= coupon.discount * coupon.count;
         });
     
         return sum > 0 ? sum : 0;
@@ -168,10 +165,10 @@ export default function Foodorder({params}:{params:{rid:string}}){
     //====================================
 
     // New state variable to hold the selected coupons
-    const [selectedCoupons, setSelectedCoupons] = useState<{ points: number; discount: number }[]>([]);
+    const [selectedCoupons, setSelectedCoupons] = useState<{ points: number; discount: number; count: number }[]>([]);
 
     // Callback function to receive updates from PointShop
-    const handleCouponsUpdate = (coupons: { points: number; discount: number }[]) => {
+    const handleCouponsUpdate = (coupons: { points: number; discount: number; count: number }[]) => {
         setSelectedCoupons(coupons);
     };
 
@@ -205,7 +202,7 @@ export default function Foodorder({params}:{params:{rid:string}}){
                 <div className="grid gap-x-5 gap-y-3 pb-5 w-full sm:w-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                 {
                 MenuResponse.data.map((item:any, index:number)=>(
-                    <div key={index} className="h-[150px] sm:w-[280px] sm:h-[320px] bg-white p-3 rounded-lg shadow-md flex sm:flex-col border-2 border-gray-100 items-center justify-around">
+                    <div key={index} className="h-[150px] sm:w-[280px] sm:h-fit bg-white p-3 rounded-lg shadow-md flex sm:flex-col border-2 border-gray-100 items-center justify-around">
                         <div className="aspect-[16/10] content-center flex justify-center">
                             <Image src={item.image??'/img/placeholder.svg'} alt="Product Picture" width={200} height={200} 
                             className="self-start sm:self-center rounded-md "/>
@@ -215,17 +212,19 @@ export default function Foodorder({params}:{params:{rid:string}}){
                             <h3 className="text-lg font-semibold"> {item.name} </h3>
                             <h3 className="text-lg font-semibold"> {item.price} ฿</h3>
  
-                            <div className='mt-1 w-fit h-fit relative flex flex-row flex-nowrap border-gray-200 border-[1px] rounded-sm '>
+                            <div className='mt-1 w-fit h-fit flex flex-col flex-nowrap border-gray-200 border-[1px] rounded-sm '>
 
-                                <button onClick={e => { handleDelete(item)} } className='hover:bg-gray-50 size-6'>-</button>
-                                <div className='w-9 border-x-[1px] border-gray-300'>{editedOrder.get(item._id) ? editedOrder.get(item._id) : 0}</div>
-                                <button onClick={e => { handleAdd(item)} } className='hover:bg-gray-50 size-6 '>+</button>
-                                {
-                                    editedOrder.get(item._id)
-                                    ?<span className='absolute -right-14 font-medium text-red-700'>{(editedOrder.get(item._id)??0) * (item.price)} ฿</span>
-                                    :''
-                                }
+                                <div className='flex flex-row'>
+                                    <button onClick={e => { handleDelete(item)} } className='hover:bg-gray-50 size-6'>-</button>
+                                    <div className='w-9 border-x-[1px] border-gray-300'>{editedOrder.get(item._id) ? editedOrder.get(item._id) : 0}</div>
+                                    <button onClick={e => { handleAdd(item)} } className='hover:bg-gray-50 size-6 '>+</button>
+                                </div>
                             </div>                            
+                            {
+                                editedOrder.get(item._id)
+                                ?<div className='font-medium text-red-700 mt-2'>{(editedOrder.get(item._id)??0) * (item.price)} ฿</div>
+                                :''
+                            }
                         </div>
                     </div>
                 ))

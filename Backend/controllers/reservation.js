@@ -445,10 +445,13 @@ exports.paidReservation=async (req,res,next)=>{
             })
         reservation = await Reservation.findById(req.params.id).populate("user");
 
+        user = await User.findById(reservation.user._id);
+
         res.status(200).json({
             success: true,
             data:reservation,
-            message :`You have gained ${gainpoint} points`
+            points: user.points,
+            message :`You have gained ${Math.floor(0.1*(totalPrice))} points`
         });
     }catch(error){
         console.log(error);

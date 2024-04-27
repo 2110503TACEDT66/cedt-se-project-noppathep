@@ -50,7 +50,7 @@ export default function ReservationForm({profile}:{profile:any}) {
               await createdReservation(location, session.user.token, bookingDate,profile.data._id);
             }
             console.log("Booking dispatched successfully.");
-            Swal.fire({title:'Reservation Complete!',text:"You can make your order in 'my Reservation'",icon:'success'})
+            Swal.fire({title:'Reservation Complete!',text:"You can make your order in 'My Reservation'",icon:'success'})
     
           } catch (error:any) {
             //any error will be display on form
