@@ -31,7 +31,7 @@ export default function Cards() {
         <h1 className="home-page-heading">Your Cards</h1>
         <Container>
           <Row className="justify-content-center">
-            {!cardsData ? (
+            {!cardsData || cardsData.length == 0 ? (
               <>
                 <Card style={{ width: '50%', margin: '25px' }}>
                   <Card.Body>

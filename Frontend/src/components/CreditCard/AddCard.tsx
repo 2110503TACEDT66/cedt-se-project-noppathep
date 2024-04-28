@@ -35,10 +35,6 @@ export default function AddCard() {
   function handleSubmitAction() {
     try {
       let newCardsList: Creditcard[] = [];
-      if (localStorage.getItem('cards')) {
-        const storageCards = JSON.parse(localStorage.getItem('cards') ?? '');
-        newCardsList = storageCards ? [...storageCards] : [];
-      }
 
       newCardsList.push({
         ...state,
