@@ -80,7 +80,7 @@ export default function MyRestaurant({profile}:{profile:any}) {
                                     <div key={item._id} className='bg-slate-50 shadow-md w-full md:w-[700px] h-[200px] rounded-md'>
                                         <div className='h-full w-full flex flex-row items-center justify-center px-5'>
                                             <Image
-                                                src={item.image}
+                                                src={item.image??'img/placeholder.svg'}
                                                 alt="Image"
                                                 width={150}
                                                 height={100}
@@ -111,12 +111,12 @@ export default function MyRestaurant({profile}:{profile:any}) {
                                                 <div className='ml-auto flex flex-row gap-2'>
                                                         <button className="rounded-md bg-orange-600 hover:bg-orange-700 px-2 py-1 text-white shadow-sm" 
                                                                 onClick={()=>{router.push(`/restaurantreserve/${item._id}`)}}>
-                                                            View Reservations
+                                                            Reservations
                                                         </button>
                                                         <button className="block rounded-md bg-red-600 hover:bg-red-700 px-2 py-1 text-white shadow-sm" 
                                                                 onClick={()=>removeRestaurant(item._id)}
                                                         >
-                                                           Delete Restaurant
+                                                           Delete
                                                         </button>
                                                 </div>
                                             </div>
