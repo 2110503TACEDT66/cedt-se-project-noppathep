@@ -22,7 +22,7 @@ interface foodItem{
 }
 
 export default function ReservationForOwner(
-    {reservationData}:{reservationData:any}
+    {reservationData,restaurantData}:{reservationData:any,restaurantData:any}
 ){
     const {data:session , status} = useSession();
     //control order dropdown
@@ -133,7 +133,9 @@ export default function ReservationForOwner(
                     
                     {   //switching between normal-editing mode
                         editStates
-                        ?   <DateReserve defaultDate={dayjs(reservationData.apptDate)} onDateChange={(value:any) => { setBookingDate(value) }} />
+                        ?   <DateReserve defaultDate={dayjs(reservationData.apptDate)} onDateChange={(value:any) => { setBookingDate(value) }}
+                                minTime={restaurantData.openingHours.open} maxTime={restaurantData.openingHours.close}
+                            />
                         :   <>{dayjs(reservationData.apptDate).format("DD/MM/YYYY HH:mm")}</>
                     }
                     
