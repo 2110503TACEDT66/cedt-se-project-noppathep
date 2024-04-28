@@ -9,7 +9,6 @@ const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
 const cors = require('cors');
 
-
 //Load env vars
 dotenv.config({path:'./config/config.env'});
 
@@ -39,6 +38,9 @@ app.use(cors());
 //     res.setHeader('Surrogate-Control', 'no-store');
 //     next();
 // });
+
+const picture = require('./routes/picture');
+app.use('/api/v1/picture', picture);
 
 const auth = require('./routes/auth');
 app.use('/api/v1/auth', auth);

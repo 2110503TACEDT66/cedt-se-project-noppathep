@@ -1,7 +1,7 @@
 const express = require('express');
 
 const {protect,authorize} = require('../middleware/auth');
-const{getRestaurant,getRestaurants,updateRestaurant,createRestaurant,deleteRestaurant} = require('../controllers/restaurants');
+const{getRestaurant,getRestaurants,updateRestaurant,createRestaurant,deleteRestaurant,uploadPicture} = require('../controllers/restaurants');
 
 const reservationRouter = require('./reservations');
 const tableRouter = require('./tables');
