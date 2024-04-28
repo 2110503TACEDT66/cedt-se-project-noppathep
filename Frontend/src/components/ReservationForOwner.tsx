@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import  Dayjs  from 'dayjs';
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
@@ -12,7 +12,6 @@ import Foodorder from "@/app/(orderingfood)/Orderfood/[rid]/page";
 import Swal from "sweetalert2";
 import deleteReservation from "@/libs/reservation/deleteReservation";
 import { getSession, useSession } from "next-auth/react";
-import getUserProfile from "@/libs/user/getUserProfile";
 import updateReservation from "@/libs/reservation/updateReservation";
 import DateReserve from "./DateReserve";
 
@@ -26,7 +25,6 @@ export default function ReservationForOwner(
     {reservationData}:{reservationData:any}
 ){
     const {data:session , status} = useSession();
-    const ownerId = useRef<string>("");
     //control order dropdown
     const [isCollapse , setCollapse] = useState(true);
     
@@ -50,6 +48,7 @@ export default function ReservationForOwner(
         
     }
   
+    //state for updating reservation
     const [bookingDate, setBookingDate] = useState(Dayjs);
     const [editStates, setEditStates] = useState<boolean>(false);
 
@@ -86,7 +85,10 @@ export default function ReservationForOwner(
                     session.user.token,
                     bookingDate
                 )
-                .then(()=>Swal.fire("Your reservation has been changed", "", "success"))
+                .then(()=>{
+                    Swal.fire("Your reservation has been changed", "", "success");
+                    window.location.reload();
+                })
                 .catch((error)=>{
                     Swal.fire(error.message,"","info");
                     return;
@@ -97,15 +99,15 @@ export default function ReservationForOwner(
           });
     }
 
-    
-    useEffect(()=>{
-        const fetchUserData = async ()=> {
-            const res = await getUserProfile(session!.user.token);
-            ownerId.current = res.data._id;
-        }
-        fetchUserData();
-    },[]);
         
+    // return(
+    //     <div className="bg-slate-50 h-32 shadow-md rounded-lg p-3 flex flex-col text-black items-start relative">
+    //         <div className="flex flex-col flex-nowrap items-start w-full gap-y-2 animate-pulse">
+    //             <div className="bg-gray-200 w-44 h-6 rounded-md"></div>
+    //             <div className="bg-gray-200 w-3/4 sm:w-1/2 h-16 rounded-md"></div>
+    //         </div>
+    //     </div>
+    // )
 
     return(
         <div className="bg-slate-50 shadow-md rounded-lg p-3 flex flex-col text-black items-start relative">
@@ -141,7 +143,7 @@ export default function ReservationForOwner(
                                 <button onClick={ ()=>setEditStates(prev=>!prev) } className="hover:[&>_]:bg-gray-300">
                                     <DisabledByDefaultIcon fontSize="inherit" className="size-8 rounded-full p-1 text-gray-700 transition-colors"/>
                                 </button>
-                                <button onClick={()=>updateReservation(reservationData._id,session!.user.token,bookingDate)} className="hover:[&>_]:bg-gray-300">
+                                <button onClick={()=>editReservation()} className="hover:[&>_]:bg-gray-300">
                                     <CheckBoxIcon fontSize="inherit" className="size-8 rounded-full p-1 text-green-700 transition-colors"/>
                                 </button>
                             </span>

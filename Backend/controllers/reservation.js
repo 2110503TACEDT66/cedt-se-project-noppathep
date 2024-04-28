@@ -155,13 +155,21 @@ exports.addReservation=async (req,res,next)=>{
 exports.updateReservation=async (req,res,next)=>{
     try{   
         let reservation = await Reservation.findById(req.params.id);
+        let restaurant = await Restaurant.findById(reservation.restaurant);
+        console.log("=====================================");
+        console.log(req.user.role);
+        console.log(restaurant.owner.toString());
+        console.log("=====================================");
+        
+        // can't find reservation id
         if(!reservation){
             return res.status(404).json({success:false,message:`No reservation with the id of ${req.params.id}`});
         }
-        if(reservation.user.toString()!==req.user.id&&req.user.role!=='admin'){
+        // can't update if not a user's reservation himself / admin / restaurant owner 
+        if(reservation.user.toString()!==req.user.id && req.user.role!=='admin' && req.user.id!==restaurant.owner.toString()){
             return res.status(401).json({
                 success:false,
-                message:`User ${req.user.id} is not authorize to update this bootcamp`
+                message:`User ${req.user.id} is not authorize to update this reservation`
             });
         }
 
@@ -184,9 +192,9 @@ exports.updateReservation=async (req,res,next)=>{
             if(closeTime < openTime) {
                 closeTime.setDay(closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000)));
             }
-            console.log(reservationTime)
-            console.log(openTime)
-            console.log(closeTime)
+            // console.log(reservationTime)
+            // console.log(openTime)
+            // console.log(closeTime)
 
             if(reservationTime > closeTime || reservationTime < openTime) {
                 return res.status(400).json({
