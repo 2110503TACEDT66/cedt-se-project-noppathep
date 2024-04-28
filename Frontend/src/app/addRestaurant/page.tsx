@@ -43,6 +43,8 @@ export default function addRestaurantPage() {
                     close: close.format("HH:mm"),
                 },
                 tel: tel,
+                averageRating: 0,
+                image: ""
             }
             try {
                 console.log(newRestaurant);
