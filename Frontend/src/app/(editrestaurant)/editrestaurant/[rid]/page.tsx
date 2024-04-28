@@ -59,11 +59,13 @@ export default function editRestaurant({params}:{params:{rid:string}}) {
                     postalcode: postalcode,
                     region: region,
                 },
+                averageRating: 0,
                 openingHours: {
                     open: open.format("HH:mm"),
                     close: close.format("HH:mm"),
                 },
                 tel: tel,
+                image: "",
             }
             try {
                 console.log(updatedRestaurant);
