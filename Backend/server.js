@@ -8,6 +8,8 @@ const {xss} = require('express-xss-sanitizer');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
 const cors = require('cors');
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUI = require('swagger-ui-express');
 
 
 //Load env vars
@@ -30,6 +32,22 @@ const limiter = rateLimit({
 app.use(limiter);
 app.use(hpp());
 app.use(cors());
+
+//swagger
+const swaggerOptions = {
+    swaggerDefinition:{
+        openapi:'3.0.0',
+        info:{
+            title:'Libraty API',
+            version:'1.0.0',
+            description:'A restaurant reservation API'
+        }
+    },
+    apis:['./routes/*.js'],
+}
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs',swaggerUI.serve,swaggerUI.setup(swaggerDocs));
+
 
 // // Add cache control headers doesn't work nutty
 // app.use((req, res, next) => {
