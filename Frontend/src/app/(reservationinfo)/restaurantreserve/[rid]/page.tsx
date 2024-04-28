@@ -37,7 +37,7 @@ export default async function restaurantReserve({params}:{params:{rid:string}}) 
                         </div>
 
                         {/* Pass reservations data to ReservationList component */}
-                        <ReservationList reservationJson={restaurant.data.reservations}/>
+                        <ReservationList dataJson={restaurant.data}/>
                     </div>
             </Suspense>
         </main>

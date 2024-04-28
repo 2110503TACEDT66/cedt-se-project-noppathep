@@ -6,16 +6,19 @@ import  getReservations  from '@/libs/reservation/getReservations';
 import deleteReservation from '@/libs/reservation/deleteReservation';
 import LinearProgress from '@mui/material/LinearProgress';
 import updateReservation from '@/libs/reservation/updateReservation';
+import Select from '@mui/material/Select';
 import Profile from './Profile';
 
 import Swal from 'sweetalert2'
 
+import MenuItem from '@mui/material/MenuItem';
 import getRestaurants from '@/libs/restaurant/getRestaurants';
 import DateReserve from './DateReserve';
 import  Dayjs  from 'dayjs';
 import { useRouter } from 'next/navigation';
 import { Close, Edit } from '@mui/icons-material';
 import Link from 'next/link';
+import updateUserProfile from '@/libs/user/updateUserProfile';
 import dayjs from 'dayjs';
 import payReservation from '@/libs/reservation/payReservation';
 
@@ -40,8 +43,7 @@ export default function MyReservation({profile}:{profile:any}) {
     }, []);
   
     const [bookingDate, setBookingDate] = useState(Dayjs);
-    const [location, setLocation] = useState('');
-    
+
     const removeReservation = async (rid:string)=>{
 
         Swal.fire({
@@ -92,17 +94,20 @@ export default function MyReservation({profile}:{profile:any}) {
             confirmButtonText: "Save"
           }).then((result) => {
             if (result.isConfirmed && session != null) {
-  
-              updateReservation(
-                itemID,
-                session.user.token,
-                bookingDate
-              )
-  
-              Swal.fire("Your reservation has been changed", "", "success");
-              window.location.reload();
+                
+                updateReservation(
+                    itemID,
+                    session.user.token,
+                    bookingDate
+                )
+                .then(()=>Swal.fire("Your reservation has been changed", "", "success"))
+                .catch((error)=>{
+                    Swal.fire(error.message,"","info");
+                    return;
+                })
             } 
             else return;
+
           });
     }
 
@@ -190,7 +195,7 @@ export default function MyReservation({profile}:{profile:any}) {
 
                                                 {   //switching between normal-editing mode
                                                     !editStates[item._id] && !item.paid &&
-                                                    <button className='ml-auto w-fit h-fit py-0 absolute right-0' onClick={(e) => {toggleEditState(item._id); setLocation(item.restaurant._id); setBookingDate(item.apptDate);}}>
+                                                    <button className='ml-auto w-fit h-fit py-0 absolute right-0' onClick={(e) => {toggleEditState(item._id); setBookingDate(item.apptDate);}}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
                                                 }
@@ -201,13 +206,13 @@ export default function MyReservation({profile}:{profile:any}) {
                                                 
                                                 {   //switching between normal-editing mode
                                                     editStates[item._id]
-                                                    ?   <DateReserve defaultDate={dayjs(item.apptDate)} onDateChange={(value:any) => { setBookingDate(value) }} 
-                                                        minTime={item.restaurant.openingHours.open} maxTime={item.restaurant.openingHours.close}/>
+                                                    ?   <DateReserve defaultDate={dayjs(item.apptDate)} onDateChange={(value:any) => { setBookingDate(value) }}
+                                                            minTime={item.openingHours.open} maxTime={item.openingHours.close}
+                                                        />
                                                     :   <div className='text-left text-sm font-medium text-gray-600'>
                                                             Reservation Date: {formatDate(item.apptDate)}
                                                         </div>
                                                 }
-
 
                                                 {   
                                                     !editStates[item._id] &&
@@ -232,6 +237,7 @@ export default function MyReservation({profile}:{profile:any}) {
                                                         }
                                                 </div>
 
+
                                             {   //switching between normal-editing mode
                                                 editStates[item._id]
                                                 ?   <div className='ml-auto flex flex-row gap-2 text-white [&>button]:max-h-9 [&>button]:font-semibold [&>button]:rounded-md [&>button]:shadow-sm'>
@@ -247,7 +253,7 @@ export default function MyReservation({profile}:{profile:any}) {
                                                         </button>
                                                         
                                                     </div>
-
+                                                    
                                                 :   <div className='ml-auto flex flex-row gap-2 text-gray-50 [&>button]:max-h-9 [&>button]:font-semibold [&>button]:rounded-md [&>button]:shadow-sm '>
 
                                      
@@ -271,6 +277,7 @@ export default function MyReservation({profile}:{profile:any}) {
                                                                 </button>
                                                             )
                                                         }
+
 
 
                                                         {   //PAY BUTTON only when reservation not yet paid

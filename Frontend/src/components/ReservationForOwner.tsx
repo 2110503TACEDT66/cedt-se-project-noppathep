@@ -1,15 +1,19 @@
 import dayjs from "dayjs";
-import { useEffect, useRef, useState } from "react";
-
+import  Dayjs  from 'dayjs';
+import { useState } from "react";
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import Foodorder from "@/app/(orderingfood)/Orderfood/[rid]/page";
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
+import Foodorder from "@/app/(orderingfood)/Orderfood/[rid]/page";
 import Swal from "sweetalert2";
 import deleteReservation from "@/libs/reservation/deleteReservation";
 import { getSession, useSession } from "next-auth/react";
-import getUserProfile from "@/libs/user/getUserProfile";
+import updateReservation from "@/libs/reservation/updateReservation";
+import DateReserve from "./DateReserve";
 
 interface foodItem{
     name:string,
@@ -18,34 +22,35 @@ interface foodItem{
 }
 
 export default function ReservationForOwner(
-    {reservationData}:{reservationData:any}
+    {reservationData,restaurantData}:{reservationData:any,restaurantData:any}
 ){
     const {data:session , status} = useSession();
-    const ownerId = useRef<string>("");
     //control order dropdown
     const [isCollapse , setCollapse] = useState(true);
-
-  
+    
+    
     var uniqueFoodList:Map<string,foodItem> = new Map<string,foodItem>();
     if(reservationData.foodOrder.length !== 0){
         
-            reservationData.foodOrder.forEach((current:any)=>{
-                if(uniqueFoodList.has(current._id)){
-                    uniqueFoodList.get(current._id)!.amount+=1;
-                }
-                else{
-                    let newFood:foodItem = {
-                        name:current.name,
-                        price:current.price,
-                        amount:1
-                    };
-                    uniqueFoodList.set(current._id,newFood);
-                }
-            })
-     
-            console.log(uniqueFoodList);
-        }
-    
+        reservationData.foodOrder.forEach((current:any)=>{
+            if(uniqueFoodList.has(current._id)){
+                uniqueFoodList.get(current._id)!.amount+=1;
+            }
+            else{
+                let newFood:foodItem = {
+                    name:current.name,
+                    price:current.price,
+                    amount:1
+                };
+                uniqueFoodList.set(current._id,newFood);
+            }
+        })
+        
+    }
+  
+    //state for updating reservation
+    const [bookingDate, setBookingDate] = useState(Dayjs);
+    const [editStates, setEditStates] = useState<boolean>(false);
 
 
     //delete reservation
@@ -65,15 +70,44 @@ export default function ReservationForOwner(
         });
     };
 
-    
-    useEffect(()=>{
-        const fetchUserData = async ()=> {
-            const res = await getUserProfile(session!.user.token);
-            ownerId.current = res.data._id;
-        }
-        fetchUserData();
-    },[]);
+    //edit date of reservation
+    const editReservation = async () => {
+        Swal.fire({
+            title: "Do you want to save the changes?",
+            showCancelButton: true,
+            
+            confirmButtonText: "Save"
+          }).then((result) => {
+            if (result.isConfirmed && session != null) {
+                
+                updateReservation(
+                    reservationData._id,
+                    session.user.token,
+                    bookingDate
+                )
+                .then(()=>{
+                    Swal.fire("Your reservation has been changed", "", "success");
+                    window.location.reload();
+                })
+                .catch((error)=>{
+                    Swal.fire(error.message,"","info");
+                    return;
+                })
+            } 
+            else return;
+
+          });
+    }
+
         
+    // return(
+    //     <div className="bg-slate-50 h-32 shadow-md rounded-lg p-3 flex flex-col text-black items-start relative">
+    //         <div className="flex flex-col flex-nowrap items-start w-full gap-y-2 animate-pulse">
+    //             <div className="bg-gray-200 w-44 h-6 rounded-md"></div>
+    //             <div className="bg-gray-200 w-3/4 sm:w-1/2 h-16 rounded-md"></div>
+    //         </div>
+    //     </div>
+    // )
 
     return(
         <div className="bg-slate-50 shadow-md rounded-lg p-3 flex flex-col text-black items-start relative">
@@ -93,9 +127,33 @@ export default function ReservationForOwner(
                     <span className="bg-gray-200 rounded-full ml-2 p-1 px-2 text-xs font-normal">{reservationData.user._id}</span>
                 </div>
 
-                <span className="space-x-2">
-                    <strong>Date:</strong> {dayjs(reservationData.apptDate).format("DD/MM/YYYY HH:mm")}
-                    <EditIcon fontSize="inherit" className="size-4 text-gray-700" />
+                <span className="space-x-2 flex items-center">
+                    
+                    <strong>Date:</strong> 
+                    
+                    {   //switching between normal-editing mode
+                        editStates
+                        ?   <DateReserve defaultDate={dayjs(reservationData.apptDate)} onDateChange={(value:any) => { setBookingDate(value) }}
+                                minTime={restaurantData.openingHours.open} maxTime={restaurantData.openingHours.close}
+                            />
+                        :   <>{dayjs(reservationData.apptDate).format("DD/MM/YYYY HH:mm")}</>
+                    }
+                    
+                    {   //switching between normal-editing mode
+                        editStates
+                        ?   <span>
+                                <button onClick={ ()=>setEditStates(prev=>!prev) } className="hover:[&>_]:bg-gray-300">
+                                    <DisabledByDefaultIcon fontSize="inherit" className="size-8 rounded-full p-1 text-gray-700 transition-colors"/>
+                                </button>
+                                <button onClick={()=>editReservation()} className="hover:[&>_]:bg-gray-300">
+                                    <CheckBoxIcon fontSize="inherit" className="size-8 rounded-full p-1 text-green-700 transition-colors"/>
+                                </button>
+                            </span>
+                        :   <button onClick={ ()=>setEditStates(prev=>!prev) } className="hover:[&>_]:bg-gray-300">
+                                <EditIcon fontSize="inherit" className="size-6 rounded-full p-1 text-gray-700 transition-colors" />
+                            </button>
+                    }
+    
                 </span>
             
             </div>
