@@ -17,7 +17,7 @@ export default async function ManageList({profile}:{profile:any}) {
         <main>
             <div className="text-black flex flex-col">
                 <RestaurantList RestaurantsJson={allRestaurants}></RestaurantList>
-                <ReservationList reservationJson={allReservations.data}></ReservationList>
+                <ReservationList dataJson={allReservations.data}></ReservationList>
             </div>
         </main>
     );

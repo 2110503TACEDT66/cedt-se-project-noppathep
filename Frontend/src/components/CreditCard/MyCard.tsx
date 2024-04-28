@@ -31,7 +31,7 @@ export default function Cards() {
         <h1 className="home-page-heading">Your Cards</h1>
         <Container>
           <Row className="justify-content-center">
-            {cardsData.length === 0 && (
+            {!cardsData ? (
               <>
                 <Card style={{ width: '50%', margin: '25px' }}>
                   <Card.Body>
@@ -46,8 +46,7 @@ export default function Cards() {
                   </Card.Body>
                 </Card>
               </>
-            )}
-            {cardsData.map((card: Creditcard, id) => (
+            ) : cardsData.map((card: Creditcard, id) => (
               <Col md={4} key={id} className="mb-3">
                 <Link
                   key={id}
