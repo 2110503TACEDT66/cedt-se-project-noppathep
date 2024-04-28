@@ -50,18 +50,24 @@ export default function PointShop({ profile, onCouponsUpdate }: PointShopProps) 
 
     
     // Function to increase the count of a specific coupon
-    const increaseCouponCount = (index: number) => {
-        const updatedCoupons = [...selectedCoupons];
-        updatedCoupons[index].count += 1;
-        setSelectedCoupons(updatedCoupons);
-        onCouponsUpdate(updatedCoupons);
+    const increaseCouponCount = (index: number, points: number) => {
+        if (currentPoints >= points) {
+            setCurrentPoints(currentPoints - points);
+
+            const updatedCoupons = [...selectedCoupons];
+            updatedCoupons[index].count += 1;
+            setSelectedCoupons(updatedCoupons);
+            onCouponsUpdate(updatedCoupons);
+        }
     };
     
     // Function to decrease the count of a specific coupon
-    const decreaseCouponCount = (index: number) => {
+    const decreaseCouponCount = (index: number, points: number) => {
         const updatedCoupons = [...selectedCoupons];
+        
         if (updatedCoupons[index].count > 1) {
             updatedCoupons[index].count -= 1;
+            setCurrentPoints(currentPoints + points);
             setSelectedCoupons(updatedCoupons);
             onCouponsUpdate(updatedCoupons);
         }
@@ -117,9 +123,9 @@ export default function PointShop({ profile, onCouponsUpdate }: PointShopProps) 
                                         <div className="flex items-center gap-2">
                                             <span>-{coupon.discount} bath discount</span>
                                             <span className='flex gap-3 justify-center items-center'>
-                                                <button onClick={() => decreaseCouponCount(index)} className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-lg">-</button>
+                                                <button onClick={() => decreaseCouponCount(index, coupon.points)} className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-lg">-</button>
                                                 {coupon.count}x
-                                                <button onClick={() => increaseCouponCount(index)} className="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-lg">+</button>
+                                                <button onClick={() => increaseCouponCount(index, coupon.points)} className="bg-green-500 hover:bg-green-600 text-white py-1 px-2 rounded-lg">+</button>
                                             </span>
                                         </div>
                                         <button onClick={() => removeCoupon(index)} className="bg-red-500 hover:bg-red-600 text-white py-1 px-2 rounded-lg">Remove</button>
