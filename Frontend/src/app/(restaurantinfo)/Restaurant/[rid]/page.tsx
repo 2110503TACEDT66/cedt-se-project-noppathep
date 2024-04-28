@@ -20,7 +20,7 @@ export default async function RestaurantPage({params}:{params:{rid:string}}){
         <main className="text-center p-5 text-black">
             <h1 className="text-lg font-medium">{RestaurantDetail.data.name}</h1>
             <div className="flex flex-row my-5 gap-3 flex-wrap">
-                <Image src={RestaurantDetail.data.image} 
+                <Image src={RestaurantDetail.data.image??'/img/placeholder.svg'} 
                 alt='restaurant logo' width={0} height={0} sizes="100vw"
                 className='rounded-lg w-full sm:w-[20%]'/>
             <table className='table-auto border-separate border-spacing-2 bg-gray-100 w-full sm:w-fit rounded-lg p-2 text-left'>

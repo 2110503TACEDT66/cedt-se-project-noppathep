@@ -27,7 +27,6 @@ export default function Profile({profile}:{profile:any}) {
           if (result.isConfirmed && session != null) {
 
             updateUserProfile(
-                session?.user._id,
                 session?.user.token,
                 newName,
                 newEmail,
@@ -134,13 +133,13 @@ export default function Profile({profile}:{profile:any}) {
                                     <td>Credit/Debit Card</td>
                                     <td>
                                         <Link href={'/yourcard'} className='w-fit text-m font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
-                                            Check your added card here!
+                                            View
                                         </Link>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>Points</td>
-                                    <td>9999</td>
+                                    <th>Points</th>
+                                    <td>{profile.data.points}</td>
                                 </tr>
                                 <tr>
                                     <td>Member since</td>

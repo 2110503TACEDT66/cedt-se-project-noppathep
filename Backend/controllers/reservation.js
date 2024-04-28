@@ -12,12 +12,12 @@ exports.getReservations=async (req,res,next)=>{
     if(req.user.role !== 'admin'){
         query = Reservation.find({user:req.user.id}).populate({
             path:'restaurant',
-            select:'name province tel image'
+            select:'name province tel image openingHours'
         }).populate("rating");}
     else{
         query = Reservation.find().populate({
             path:"restaurant",
-            select:'name tel image'
+            select:'name tel image openingHours'
         }).populate("rating");}
     try{
         const reservations = await query;
@@ -42,7 +42,7 @@ exports.getReservation=async (req,res,next)=>{
         const reservation = await Reservation.findById(req.params.id)
         .populate({
             path:'restaurant',
-            select:'name province tel image'
+            select:'name province tel image openingHours'
         })
         .populate({
             path: 'foodOrder', 
@@ -453,10 +453,13 @@ exports.paidReservation=async (req,res,next)=>{
             })
         reservation = await Reservation.findById(req.params.id).populate("user");
 
+        user = await User.findById(reservation.user._id);
+
         res.status(200).json({
             success: true,
             data:reservation,
-            message :`You have gained ${gainpoint} points`
+            points: user.points,
+            message :`You have gained ${Math.floor(0.1*(totalPrice))} points`
         });
     }catch(error){
         console.log(error);

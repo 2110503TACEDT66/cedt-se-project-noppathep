@@ -1,4 +1,4 @@
-export default async function updateUserProfile(token: string, newName:string, newEmail:string, newTel:string, newCard:string) {
+export default async function updatePoint(token: string, points:number) {
     const response = await fetch(`http://localhost:5000/api/v1/auth/update`, {
         method: "PUT",
         headers: {
@@ -6,10 +6,7 @@ export default async function updateUserProfile(token: string, newName:string, n
             "Content-Type": "application/json" 
         },
         body: JSON.stringify({ 
-            name: newName,
-            email: newEmail,
-            tel: newTel,
-            card: newCard,
+            points: points
         })
     });
 
@@ -25,7 +22,7 @@ export default async function updateUserProfile(token: string, newName:string, n
             }
         } catch (error) {
             console.error("Error parsing error message:", error);
-            throw new Error("Cannot Update user profile");
+            throw new Error("Cannot Update Points");
         }
     }
     return await response.json();
