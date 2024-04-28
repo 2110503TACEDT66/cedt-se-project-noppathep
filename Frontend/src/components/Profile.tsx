@@ -129,18 +129,26 @@ export default function Profile({profile}:{profile:any}) {
                                     </td>
                                 </tr>
 
-                                <tr>
-                                    <td>Credit/Debit Card</td>
-                                    <td>
-                                        <Link href={'/yourcard'} className='w-fit text-m font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
-                                            View
-                                        </Link>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th>Points</th>
-                                    <td>{profile.data.points}</td>
-                                </tr>
+                                {
+                                    profile.role == "user" && (
+                                        <tr>
+                                            <td>Credit/Debit Card</td>
+                                            <td>
+                                                <Link href={'/yourcard'} className='w-fit text-m font-medium bg-purple-500 hover:bg-purple-600 p-2 rounded-md text-white'>
+                                                    View
+                                                </Link>
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+                                {
+                                    profile.role == "user" && (
+                                        <tr>
+                                            <th>Points</th>
+                                            <td>{profile.data.points}</td>
+                                        </tr>
+                                    )
+                                }
                                 <tr>
                                     <td>Member since</td>
                                     <td>{formatDate(profile.data.createdAt)}</td>
