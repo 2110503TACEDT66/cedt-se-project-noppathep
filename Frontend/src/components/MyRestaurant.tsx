@@ -45,7 +45,7 @@ export default function MyRestaurant({profile}:{profile:any}) {
           }).then(async (result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                await deleteRestaurant(session?.user.token || "", rid);
+                await deleteRestaurant(session!.user.token, rid);
                 Swal.fire("Restaurant Deleted!", "", "success");
                 window.location.reload();
             } else return;
