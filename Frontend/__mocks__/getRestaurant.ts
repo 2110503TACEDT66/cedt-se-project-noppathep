@@ -18,6 +18,24 @@ const mockRestaurants = [
     },
     image: 'restaurant1.jpg',
   },
+  {
+    _id: 'restaurant2',
+    name: 'Restaurant 2',
+    address: {
+      district: 'District 1',
+      province: 'Province 1',
+      postalcode: '12345',
+      region: 'Region 2',
+    },
+    tel: '123456789',
+    averageRating: 5,
+    openingHours: {
+      open: '10:00',
+      close: '21:00',
+    },
+    image: 'restaurant2.jpg',
+  },
+
   // Add more mock restaurant data as needed
 ];
 
