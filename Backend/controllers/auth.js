@@ -62,7 +62,8 @@ const sendTokenResponse = (user, statusCode, res) => {
         .json({
             success: true,
             token,
-            name: user.name
+            name: user.name,
+            role: user.role
         });
 }
 

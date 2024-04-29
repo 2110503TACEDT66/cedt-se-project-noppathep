@@ -10,6 +10,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { RestaurantModel } from '../../interface';
 import Swal from 'sweetalert2';
+import InputLabel from '@mui/material/InputLabel';
 
 export default function ReservationForm({profile}:{profile:any}) {
 
@@ -86,13 +87,15 @@ export default function ReservationForm({profile}:{profile:any}) {
             <h2 className='text-gray-700 font-semibold text-2xl'>Reserve Seat</h2>
             <h6 className='text-gray-700 font-medium text-sm mb-3'>in the name of <span className='text-blue-500'>{profile.data.name}</span></h6>
 
-            <label className="block text-sm font-medium text-gray-700">
+            <InputLabel id="restaurant-choices" className="block text-sm font-medium text-gray-700">
               Choose the restaurant
-            </label>
+            </InputLabel>
             <div className="mt-2">
               <Select
+                labelId='restaurant-choices'
                 variant="standard"
                 name="location"
+                placeholder='Pick a restaurant'
                 id="location"
                 className="h-[em] w-full"
                 value={location}
@@ -106,9 +109,9 @@ export default function ReservationForm({profile}:{profile:any}) {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <InputLabel className="block text-sm font-medium text-gray-700">
               Choose your reservation date
-            </label>
+            </InputLabel>
             <div className="mt-2 ">
               <DateReserve defaultDate={null} onDateChange={(value:any) => { setBookingDate(value)} } 
               minTime={findRestaurantFromId(location)?.openingHours.open || ""}
