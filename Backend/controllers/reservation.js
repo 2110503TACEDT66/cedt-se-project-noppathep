@@ -343,11 +343,24 @@ exports.addTable = async(req,res,next) => {
         }
         
         const table = await Table.findById(req.body.id);
+
         if(!table){
-            return res.status(404).json({success:false,message:`There are no such table in this restautarant`});
+            return res.status(404).json({
+                success:false,
+                message:`There are no such table in this restautarant`
+            });
         }
         if(!table.restaurant.equals(reservation.restaurant)){
-            return res.status(404).json({success:false,message:`Your reserved restaurant does not have the current table`});
+            return res.status(404).json({
+                success:false,
+                message:`Your reserved restaurant does not have the current table`
+            });
+        }
+        if(table.alreadyReserve.includes(reservation.apptDate.substring(0,10))) {
+            return res.status(404).json({
+                success:false,
+                message: "this table already reserve in this day"
+            });
         }
         if(reservation.reserveTable.includes(table._id)) {
             return res.status(400).json({
@@ -355,7 +368,8 @@ exports.addTable = async(req,res,next) => {
                 message: `The table with id ${table._id} is already reserved`
             });
         }
-    
+
+        table.addReserveDate(reservation.apptDate.substring(0,10));
         reservation.addTable(table);
         res.status(200).json({
             success: true,
