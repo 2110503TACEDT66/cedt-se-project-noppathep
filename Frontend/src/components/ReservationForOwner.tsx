@@ -117,19 +117,20 @@ export default function ReservationForOwner(
 
                 <div className="w-full flex justify-between mb-1 ">
                     <span className="font-normal h-fit self-center leading-none p-1 px-2 text-sm text-slate-50 bg-teal-700 rounded-md">{reservationData._id}</span>
+                    <button className="ml-5 mr-auto w-fit h-fit font-normal p-1 px-2 bg-sky-700 hover:bg-sky-800 text-sm text-gray-100 rounded-sm">table</button>
                     <button onClick={()=>handleDelete(reservationData._id)} className="hover:[&>_]:bg-gray-300">
                         <DeleteIcon fontSize="inherit" className="rounded-full size-7 p-1 transition-colors" />
                     </button>
                 </div>
 
                 <div>
-                    <span><strong>Reserver:</strong> {reservationData.user.name}</span>
+                    <span><strong>Reserver:&nbsp;</strong>{reservationData.user.name}</span>
                     <span className="bg-gray-200 rounded-full ml-2 p-1 px-2 text-xs font-normal">{reservationData.user._id}</span>
                 </div>
 
                 <span className="space-x-2 flex items-center">
                     
-                    <strong>Date:</strong> 
+                    <strong>Date:&nbsp;</strong> 
                     
                     {   //switching between normal-editing mode
                         editStates
@@ -156,6 +157,15 @@ export default function ReservationForOwner(
     
                 </span>
             
+                <div>
+                    <strong>Status:</strong>&nbsp;
+                    {   //display reservation status
+                        reservationData.paid
+                        ?<span className='font-semibold text-orange-600'>pending arrival</span>
+                        :<span className='font-semibold text-gray-600'>waiting for payment</span>
+                    }
+                    
+                </div>
             </div>
 
 

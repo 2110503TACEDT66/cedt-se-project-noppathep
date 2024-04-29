@@ -11,7 +11,7 @@ export default async function Restaurant(){
     return(
         <main className="text-center p-5">
             <h1 className="text-xl font-medium text-black">Select your Restaurant</h1>
-                <RestaurantCatalog RestaurantsJson={Restaurants}/>
+            <RestaurantCatalog RestaurantsJson={Restaurants}/>
         </main>
     )
 }
