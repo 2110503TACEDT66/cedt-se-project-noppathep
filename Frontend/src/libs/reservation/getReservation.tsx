@@ -19,6 +19,9 @@ export default async function getReservation(id:string,token:string){
             }
         } catch (error) {
             console.error("Error parsing error message:", error);
+            setTimeout(() => {
+                window.location.href = "/error"
+              }, 2000);
             throw new Error("Cannot find reservation");
         }
     }

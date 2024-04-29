@@ -8,6 +8,9 @@ export default async function deleteRestaurant(token:string, rid:string){
     });
 
     if (!response.ok) {
+        setTimeout(() => {
+            window.location.href = "/error"
+          }, 2000);
         throw new Error("Cannot delete restaurant");
     }
 

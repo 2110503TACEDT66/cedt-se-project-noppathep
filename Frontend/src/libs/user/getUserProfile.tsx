@@ -8,6 +8,9 @@ export default async function getUserProfile(token:string){
         }
     })
     if(!response.ok){
+        setTimeout(() => {
+            window.location.href = "/error"
+          }, 2000);
         throw new Error("Cannot get User Profile")
     }
     return await response.json()

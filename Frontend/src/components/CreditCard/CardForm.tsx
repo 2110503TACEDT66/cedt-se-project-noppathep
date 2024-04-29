@@ -63,7 +63,7 @@ export default function CardForm(props: CardFormProps) {
     // validate errors
     if (!isFormHasErrors()) {
       handleSubmitAction();
-      window.location.href = "/yourcard";
+      // window.location.href = "/yourcard";
     }
   };
 

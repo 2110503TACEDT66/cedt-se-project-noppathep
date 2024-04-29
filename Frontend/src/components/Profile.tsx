@@ -130,7 +130,7 @@ export default function Profile({profile}:{profile:any}) {
                                 </tr>
 
                                 {
-                                    profile.role == "user" && (
+                                    profile.data.role == "user" && (
                                         <tr>
                                             <td>Credit/Debit Card</td>
                                             <td>
@@ -142,7 +142,7 @@ export default function Profile({profile}:{profile:any}) {
                                     )
                                 }
                                 {
-                                    profile.role == "user" && (
+                                    profile.data.role == "user" && (
                                         <tr>
                                             <th>Points</th>
                                             <td>{profile.data.points}</td>

@@ -9,6 +9,9 @@ export default async function deleteReservation(id: string, token: string) {
         }
     });
     if (!response.ok) {
+        setTimeout(() => {
+            window.location.href = "/error"
+          }, 2000);
         throw new Error("Cannot delete reservation");
     }
 

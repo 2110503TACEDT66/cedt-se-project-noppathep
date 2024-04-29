@@ -9,6 +9,9 @@ export default async function getReservations(token:string){
         }
     })
     if(!response.ok){
+        setTimeout(() => {
+            window.location.href = "/error"
+          }, 2000);
             throw new Error("Failed to fetch Reservation")
     }
     return await response.json()

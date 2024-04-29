@@ -27,6 +27,9 @@ export default async function updateRestaurant(id: string, token: string, restau
             }
         } catch (error) {
             console.error("Error parsing error message:", error);
+            setTimeout(() => {
+                window.location.href = "/error"
+              }, 2000);
             throw new Error("Cannot Update restaurant");
         }
     }
