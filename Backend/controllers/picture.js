@@ -36,11 +36,17 @@ const upload = multer({ storage });
 exports.uploadFile = (req, res) => {
   upload.single('file')(req, res, (err) => {
     if (err) {
-      return res.status(400).json({ error: err.message });
+      console.error("Error uploading file:", err);
+      return res.status(400).json({ error: err.message, message: "Something went wrong" });
     }
-    res.json({ file: req.file });
+    if (!req.file || !req.file._id) {
+      console.error("Uploaded file or its ID is missing.");
+      return res.status(400).json({ error: "Uploaded file or its ID is missing.", message: "Something went wrong" });
+    }
+    return res.json({ file: req.file });
   });
 };
+
 
 // Function to handle file retrieval
 exports.retrieveFile = (req, res) => {

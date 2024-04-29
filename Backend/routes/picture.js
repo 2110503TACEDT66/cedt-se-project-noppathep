@@ -6,7 +6,7 @@ const router =express.Router({mergeParams:true});
 
 const {protect,authorize} =require('../middleware/auth');
 
-router.route('/').post(protect,authorize('admin owner'),uploadFile);
-router.route('/:id').get(retrieveFile);
+router.route('/').post(protect,authorize('admin','owner'),uploadFile);
+router.route('/').get(retrieveFile);
 
 module.exports = router;
