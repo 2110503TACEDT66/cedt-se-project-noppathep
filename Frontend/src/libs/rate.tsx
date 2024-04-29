@@ -23,6 +23,9 @@ export default async function rate(id: string, token: string, rating: number, co
             }
         } catch (error) {
             console.error("Error parsing error message:", error);
+            setTimeout(() => {
+                window.location.href = "/error"
+              }, 2000);
             throw new Error("Cannot add a rating");
         }
     }

@@ -22,6 +22,9 @@ export default async function pickTable(id: string, token: string, table: string
         } catch (e) {
             // If JSON parsing fails, fall back to raw text error message
             alert(`An error occurred: ${errorText}`);
+            setTimeout(() => {
+                window.location.href = "/error"
+              }, 2000);
             return { success: false }; // Indicate the operation failed
         }
     }

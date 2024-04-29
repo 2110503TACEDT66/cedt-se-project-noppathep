@@ -15,6 +15,9 @@ export default async function userRegister(userEmail:string,userPassword:string,
     })
     if(!response.ok){
         alert("Register failed")
+        setTimeout(() => {
+            window.location.href = "/error"
+          }, 2000);
         return null
     }
     return await response.json()

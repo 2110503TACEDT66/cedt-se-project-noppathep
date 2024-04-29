@@ -22,6 +22,9 @@ export default async function updatePoint(token: string, points:number) {
             }
         } catch (error) {
             console.error("Error parsing error message:", error);
+            setTimeout(() => {
+                window.location.href = "/error"
+              }, 2000);
             throw new Error("Cannot Update Points");
         }
     }

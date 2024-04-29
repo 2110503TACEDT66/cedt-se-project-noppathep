@@ -12,6 +12,9 @@ export default async function userLogIn(userEmail:string,userPassword:string){
         })
     })
     if(!response.ok){
+        setTimeout(() => {
+            window.location.href = "/error"
+          }, 2000);
         throw new Error("Failed to log-in")
     }
     return await response.json()

@@ -7,6 +7,9 @@ export default async function deleteOrder(id: string, token: string, food: strin
         },
     });
     if (!response.ok) {
+        setTimeout(() => {
+            window.location.href = "/error"
+          }, 2000);
         throw new Error("Cannot delete Order")
     }
     return await response.json();

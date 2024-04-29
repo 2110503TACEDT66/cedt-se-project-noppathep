@@ -3,10 +3,9 @@ import { getServerSession } from 'next-auth/next';
 import { Suspense } from 'react';
 import { authOptions } from '../api/auth/[...nextauth]/route';
 import getUserProfile from '@/libs/user/getUserProfile';
-import AddCard from '@/components/CreditCard/AddCard';
+import Error from '@/components/Error';
 
-
-export default async function credit() {
+export default async function errorPage() {
     const session = await getServerSession(authOptions);
     let profile = null;
     if (session) {
@@ -17,7 +16,7 @@ export default async function credit() {
 
     return (
         <main>
-            <AddCard/>
+            <Error/>
         </main>
     );
 }
