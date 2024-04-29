@@ -41,7 +41,10 @@ const swaggerOptions = {
             title:'Libraty API',
             version:'1.0.0',
             description:'A restaurant reservation API'
-        }
+        },
+        servers:[
+            {url:'http://localhost:5000/api/v1'}
+        ],
     },
     apis:['./routes/*.js'],
 }

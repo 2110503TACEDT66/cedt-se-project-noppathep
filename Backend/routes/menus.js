@@ -47,6 +47,8 @@ module.exports = router;
  * /menus:
  *   post:
  *     summary: create new menu
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Menu]
  *     requestBody:
  *       required: true
@@ -76,6 +78,8 @@ module.exports = router;
  * /menus/{id}:
  *   get:
  *     summary: Get menu by id
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Menu]
  *     parameters:
  *       - in: path
@@ -104,6 +108,8 @@ module.exports = router;
  *
  *   put:
  *     summary: update a table for a restaurant by id
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Menu]
  *     parameters:
  *       - in: path
@@ -138,6 +144,8 @@ module.exports = router;
  *
  *   delete:
  *     summary: remove the table by id
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Menu]
  *     parameters:
  *       - in: path

@@ -123,9 +123,11 @@ module.exports = router;
  * 
  * 
  * @swagger
- * /restaurant/{restaurantId}/rating:
+ * /restaurants/{restaurantId}/rating:
  *   get:
  *     summary: get restaurant's average rating and all rating datas
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Restaurant]
  *     parameters:
  *       - in: path

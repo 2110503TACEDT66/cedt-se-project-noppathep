@@ -72,11 +72,12 @@ module.exports = router;
  *             rating: 4
  *             comment: "This restaurant is very good."
  * 
- * 
  * @swagger
  * /reservations:
  *   get:
  *     summary: Get all reservations
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Reservation]
  *     responses:
  *       200:
@@ -103,6 +104,8 @@ module.exports = router;
  * /reservations/{id}/tables/{tableid}:
  *   delete:
  *     summary: Add new table
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Reservation]
  *     requestBody:
  *       required: true
@@ -144,6 +147,8 @@ module.exports = router;
  * /reservations/{id}/tables:
  *   post:
  *     summary: Add new table
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Reservation]
  *     requestBody:
  *       required: true
@@ -180,6 +185,8 @@ module.exports = router;
  * /reservations/{id}/paid:
  *   put:
  *     summary: making payment for the reservation
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Reservation]
  *     parameters:
  *       - in: path
@@ -221,6 +228,8 @@ module.exports = router;
  * /reservations/{reservationId}/:
  *   post:
  *     summary: Get rating information of the reservation
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Reservation]
  *     parameters:
  *       - in: path
@@ -270,6 +279,8 @@ module.exports = router;
  * /reservations/{id}/{food}:
  *   delete:
  *     summary: remove food from the reservation
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Reservation]
  *     parameters:
  *       - in: path
@@ -304,6 +315,8 @@ module.exports = router;
  * /reservations/{id}/rating:
  *   get:
  *     summary: Get rating info of reservation
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Reservation]
  *     parameters:
  *       - in: path
@@ -329,6 +342,8 @@ module.exports = router;
  * 
  *   put:
  *     summary: Add rating to reservation
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Reservation]
  *     parameters:
  *       - in: path
@@ -367,6 +382,8 @@ module.exports = router;
  * 
  *   delete:
  *     summary: Add rating to reservation
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Reservation]
  *     parameters:
  *       - in: path

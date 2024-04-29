@@ -43,6 +43,8 @@ module.exports = router;
  * /restaurants/{restaurantId}/tables:
  *   get:
  *     summary: Get all tables belong to a restaurant
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Table]
  *     parameters:
  *       - in: path
@@ -77,6 +79,8 @@ module.exports = router;
  *
  *   post:
  *     summary: create new table for a restaurant
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Table]
  *     parameters:
  *       - in: path
@@ -113,6 +117,8 @@ module.exports = router;
  * /tables/{id}:
  *   get:
  *     summary: Get table by its id
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Table]
  *     parameters:
  *       - in: path
@@ -141,6 +147,8 @@ module.exports = router;
  *
  *   put:
  *     summary: update a table for a restaurant by id
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Table]
  *     parameters:
  *       - in: path
@@ -175,6 +183,8 @@ module.exports = router;
  *
  *   delete:
  *     summary: remove the table by id
+ *     security:
+ *       - bearerAuth: []
  *     tags: [Table]
  *     parameters:
  *       - in: path

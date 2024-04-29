@@ -14,8 +14,16 @@ module.exports=router;
 
 /**
  * @swagger
+ * tags:
+ *   name: User
+ *   description: The user managing API
  * 
  * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  *   schemas:
  *     User:
  *       type: object
@@ -85,4 +93,91 @@ module.exports=router;
  *           type: string
  *           example: 6666
  * 
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Login
+ *     tags: [User]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: TestUser@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: 123456
+ *     responses:
+ *       200:
+ *         description:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required:
+ *                 - success
+ *                 - token
+ *                 - name
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2M3c2c21421cZGQ2c42v5215YzY3ZThlZTczMjcwODUwZSIsImlhdCI6MTcxNDM3NTA1MCwiZXhwIjoxNz4234cih2yuPyfft6d6qafKAU--yY4KOd8rOSpQ3lxkArf5aFNNM0Y
+ *                 name:
+ *                   type: string
+ *                   example: TestUser
+ *
+ * @swagger
+ * /auth/logout:
+ *   get:
+ *     summary: Logout
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required:
+ *                 - success
+ *                 - data
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   example: {}
+ *
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     summary: Logout
+ *     security:
+ *       - bearerAuth: []
+ *     tags: [User]
+ *     responses:
+ *       200:
+ *         description:
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               required:
+ *                 - success
+ *                 - data
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/User'
+ *
  */
