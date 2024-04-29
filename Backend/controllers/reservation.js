@@ -356,7 +356,8 @@ exports.addTable = async(req,res,next) => {
                 message:`Your reserved restaurant does not have the current table`
             });
         }
-        if(table.alreadyReserve.includes(reservation.apptDate.substring(0,10))) {
+        console.log(reservation.apptDate.toLocaleDateString())
+        if(table.alreadyReserve.includes(reservation.apptDate.toLocaleDateString())) {
             return res.status(404).json({
                 success:false,
                 message: "this table already reserve in this day"
@@ -368,8 +369,7 @@ exports.addTable = async(req,res,next) => {
                 message: `The table with id ${table._id} is already reserved`
             });
         }
-
-        table.addReserveDate(reservation.apptDate.substring(0,10));
+        table.addReserveDate(reservation.apptDate.toLocaleDateString());
         reservation.addTable(table);
         res.status(200).json({
             success: true,
@@ -411,7 +411,7 @@ exports.removeTable=async (req,res,next)=>{
                 message:`The table with id ${req.params.tableid} is not in this table`
             })
         }
-        table.removeReserveDate(reservation.apptDate.substring(0,10))
+        table.removeReserveDate(reservation.apptDate.toLocaleDateString());
         reservation.removeTable(req.params.tableid);
         res.status(200).json({
             success: true,
