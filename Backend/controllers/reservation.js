@@ -404,6 +404,14 @@ exports.removeTable=async (req,res,next)=>{
                 message: `The table with id ${req.params.tableid} is not in this reservation`
             });
         }
+        const table = await Table.findById(req.params.tableid);
+        if(!table) {
+            return res.status(404).json({
+                success:false,
+                message:`The table with id ${req.params.tableid} is not in this table`
+            })
+        }
+        table.removeReserveDate(reservation.apptDate.substring(0,10))
         reservation.removeTable(req.params.tableid);
         res.status(200).json({
             success: true,

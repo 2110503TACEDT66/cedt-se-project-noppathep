@@ -11,7 +11,7 @@ const TableSchema = new mongoose.Schema({
         require:true
     },
     alreadyReserve:[{
-        type:Date
+        type:String
     }]
 });
 
