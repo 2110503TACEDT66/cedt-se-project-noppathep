@@ -5,9 +5,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import ReservationForm from '@/components/ReservationForm';
 import NextAuthProvider from '@/app/providers/NextAuthProvider';
 import { waitFor } from '@testing-library/react';
-import getRestaurants from '../__mock__/getRestaurant';
 
-jest.mock('../__mock__/getRestaurant');
+jest.mock('../__mocks__/getRestaurant');
+jest.mock('../__mocks__/createdReservation');
 
 describe('Test user made reservation', () => {
     let loginResult:any;
@@ -44,14 +44,44 @@ describe('Test user made reservation', () => {
             </NextAuthProvider>
         );
 
+        // Wait for restaurants to be loaded
+        await waitFor(() => {
+            expect(screen.getByLabelText('Choose the restaurant')).toBeInTheDocument();
+        });
+
+        // Find the dropdown element
+        const dropdown = screen.getByRole('combobox', { name: 'Choose the restaurant' });
+
+        // Check if the expected options are present in the dropdown
+        expect(screen.getByText('Restaurant 1')).toBeInTheDocument();
+        // // Wait for restaurants to be loaded
         // await waitFor(() => {
-        //     expect(screen.getByText('Choose the restaurant')).toBeInTheDocument();
-
-        //     expect(screen.getByPlaceholderText("Pick a restaurant")).toBeInTheDocument();
-
-        //     fireEvent.mouseDown(screen.getByPlaceholderText("Pick a restaurant"));
+        //   expect(screen.getByLabelText('Choose the restaurant')).toBeInTheDocument();
         // });
-    })
+      
+        // // Simulate user selecting a restaurant
+        // fireEvent.change(screen.getByLabelText('Choose the restaurant'), { target: { value: 'restaurant1' } });
+      
+        // // Simulate user selecting a reservation date
+        // // Here, you might need to mock the DateReserve component or its behavior
+        // // You can mock the behavior of the DateReserve component similarly to how we mocked getRestaurants
+      
+        // // Simulate user clicking the "Reserve now" button
+        // fireEvent.click(screen.getByText('Reserve now'));
+      
+        // // Wait for confirmation popup to appear
+        // await waitFor(() => {
+        //   expect(screen.getByText('Do you want to make this reservation?')).toBeInTheDocument();
+        // });
+      
+        // // Simulate user confirming the reservation
+        // fireEvent.click(screen.getByText('Sure'));
+      
+        // // Wait for success message to appear
+        // await waitFor(() => {
+        //   expect(screen.getByText('Reservation Complete!')).toBeInTheDocument();
+        // });
+      });
 
     it('made reservation at restaurant outside their opening period', () => {
 
