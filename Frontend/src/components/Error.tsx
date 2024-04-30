@@ -11,7 +11,7 @@ export default function Error() {
           <div className="message text-lg">Something went wrong...</div>
           <div>
             <button
-              className="retry-button mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="retry-button mt-4 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
               onClick={redirectToHomePage}
             >
               🏠 Back to home!

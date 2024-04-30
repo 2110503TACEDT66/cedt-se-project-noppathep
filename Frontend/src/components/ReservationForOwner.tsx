@@ -14,6 +14,7 @@ import deleteReservation from "@/libs/reservation/deleteReservation";
 import { getSession, useSession } from "next-auth/react";
 import updateReservation from "@/libs/reservation/updateReservation";
 import DateReserve from "./DateReserve";
+import Link from "next/link";
 
 interface foodItem{
     name:string,
@@ -117,7 +118,7 @@ export default function ReservationForOwner(
 
                 <div className="w-full flex justify-between mb-1 ">
                     <span className="font-normal h-fit self-center leading-none p-1 px-2 text-sm text-slate-50 bg-teal-700 rounded-md">{reservationData._id}</span>
-                    <button className="ml-5 mr-auto w-fit h-fit font-normal p-1 px-2 bg-sky-700 hover:bg-sky-800 text-sm text-gray-100 rounded-sm">table</button>
+                    
                     <button onClick={()=>handleDelete(reservationData._id)} className="hover:[&>_]:bg-gray-300">
                         <DeleteIcon fontSize="inherit" className="rounded-full size-7 p-1 transition-colors" />
                     </button>
@@ -154,9 +155,13 @@ export default function ReservationForOwner(
                                 <EditIcon fontSize="inherit" className="size-6 rounded-full p-1 text-gray-700 transition-colors" />
                             </button>
                     }
-    
                 </span>
             
+                <div>
+                    <strong>Table picked:</strong>&nbsp;
+                    { reservationData.reserveTable.length }
+                </div>
+
                 <div>
                     <strong>Status:</strong>&nbsp;
                     {   //display reservation status
