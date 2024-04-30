@@ -11,7 +11,7 @@
 // please read our getting started guide:
 // https://on.cypress.io/introduction-to-cypress
 
-describe('example to-do app', () => {
+describe('User story 1-4', () => {
     beforeEach(() => {
       //start at home page
       cy.visit('http://localhost:3000')
@@ -40,7 +40,7 @@ describe('example to-do app', () => {
 
 
       //fill in the form
-      cy.get('input[name="name"]').type('Cypress Restaurant')
+      cy.get('input[name="name"]').type('Cypress openinghour Restaurant')
       cy.get('input[name="name"]').should('have.value','Cypress Restaurant')
 
       cy.get('input[name="district"]').type('Cypress district')
@@ -70,7 +70,6 @@ describe('example to-do app', () => {
       //should redirect back to myrestaurant page
       cy.location('pathname').should('include', 'myrestaurant');
       cy.get('a').contains('Cypress Restaurant')
-    
     })
 
   
@@ -92,6 +91,7 @@ describe('example to-do app', () => {
       cy.get('button').contains('My Restaurant').should('not.exist')
 
     })
+
 
   })
   
