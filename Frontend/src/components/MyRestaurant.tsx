@@ -88,7 +88,7 @@ export default function MyRestaurant({profile}:{profile:any}) {
                                             />
                                             <div className='w-full flex flex-col gap-2 pl-3 pb-3 relative'>
                                                 {!editStates[item._id] && (
-                                                    <button className='ml-auto w-fit h-fit py-0 absolute right-0' onClick={(e) => {toggleEditState(item.id);}}>
+                                                    <button className='ml-auto w-fit h-fit py-0 absolute right-0' onClick={(e) => {toggleEditState(item.id);}} data-cy={item.name}>
                                                         <Edit fontSize='medium' sx={{ color: "black" }} />
                                                     </button>
                                                 )}

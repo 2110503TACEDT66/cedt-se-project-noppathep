@@ -25,8 +25,28 @@ const RestaurantSchema = new mongoose.Schema({
         length:[10,'Name can not be more or less than 10 charector']
     },
     openingHours: {
-        open: { type: String, required: true,match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/},
-        close: { type: String, required: true,match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]||24:00$/}
+        open: { 
+            type: String, 
+            required: true,
+            validate: {
+                validator: function(value) {
+                    return value !== this.openingHours.close; // Check if opening time is not equal to closing time
+                },
+                message: 'Opening time cannot be the same as closing time'
+            },
+            match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/
+        },
+        close: { 
+            type: String, 
+            required: true,
+            validate: {
+                validator: function(value) {
+                    return value !== this.openingHours.open; // Check if closing time is not equal to opening time
+                },
+                message: 'Closing time cannot be the same as opening time'
+            },
+            match: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]||24:00$/
+        }
     },
     averageRating:{ //misspell
         type:Number,
