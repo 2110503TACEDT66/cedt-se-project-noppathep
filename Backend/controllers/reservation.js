@@ -438,10 +438,24 @@ exports.paidReservation=async (req,res,next)=>{
             path: 'foodOrder', 
             model: 'Menu',
             select: 'name price'
-          });
-
+        });
+        
         if(!reservation){
             return res.status(404).json({success:false,message:`No reservation with the id of ${req.params.id}`});
+        }
+
+        // fetch if user have any card added
+        let user = await User.findById(reservation.user._id).populate({
+            path:'user',
+            select: 'card'
+        });
+
+        // if user have no cards, return err
+        if (!user.card) {
+            return res.status(401).json({
+                success:false,
+                message:`User ${req.user.id} doesn't have any credit card added`
+            });
         }
 
         let totalPrice = 0;

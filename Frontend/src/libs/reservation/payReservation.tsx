@@ -11,7 +11,6 @@ export default async function payReservation(rid:string,token:string){
         try {
             const errorJson = JSON.parse(errorMessage);
             if (errorJson.message) {
-                alert(errorJson.message);
                 throw new Error(errorJson.message);
             } else {
                 throw new Error("Unknown error occurred");
