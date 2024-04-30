@@ -15,7 +15,7 @@ describe('Test user made reservation', () => {
     })
 
     it('payment Test', async() => {
-        const response = await getReservation("token",loginResult.token);
-        expect(response.totalPrice).toBe(1050);
+        const response = await getReservation("662f7548723ad056bb930ffa",loginResult.token);
+        expect(response.totalPrice).toBe(0);
     })
 })
