@@ -40,7 +40,7 @@ describe('User story 1-4', () => {
 
 
       //fill in the form
-      cy.get('input[name="name"]').type('Cypress openinghour Restaurant')
+      cy.get('input[name="name"]').type('Cypress Restaurant')
       cy.get('input[name="name"]').should('have.value','Cypress Restaurant')
 
       cy.get('input[name="district"]').type('Cypress district')
