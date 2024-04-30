@@ -105,31 +105,36 @@ exports.addReservation=async (req,res,next)=>{
         const openTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(open.split(':')[0]), parseInt(open.split(':')[1]));
         const closeTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(close.split(':')[0]), parseInt(close.split(':')[1]));
         
-        console.log(reservationTime.getDate().toString())
+        //console.log("time "+reservationTime);
 
-        if(reservationTime.getDate().toString() != reservationTime.toUTCString().substring(5,7)) {
-            closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
-            openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
-        }
         closeTime.setTime(closeTime.getTime() + (7 * 60 * 60 * 1000));
         openTime.setTime(openTime.getTime() + (7 * 60 * 60 * 1000));
+        /*
+        console.log(openTime);
+        console.log(closeTime);
+        console.log(reservationTime);
+        console.log("date and time");
+        console.log(reservationTime.getDate());
+        console.log(openTime.getDate());
+        */
+        if( openTime >reservationTime ) {
+            console.log("fixing date")
+            openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
+            closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
+        }
 
         if(closeTime < openTime) {
             closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000));
         }
-
+        /*
+        console.log(openTime);
+        console.log(closeTime);
+        console.log(reservationTime);
+        */
         if(reservationTime > closeTime || reservationTime < openTime) {
             return res.status(400).json({
                     success: false,
                     message: 'Reservation must be within restaurant opening hours'
-            });
-        }
-
-        const oneHourBeforeClose = new Date(closeTime.getTime() - (1 * 60 * 60 * 1000));
-        if(reservationTime > oneHourBeforeClose) {
-            return res.status(400).json({
-                    success: false,
-                    message: 'Reservation must be before restaurant close time 1 hour'
             });
         }
         console.log(req.body);
