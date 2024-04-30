@@ -181,25 +181,31 @@ exports.updateReservation=async (req,res,next)=>{
         const { apptDate } = req.body;
         if(apptDate) {
             const restaurant = await Restaurant.findById(reservation.restaurant);
-            const { open, close } = restaurant.openingHours;
+            const { open , close } =  restaurant.openingHours;
             const today = new Date();
-            const reservationTime = new Date (new Date(apptDate).getTime() + (7 * 60 * 60 * 1000));
+            const thailandTime = new Date(today.getTime() + (7 * 60 * 60 * 1000));
+            const reservationTime = new Date(apptDate);
+            if(reservationTime < thailandTime) {
+                return res.status(400).json({
+                    success : false,
+                    message : "Reservation must be scheduled for a time after today"
+                })
+            }
+
             const openTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(open.split(':')[0]), parseInt(open.split(':')[1]));
             const closeTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(close.split(':')[0]), parseInt(close.split(':')[1]));
-            
-            if(reservationTime.getDate().toString() != reservationTime.toUTCString().substring(5,7)) {
-                closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
-                openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
-            }
+        
             closeTime.setTime(closeTime.getTime() + (7 * 60 * 60 * 1000));
             openTime.setTime(openTime.getTime() + (7 * 60 * 60 * 1000));
+            if( openTime >reservationTime ) {
+                console.log("fixing date")
+                openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
+                closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
+            }
 
             if(closeTime < openTime) {
-                closeTime.setDay(closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000)));
+                closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000));
             }
-            // console.log(reservationTime)
-            // console.log(openTime)
-            // console.log(closeTime)
 
             if(reservationTime > closeTime || reservationTime < openTime) {
                 return res.status(400).json({
@@ -207,16 +213,8 @@ exports.updateReservation=async (req,res,next)=>{
                     message: 'Reservation must be within restaurant opening hours'
                 });
             }
-
-            const oneHourBeforeClose = new Date(closeTime.getTime() - (1 * 60 * 60 * 1000));
-            if(reservationTime > oneHourBeforeClose) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Reservation must be befor restaurant close time 1 hour'
-               });
-            } 
-        }
-        
+            console.log(req.body);
+    }
         reservation = await Reservation.findByIdAndUpdate(req.params.id,req.body,{
             new:true,
             runValidators:true
