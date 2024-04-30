@@ -15,6 +15,10 @@ describe('User story 1-4', () => {
     beforeEach(() => {
       //start at home page
       cy.visit('http://localhost:3000')
+
+
+
+
     })
   
     it('should successfully add new restaurant', () => {
@@ -24,10 +28,10 @@ describe('User story 1-4', () => {
       cy.location('pathname').should('include', 'api/auth/signin');
       
       //fill in email&password
-      cy.get('input[type="email"]').type('whaleboneowner@gmail.com')
-      cy.get('input[type="email"]').should('have.value','whaleboneowner@gmail.com')
-      cy.get('input[type="password"]').type('123456')
-      cy.get('input[type="password"]').should('have.value','123456')
+      cy.get('input[type="email"]').type('ownertest@gmail.com')
+      cy.get('input[type="email"]').should('have.value','ownertest@gmail.com')
+      cy.get('input[type="password"]').type('0123456')
+      cy.get('input[type="password"]').should('have.value','0123456')
       
       cy.get('button').contains('Login').click();
       cy.location('pathname').should('include', '');
@@ -35,7 +39,7 @@ describe('User story 1-4', () => {
       //navigate to add restaurant page
       cy.get('a').contains('My Restaurant').click();
       cy.location('pathname').should('include', 'myrestaurant');
-      cy.get('a').contains('Add restaurant').click();
+      cy.get('a[href="/addRestaurant"]').click();
       cy.location('pathname').should('include', 'addRestaurant');
 
 
@@ -55,8 +59,8 @@ describe('User story 1-4', () => {
       cy.get('input[name="region"]').type('Cypress region')
       cy.get('input[name="region"]').should('have.value','Cypress region')
 
-      cy.get('input[name="tel"]').type('0111222333')
-      cy.get('input[name="tel"]').should('have.value','0111222333')
+      cy.get('input[name="tel"]').type('012345678')
+      cy.get('input[name="tel"]').should('have.value','012345678')
 
       cy.get('label').contains('Open').next().children().first().type('08:30')
       cy.get('label').contains('Open').next().children().first().should('have.value','08:30')
@@ -67,9 +71,19 @@ describe('User story 1-4', () => {
 
       //submit
       cy.get('button').contains('Add New Restaurant').click();
+      cy.wait(1000)
       //should redirect back to myrestaurant page
       cy.location('pathname').should('include', 'myrestaurant');
       cy.get('a').contains('Cypress Restaurant')
+
+      
+      //remove restaurant we just created
+      cy.get('a').contains('Cypress Restaurant')
+        .parent().parent()
+        .find('div').contains('button','Delete').click();
+
+      cy.get('button').contains('Sure, delete it').click();
+
     })
 
   
@@ -80,14 +94,15 @@ describe('User story 1-4', () => {
       cy.location('pathname').should('include', 'api/auth/signin');
       
       //fill in email&password
-      cy.get('input[type="email"]').type('testuser@gmail.com')
-      cy.get('input[type="email"]').should('have.value','testuser@gmail.com')
-      cy.get('input[type="password"]').type('testuser')
-      cy.get('input[type="password"]').should('have.value','testuser')
+      cy.get('input[type="email"]').type('usertest@gmail.com')
+      cy.get('input[type="email"]').should('have.value','usertest@gmail.com')
+      cy.get('input[type="password"]').type('123456')
+      cy.get('input[type="password"]').should('have.value','123456')
 
       cy.get('button').contains('Login').click();
       cy.location('pathname').should('include', '');
 
+      //won't see My Restaurant button
       cy.get('button').contains('My Restaurant').should('not.exist')
 
     })
