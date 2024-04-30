@@ -11,7 +11,7 @@
 // please read our getting started guide:
 // https://on.cypress.io/introduction-to-cypress
 
-describe('User story 1-4', () => {
+describe('User story 1-3', () => {
     beforeEach(() => {
         //start at home page
         cy.visit('http://localhost:3000')
@@ -19,19 +19,20 @@ describe('User story 1-4', () => {
       
         //click on sign-in link and navigate to /signin page
         cy.get('a').contains('Sign-in').click();
-        cy.location('pathname').should('include', 'api/auth/signin');  
+        cy.location('pathname').should('include', 'api/auth/signin');
         
         
         //=======<login before test>==================
         //fill in email&password
-        cy.get('input[type="email"]').type('whaleboneowner@gmail.com')
-        cy.get('input[type="email"]').should('have.value','whaleboneowner@gmail.com')
-        cy.get('input[type="password"]').type('123456')
-        cy.get('input[type="password"]').should('have.value','123456')
+        cy.get('input[type="email"]').type('ownertest@gmail.com')
+        cy.get('input[type="email"]').should('have.value','ownertest@gmail.com')
+        cy.get('input[type="password"]').type('0123456')
+        cy.get('input[type="password"]').should('have.value','0123456')
         cy.get('button').contains('Login').click();
         cy.location('pathname').should('include', '');
         //navigate to add restaurant page
         cy.get('a').contains('My Restaurant').click();
+
     })
     
   
@@ -41,7 +42,7 @@ describe('User story 1-4', () => {
         //=======<add new restaurant>==================
         cy.get('a').contains('My Restaurant').click();
         cy.location('pathname').should('include', 'myrestaurant');
-        cy.get('a').contains('Add restaurant').click();
+        cy.get('a[href="/addRestaurant"]').click();
         cy.location('pathname').should('include', 'addRestaurant');
         //fill in the form
         cy.get('input[name="name"]').type('Cypress openinghour Restaurant')
@@ -71,7 +72,7 @@ describe('User story 1-4', () => {
         cy.get('[data-cy="Cypress openinghour Restaurant"]').click()
         cy.location('pathname').should('include', 'editrestaurant'); //should navigate to editrestaurant page
         //change opening-closing time
-        cy.wait(100)
+        cy.wait(1000)
         cy.get('label').contains('Open').next().children().first().type('10:00')
         cy.get('label').contains('Open').next().children().first().should('have.value','10:00')
         cy.get('label').contains('Close').next().children().first().type('19:00')
@@ -85,6 +86,16 @@ describe('User story 1-4', () => {
 
         //check if the opening hour really changed
         cy.get('td').contains('Opening hours:').next().should('include.text','10:00 - 19:00');
+        cy.wait(1000)
+        
+
+        //go back & remove restaurant we just created
+        cy.get('a').contains('My Restaurant').click();
+        cy.get('a').contains('Cypress openinghour Restaurant')
+        .parent().parent()
+        .find('div').contains('button','Delete').click();
+
+        cy.get('button').contains('Sure, delete it').click();
     
     })
 

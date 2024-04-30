@@ -12,7 +12,7 @@ export default async function orderFood(id: string, token: string, food: string)
     });
 
     if (!response.ok) {
-        const errorMessage = await response.text();
+        const errorMessage = await response.json();
         try {
             const errorJson = JSON.parse(errorMessage);
             if (errorJson.message) {
