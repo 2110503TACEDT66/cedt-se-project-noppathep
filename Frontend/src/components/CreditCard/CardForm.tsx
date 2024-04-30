@@ -101,8 +101,8 @@ export default function CardForm(props: CardFormProps) {
       newErrors.cardNumber = 'Card number should be 16 digits';
       isErrorFlag = true;
     }
-    if (selectedCreditCard['cardCvv'].length !== 4) {
-      newErrors.cardCvv = 'Card number should be 4 digits';
+    if (selectedCreditCard['cardCvv'].length !== 3) {
+      newErrors.cardCvv = 'Card number should be 3 digits';
       isErrorFlag = true;
     }
     setErrors(newErrors);
@@ -208,8 +208,8 @@ export default function CardForm(props: CardFormProps) {
               <Form.Control
                 type="text"
                 className="card-input__input"
-                minLength={4}
-                maxLength={4}
+                minLength={3}
+                maxLength={3}
                 autoComplete="off"
                 name="cardCvv"
                 value={selectedCreditCard.cardCvv}

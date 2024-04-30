@@ -1,11 +1,12 @@
 'use client'
-import React, { Fragment, useCallback, useState } from 'react';
+import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import Card from './CardFunction';
 import CardForm from './CardForm';
 import { Creditcard } from '../../Creditcard';
 import updateCard from '@/libs/user/updateCard';
 import { useSession } from 'next-auth/react';
+import getUserProfile from '@/libs/user/getUserProfile';
 
 const initialState: Creditcard = {
   id: '',
@@ -19,8 +20,19 @@ const initialState: Creditcard = {
 export default function AddCard() {
   const { data: session, status } = useSession();
   
+  const [profile, setProfile] = useState<any>();
   const [state, setState] = useState<Creditcard>(initialState);
   const [isCardFlipped, setIsCardFlipped] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchProfile = await getUserProfile(session!.user.token);
+
+      setProfile(fetchProfile);
+    }
+
+    fetchData()
+  }, [])
 
   const updateStateValues = useCallback(
     (keyName: keyof Creditcard, value: string) => {
@@ -32,9 +44,12 @@ export default function AddCard() {
     [state],
   );
 
-  function handleSubmitAction() {
+  async function handleSubmitAction () {
     try {
       let newCardsList: Creditcard[] = [];
+
+      if (profile && profile.data.card != null)
+        newCardsList = profile.data.card;
 
       newCardsList.push({
         ...state,
@@ -45,7 +60,7 @@ export default function AddCard() {
       alert(error);
       console.log(error);
     } finally {
-      //release resources or stop loader
+      window.location.href = '/yourcard';
     }
   }
 

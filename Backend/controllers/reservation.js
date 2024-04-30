@@ -105,31 +105,36 @@ exports.addReservation=async (req,res,next)=>{
         const openTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(open.split(':')[0]), parseInt(open.split(':')[1]));
         const closeTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(close.split(':')[0]), parseInt(close.split(':')[1]));
         
-        console.log(reservationTime.getDate().toString())
+        //console.log("time "+reservationTime);
 
-        if(reservationTime.getDate().toString() != reservationTime.toUTCString().substring(5,7)) {
-            closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
-            openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
-        }
         closeTime.setTime(closeTime.getTime() + (7 * 60 * 60 * 1000));
         openTime.setTime(openTime.getTime() + (7 * 60 * 60 * 1000));
+        /*
+        console.log(openTime);
+        console.log(closeTime);
+        console.log(reservationTime);
+        console.log("date and time");
+        console.log(reservationTime.getDate());
+        console.log(openTime.getDate());
+        */
+        if( openTime >reservationTime ) {
+            console.log("fixing date")
+            openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
+            closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
+        }
 
         if(closeTime < openTime) {
             closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000));
         }
-
+        /*
+        console.log(openTime);
+        console.log(closeTime);
+        console.log(reservationTime);
+        */
         if(reservationTime > closeTime || reservationTime < openTime) {
             return res.status(400).json({
                     success: false,
                     message: 'Reservation must be within restaurant opening hours'
-            });
-        }
-
-        const oneHourBeforeClose = new Date(closeTime.getTime() - (1 * 60 * 60 * 1000));
-        if(reservationTime > oneHourBeforeClose) {
-            return res.status(400).json({
-                    success: false,
-                    message: 'Reservation must be before restaurant close time 1 hour'
             });
         }
         console.log(req.body);
@@ -155,18 +160,14 @@ exports.addReservation=async (req,res,next)=>{
 exports.updateReservation=async (req,res,next)=>{
     try{   
         let reservation = await Reservation.findById(req.params.id);
-        let restaurant = await Restaurant.findById(reservation.restaurant);
-        console.log("=====================================");
-        console.log(req.user.role);
-        console.log(restaurant.owner.toString());
-        console.log("=====================================");
         
         // can't find reservation id
         if(!reservation){
             return res.status(404).json({success:false,message:`No reservation with the id of ${req.params.id}`});
         }
+
         // can't update if not a user's reservation himself / admin / restaurant owner 
-        if(reservation.user.toString()!==req.user.id && req.user.role!=='admin' && req.user.id!==restaurant.owner.toString()){
+        if(reservation.user!=req.user.id && req.user.role!='admin'){
             return res.status(401).json({
                 success:false,
                 message:`User ${req.user.id} is not authorize to update this reservation`
@@ -176,50 +177,67 @@ exports.updateReservation=async (req,res,next)=>{
         const { apptDate } = req.body;
         if(apptDate) {
             const restaurant = await Restaurant.findById(reservation.restaurant);
-            const { open, close } = restaurant.openingHours;
+            const { open , close } =  restaurant.openingHours;
             const today = new Date();
-            const reservationTime = new Date (new Date(apptDate).getTime() + (7 * 60 * 60 * 1000));
+            const thailandTime = new Date(today.getTime() + (7 * 60 * 60 * 1000));
+            const reservationTime = new Date(apptDate);
+            if(reservationTime < thailandTime) {
+                return res.status(400).json({
+                    success : false,
+                    message : "Reservation must be scheduled for a time after today"
+                })
+            }
+
             const openTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(open.split(':')[0]), parseInt(open.split(':')[1]));
             const closeTime = new Date(reservationTime.getFullYear(), reservationTime.getMonth(), reservationTime.getDate(), parseInt(close.split(':')[0]), parseInt(close.split(':')[1]));
-            
-            if(reservationTime.getDate().toString() != reservationTime.toUTCString().substring(5,7)) {
-                closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
-                openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
-            }
+        
             closeTime.setTime(closeTime.getTime() + (7 * 60 * 60 * 1000));
             openTime.setTime(openTime.getTime() + (7 * 60 * 60 * 1000));
-
-            if(closeTime < openTime) {
-                closeTime.setDay(closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000)));
+            reservationTime.setTime(reservationTime.getTime() + (7 * 60 * 60 * 1000));
+            /*
+            console.log(openTime);
+            console.log(closeTime);
+            console.log(reservationTime);
+            console.log("date and time");
+            console.log(reservationTime.getDate());
+            console.log(openTime.getDate());
+            */
+            if( openTime >reservationTime ) {
+                console.log("fixing date")
+                openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
+                closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
             }
-            // console.log(reservationTime)
-            // console.log(openTime)
-            // console.log(closeTime)
-
+    
+            if(closeTime < openTime) {
+                closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000));
+            }
+            /*
+            console.log(openTime);
+            console.log(closeTime);
+            console.log(reservationTime);
+            */
             if(reservationTime > closeTime || reservationTime < openTime) {
                 return res.status(400).json({
                     success: false,
                     message: 'Reservation must be within restaurant opening hours'
                 });
             }
+            console.log(req.body);
+            reservation = await Reservation.findByIdAndUpdate(req.params.id,req.body,{
+                new:true,
+                runValidators:true
+            });
+            res.status(200).json({
+                success: true,
+                data:reservation
+            });
+    }else{
+        res.status(400).json({
+            success: false,
+            message:"cannot find new appointment date"
+        });
+    }
 
-            const oneHourBeforeClose = new Date(closeTime.getTime() - (1 * 60 * 60 * 1000));
-            if(reservationTime > oneHourBeforeClose) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Reservation must be befor restaurant close time 1 hour'
-               });
-            } 
-        }
-        
-        reservation = await Reservation.findByIdAndUpdate(req.params.id,req.body,{
-            new:true,
-            runValidators:true
-        });
-        res.status(200).json({
-            success: true,
-            data:reservation
-        });
     }catch(error){
         console.log(error);
         return res.status(500).json({
@@ -438,10 +456,21 @@ exports.paidReservation=async (req,res,next)=>{
             path: 'foodOrder', 
             model: 'Menu',
             select: 'name price'
-          });
-
+        });
+        
         if(!reservation){
             return res.status(404).json({success:false,message:`No reservation with the id of ${req.params.id}`});
+        }
+
+        // fetch if user have any card added
+        let user = await User.findById(reservation.user._id);
+
+        // if user have no cards, return err
+        if ( !(user.toObject().hasOwnProperty('card')) || user.card.length == 0 ) {
+            return res.status(401).json({
+                success:false,
+                message:`User doesn't have any credit card added`
+            });
         }
 
         let totalPrice = 0;
