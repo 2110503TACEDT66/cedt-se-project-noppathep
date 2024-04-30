@@ -1,5 +1,5 @@
 // __tests__/pickTable.test.tsx
-import fetchMock from 'jest-fetch-mock';
+import fetchMock from 'jest-fetch-mock'; //npm install --save-dev jest-fetch-mock
 import pickTable from '@/libs/pickTable';
 
 // Enable fetch mocking before all tests
