@@ -11,17 +11,13 @@ export default async function payReservation(rid:string,token:string){
         try {
             const errorJson = JSON.parse(errorMessage);
             if (errorJson.message) {
-                alert(errorJson.message);
                 throw new Error(errorJson.message);
             } else {
                 throw new Error("Unknown error occurred");
             }
-        } catch (error) {
+        } catch (error:any) {
             console.error("Error parsing error message:", error);
-            setTimeout(() => {
-                window.location.href = "/error"
-              }, 2000);
-            throw new Error("Cannot make a payment");
+            throw new Error(error.message);
         }
     }
     return await response.json();

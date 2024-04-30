@@ -88,10 +88,18 @@ exports.getRestaurant = async (req,res,next)=>{
 //@route POST /api/v1/restaurants
 //@acess Private
 exports.createRestaurant = async (req,res,next)=>{
-    const restaurant = await Restaurant.create(req.body);
-    res.status(201).json({
-        success:true,
-        data:restaurant});
+    try {
+        const restaurant = await Restaurant.create(req.body);
+        res.status(201).json({
+            success:true,
+            data:restaurant
+        });
+    } catch (err) {
+        res.status(400).json({
+            success:false,
+            error: err.message // Sending the error message back to the client
+        });
+    }
 };
 //@desc Update single restaurants
 //@route PUT /api/v1/resturants/:id

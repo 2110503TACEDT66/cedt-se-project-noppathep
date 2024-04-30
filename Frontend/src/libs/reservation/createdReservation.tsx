@@ -27,9 +27,6 @@ export default async function createdReservation(id: string, token: string, appt
             }
         } catch (error:any) {
             console.error("Error parsing error message:", error);
-            setTimeout(() => {
-                window.location.href = "/error"
-              }, 2000);
             throw new Error(error.message);
         }
     }

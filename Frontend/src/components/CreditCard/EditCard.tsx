@@ -69,7 +69,7 @@ import getUserProfile from '@/libs/user/getUserProfile';
         alert(error);
         console.log(error);
       } finally {
-        //release resources or stop loader
+        window.location.href = '/yourcard';
       }
     }
     
@@ -91,7 +91,7 @@ import getUserProfile from '@/libs/user/getUserProfile';
         alert(error);
         console.log(error);
       } finally {
-        // Release resources or stop loader
+        window.location.href = '/yourcard';
       }
     }
     
