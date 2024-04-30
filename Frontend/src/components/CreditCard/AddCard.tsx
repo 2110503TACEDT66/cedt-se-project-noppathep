@@ -48,7 +48,7 @@ export default function AddCard() {
     try {
       let newCardsList: Creditcard[] = [];
 
-      if (profile)
+      if (profile && profile.data.card != null)
         newCardsList = profile.data.card;
 
       newCardsList.push({

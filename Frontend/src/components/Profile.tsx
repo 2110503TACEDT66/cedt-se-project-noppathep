@@ -130,7 +130,7 @@ export default function Profile({profile}:{profile:any}) {
                                 </tr>
 
                                 {
-                                    profile.data.role == "user" && (
+                                    profile.data.role == "user" || profile.data.role == "owner" && (
                                         <tr>
                                             <td>Credit/Debit Card</td>
                                             <td>
