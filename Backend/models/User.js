@@ -28,7 +28,7 @@ const UserSchema=new mongoose.Schema({
         cardHolder: {type:String, required:false},
         cardExpMonth: {type:String, required:false},
         cardExpYear: {type:String, required:false},
-        cardCVV: {type:String, required:false},
+        cardCVV: {type:String, required:false, maxlength:3},
     },
     points: {
         type: Number,
