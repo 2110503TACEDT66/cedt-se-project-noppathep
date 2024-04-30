@@ -194,13 +194,14 @@ exports.updateReservation=async (req,res,next)=>{
             closeTime.setTime(closeTime.getTime() + (7 * 60 * 60 * 1000));
             openTime.setTime(openTime.getTime() + (7 * 60 * 60 * 1000));
             reservationTime.setTime(reservationTime.getTime() + (7 * 60 * 60 * 1000));
+            /*
             console.log(openTime);
             console.log(closeTime);
             console.log(reservationTime);
             console.log("date and time");
             console.log(reservationTime.getDate());
             console.log(openTime.getDate());
-            
+            */
             if( openTime >reservationTime ) {
                 console.log("fixing date")
                 openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
@@ -210,11 +211,11 @@ exports.updateReservation=async (req,res,next)=>{
             if(closeTime < openTime) {
                 closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000));
             }
-            
+            /*
             console.log(openTime);
             console.log(closeTime);
             console.log(reservationTime);
-            
+            */
             if(reservationTime > closeTime || reservationTime < openTime) {
                 return res.status(400).json({
                     success: false,
