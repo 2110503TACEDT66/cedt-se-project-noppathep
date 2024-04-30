@@ -8,7 +8,7 @@ describe('Reserve Restaurant', () => {
         //reserve food Whalebone
         cy.get('[href="/reservation"]').click()
         cy.get('#location').click()
-        cy.get('[data-value="65fda132323b9f5b9ef7540c"]').click()
+        cy.get('[data-value="65fda1ee4caa1429bfd0d1ab"]').click()
         cy.get("input[id=':r1:']").type("050120241705")
         cy.get('.bg-teal-600').click()
         cy.get('.swal2-confirm').click()
@@ -25,7 +25,7 @@ describe('Reserve Restaurant', () => {
         //reserve food Whalebone
         cy.get('[href="/reservation"]').click()
         cy.get('#location').click()
-        cy.get('[data-value="65fda132323b9f5b9ef7540c"]').click()
+        cy.get('[data-value="65fda1ee4caa1429bfd0d1ab"]').click()
         cy.get("input[id=':r1:']").type("050420242005")
         cy.get('.bg-teal-600').click()
         cy.get('.swal2-confirm').click()
@@ -42,7 +42,7 @@ describe('Reserve Restaurant', () => {
         //reserve food Whalebone
         cy.get('[href="/reservation"]').click()
         cy.get('#location').click()
-        cy.get('[data-value="65fda132323b9f5b9ef7540c"]').click()
+        cy.get('[data-value="65fda1ee4caa1429bfd0d1ab"]').click()
         cy.get("input[id=':r1:']").type("043020241705")
         cy.get('.bg-teal-600').click()
         cy.get('.swal2-confirm').click()
@@ -70,7 +70,7 @@ describe('Reserve Restaurant', () => {
         //reserve food Whalebone
         cy.get('[href="/reservation"]').click()
         cy.get('#location').click()
-        cy.get('[data-value="65fda132323b9f5b9ef7540c"]').click()
+        cy.get('[data-value="65fda1ee4caa1429bfd0d1ab"]').click()
         cy.get("input[id=':r1:']").type("042920241705")
         cy.get('.bg-teal-600').click()
         cy.get('.swal2-confirm').click()
@@ -85,7 +85,7 @@ describe('Reserve Restaurant', () => {
         //reserve food Whalebone
         cy.get('[href="/reservation"]').click()
         cy.get('#location').click()
-        cy.get('[data-value="65fda132323b9f5b9ef7540c"]').click()
+        cy.get('[data-value="65fda1ee4caa1429bfd0d1ab"]').click()
         cy.get("input[id=':r1:']").type("050320242400")
         cy.get('.bg-teal-600').click()
         cy.get('.swal2-confirm').click()
