@@ -2,6 +2,7 @@ import '@testing-library/jest-dom';
 import userLogIn from '@/libs/user/userLogIn';
 import getReservation from '@/libs/reservation/getReservation';
 import orderFood from '@/libs/orderFood';
+import deleteOrder from '@/libs/deleteOrder';
 
 describe('Test US2-2', () => {
     let loginResult:any;
@@ -72,8 +73,67 @@ describe('Test US2-2', () => {
             await orderFood("fakeMenu", loginResult.token, "663101bbffe5b42c0c31bae8");
         }).rejects.toThrowError("Cannot Order food");
         });  
+    
+  it('cancel Order test', async()=> {
+    const reservation = await getReservation("6631014effe5b42c0c31bac3", loginResult.token);
+    const orderCount = reservation.data.foodOrder.length;
+    const foodOrder = reservation.data.foodOrder;
+    let orders: any[] = [];
+    foodOrder.forEach((menuItem: { _id: string }, index: number) => {
+      if (index < foodOrder.length - 1) {
+          orders.push(menuItem._id);
+      }
+    });
+    const response = await deleteOrder("6631014effe5b42c0c31bac3",loginResult.token, "663101bbffe5b42c0c31bae8");
+    expect(response.data.foodOrder.length).toBe(orderCount-1);
+    expect(response.data.foodOrder).toStrictEqual(orders);
+    
+  })
+  
+  it('Food id isnt in restaurant Throws error when cannot delete order', async () => {
 
-   it('Total payment Test', async () => {
+    jest.spyOn(window, 'fetch').mockImplementationOnce(() => {
+        return Promise.resolve({
+            status: 500,
+            json: () => Promise.resolve({ error: "Cannot delete Order" }) 
+        });
+    });
+
+
+    await expect(async () => {
+        await deleteOrder("6631014effe5b42c0c31bac3", loginResult.token, "wrongIDXD");
+    }).rejects.toThrowError("Cannot delete Order");
+    });
+
+    it('token dont work Throws error when cannot delete order', async () => {
+    
+      jest.spyOn(window, 'fetch').mockImplementationOnce(() => {
+          return Promise.resolve({
+              status: 500, 
+              json: () => Promise.resolve({ error: "Cannot delete Order" }) 
+          });
+      });
+  
+
+      await expect(async () => {
+          await deleteOrder("6631014effe5b42c0c31bac3", "faketoken", "663101bbffe5b42c0c31bae8");
+      }).rejects.toThrowError("Cannot delete Order");
+      });
+
+      it('reservation is not real Throws error when cannot delete order', async () => {
+        jest.spyOn(window, 'fetch').mockImplementationOnce(() => {
+            return Promise.resolve({
+                status: 500,
+                json: () => Promise.resolve({ error: "Cannot delete Order" })
+            });
+        });
+    
+        await expect(async () => {
+            await deleteOrder("fakeMenu", loginResult.token, "663101bbffe5b42c0c31bae8");
+        }).rejects.toThrowError("Cannot delete Order");
+        }); 
+
+  it('Total payment Test', async () => {
     const response = await getReservation("6631014effe5b42c0c31bac3", loginResult.token);
 
     if (response && response.data.foodOrder) {
@@ -87,5 +147,7 @@ describe('Test US2-2', () => {
         fail("Response or foodOrder is undefined");
     }
   })
+
+
   
 })
