@@ -22,14 +22,16 @@ const UserSchema=new mongoose.Schema({
             'Please add a valid email'
         ]
     },
-    card: {
-        id : {type:String, required:false},
-        cardNumber: {type:String, required:false, maxlength:16},
-        cardHolder: {type:String, required:false},
-        cardExpMonth: {type:String, required:false},
-        cardExpYear: {type:String, required:false},
-        cardCVV: {type:String, required:false, maxlength:3},
-    },
+    card:[{
+            type: Object,
+            id : {type:String, required:false},
+            cardNumber: {type:String, required:false, maxlength:16},
+            cardHolder: {type:String, required:false},
+            cardExpMonth: {type:String, required:false},
+            cardExpYear: {type:String, required:false},
+            cardCVV: {type:String, required:false, maxlength:3},
+            default:[]
+    }],
     points: {
         type: Number,
         default: 0,

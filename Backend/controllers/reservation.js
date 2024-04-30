@@ -448,16 +448,13 @@ exports.paidReservation=async (req,res,next)=>{
         }
 
         // fetch if user have any card added
-        let user = await User.findById(reservation.user._id).populate({
-            path:'user',
-            select: 'card'
-        });
+        let user = await User.findById(reservation.user._id);
 
         // if user have no cards, return err
-        if (!user.card) {
+        if ( !(user.toObject().hasOwnProperty('card')) || user.card.length == 0 ) {
             return res.status(401).json({
                 success:false,
-                message:`User ${req.user.id} doesn't have any credit card added`
+                message:`User doesn't have any credit card added`
             });
         }
 

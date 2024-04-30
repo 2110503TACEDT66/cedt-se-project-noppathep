@@ -129,9 +129,9 @@ export default function MyReservation({profile}:{profile:any}) {
                             }
                         });
                     })
-                    .catch((err)=>{
+                    .catch((err:any)=>{
                         //error popup
-                        Swal.fire("ERROR",err.message, "error");
+                        Swal.fire(err.message,"", "error");
                     });
 
             } 
