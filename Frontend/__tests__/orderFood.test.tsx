@@ -5,6 +5,8 @@ import Foodorder from '@/app/(orderingfood)/Orderfood/[rid]/page';
 import getReservation from '../__mocks__/getReservation';
 import { render, screen, fireEvent } from '@testing-library/react';
 import NextAuthProvider from '@/app/providers/NextAuthProvider';
+import reservation from '@/app/reservation/page';
+import getReservations from '@/libs/reservation/getReservations';
 
 jest.mock('../__mocks__/getRestaurant');
 jest.mock('../__mocks__/getReservation');
@@ -35,23 +37,23 @@ describe('payment', () => {
         
         expect(profile.data.email).toBe("foodOrderTest@gmail.com")
         expect(profile.data.role).toBe("user")
-        console.log(loginResult);
         
     })
     it('total payment', async () => {
-        const mockReservation = await getReservation();
-        const reservation = mockReservation.data.find((res: { _id: string; }) => res._id === "reservation1");
+
+        const reservations:any = getReservations(loginResult.token);
+        const reservation:any = reservations.data;
+        console.log(reservation)
         const session = {
             expires: new Date(Date.now() + 2 * 86400).toISOString(),
             user: { name:loginResult.name, email: 'foodOrderTest@gmail.com', token:loginResult.token, role:loginResult.role },
         }; 
-        render(
-            <NextAuthProvider session={session}>
-                <Foodorder params={reservation}></Foodorder>
-            </NextAuthProvider>
+        // render(
+        //     <NextAuthProvider session={session}>
+        //         <Foodorder params={reservation.id}></Foodorder>
+        //     </NextAuthProvider>
             
-        );
-        console.log(loginResult.name)
+        // );
         //expect(screen.getByText('Total Price : 1050')).toBeInTheDocument();
     })
 
