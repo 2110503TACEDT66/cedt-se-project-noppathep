@@ -160,18 +160,14 @@ exports.addReservation=async (req,res,next)=>{
 exports.updateReservation=async (req,res,next)=>{
     try{   
         let reservation = await Reservation.findById(req.params.id);
-        let restaurant = await Restaurant.findById(reservation.restaurant);
-        console.log("=====================================");
-        console.log(req.user.role);
-        console.log(restaurant.owner.toString());
-        console.log("=====================================");
         
         // can't find reservation id
         if(!reservation){
             return res.status(404).json({success:false,message:`No reservation with the id of ${req.params.id}`});
         }
+
         // can't update if not a user's reservation himself / admin / restaurant owner 
-        if(reservation.user.toString()!==req.user.id && req.user.role!=='admin' && req.user.id!==restaurant.owner.toString()){
+        if(reservation.user!=req.user.id && req.user.role!='admin'){
             return res.status(401).json({
                 success:false,
                 message:`User ${req.user.id} is not authorize to update this reservation`
@@ -197,16 +193,28 @@ exports.updateReservation=async (req,res,next)=>{
         
             closeTime.setTime(closeTime.getTime() + (7 * 60 * 60 * 1000));
             openTime.setTime(openTime.getTime() + (7 * 60 * 60 * 1000));
+            reservationTime.setTime(reservationTime.getTime() + (7 * 60 * 60 * 1000));
+            console.log(openTime);
+            console.log(closeTime);
+            console.log(reservationTime);
+            console.log("date and time");
+            console.log(reservationTime.getDate());
+            console.log(openTime.getDate());
+            
             if( openTime >reservationTime ) {
                 console.log("fixing date")
                 openTime.setTime(openTime.getTime() - (24 * 60 * 60 * 1000));
                 closeTime.setTime(closeTime.getTime() - (24 * 60 * 60 * 1000));
             }
-
+    
             if(closeTime < openTime) {
                 closeTime.setTime(closeTime.getTime() + (24 * 60 * 60 * 1000));
             }
-
+            
+            console.log(openTime);
+            console.log(closeTime);
+            console.log(reservationTime);
+            
             if(reservationTime > closeTime || reservationTime < openTime) {
                 return res.status(400).json({
                     success: false,
@@ -214,15 +222,21 @@ exports.updateReservation=async (req,res,next)=>{
                 });
             }
             console.log(req.body);
+            reservation = await Reservation.findByIdAndUpdate(req.params.id,req.body,{
+                new:true,
+                runValidators:true
+            });
+            res.status(200).json({
+                success: true,
+                data:reservation
+            });
+    }else{
+        res.status(400).json({
+            success: false,
+            message:"cannot find new appointment date"
+        });
     }
-        reservation = await Reservation.findByIdAndUpdate(req.params.id,req.body,{
-            new:true,
-            runValidators:true
-        });
-        res.status(200).json({
-            success: true,
-            data:reservation
-        });
+
     }catch(error){
         console.log(error);
         return res.status(500).json({
